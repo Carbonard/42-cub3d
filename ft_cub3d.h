@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cub3d.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/27 15:59:27 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/27 19:37:38 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ typedef struct s_vistuals
 
 typedef	struct s_string
 {
-	char	*data;
+	char	**data;
 	size_t	size;
 	size_t	length;
 }	t_string;
 
 void	init_string(t_string *str);
-int		string_pushback(t_string *str, char c);
+int		string_pushback(t_string *ptr, char *new);
 int		string_delete(t_string *str);
 
 
