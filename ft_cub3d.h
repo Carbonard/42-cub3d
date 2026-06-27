@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/27 15:59:27 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/27 19:26:51 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@
 # include <stdio.h>
 # include <error.h>
 # include <sys/time.h>
+# include "./minilibx-linux/mlx.h"
+# include "./minilibx-linux/mlx_int.h"
+# include "./libft/libft.h"
+
+// General
 
 typedef struct s_mlx_iamge
 {
@@ -28,13 +33,22 @@ typedef struct s_mlx_iamge
 
 typedef struct s_vistuals
 {
-	t_mlx_image	NO;
-	t_mlx_image	SO;
-	t_mlx_image	WE;
-	t_mlx_image	EA;
-	int			F;
-	int			C;
+	t_mlx_image	north;
+	t_mlx_image	south;
+	t_mlx_image	west;
+	t_mlx_image	east;
+	int			floor;
+	int			ceil;
 }	t_visuals;
+
+typedef struct s_context
+{
+	t_visuals	visuals;
+	void		*mlx;
+	void		*window;
+	int			width;
+	int			height;
+}	t_context;
 
 // String
 
