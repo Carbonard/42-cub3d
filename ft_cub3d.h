@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/27 21:14:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/27 22:16:48 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,13 @@ typedef struct s_character
 	int		dir_y;
 }	t_character;
 
+typedef struct s_map
+{
+	char	**matrix;
+	int		width;
+	int		height;
+}	t_map;
+
 typedef struct s_context
 {
 	t_visuals	visuals;
@@ -60,6 +67,7 @@ typedef struct s_context
 	void		*window;
 	int			width;
 	int			height;
+	t_map		map;
 	t_character	player;
 }	t_context;
 

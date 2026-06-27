@@ -1,4 +1,4 @@
-.PHONY: 
+.PHONY: all clean fclean
 
 MLX_DIR = ./minilibx-linux
 
@@ -24,7 +24,6 @@ NAME = cube3D
 # $(NAME): $(OBJ)
 # 	$(CC) $(OBJ) -o $(NAME)
 
-
 $(NAME): $(FILES) $(MINILIBX) $(LIBFT)
 	cc $(CFLAGS) $(INCLUDES) $^ $(LIBS) -o $@
 
@@ -33,3 +32,10 @@ $(MINILIBX):
 
 $(LIBFT):
 	make -C $(LIBFT_DIR)
+
+clean:
+	make -C $(MLX_DIR) clean
+	make -C $(LIBFT_DIR) clean
+
+fclean: clean
+	make -C $(LIBFT_DIR) fclean
