@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_string.c                                        :+:      :+:    :+:   */
+/*   ft_dyn_array.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:49:59 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/27 20:06:06 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/27 21:19:11 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,15 @@ char	**emergency_exit(char **ptr)
 	return (NULL);
 }
 
-char	**ft_array_realloc(char **ptr, int size)
+char	**ft_array_realloc(char **ptr, size_t size)
 {
 	char	**tmp;
-	int i;
+	size_t	i;
 
 	tmp = malloc(size * sizeof(char *));
 	if (!tmp)
 		return (emergency_exit(ptr));
-	while (ptr[i] && i < size)
+	while (ptr[i] && i + 1 < size)
 	{
 		tmp[i] = ptr[i];
 		i++;
@@ -45,41 +45,39 @@ char	**ft_array_realloc(char **ptr, int size)
 	return (tmp);
 }
 
-void	init_string(t_string *ptr)
+void	init_string(t_str_array *ptr)
 {
 	ptr->data = NULL;
 	ptr->size = 0;
 	ptr->length = 0;
 }
 
-int		string_pushback(t_string *ptr, char *new)
+int		add_string(t_str_array *ptr, char *new)
 {
 	char	**tmp;
-	// int i;
 
-	// i = 0;
-	if (ptr->length + 2 >= ptr->size)
+	if (ptr->length + 1 >= ptr->size)
 	{
 		if (!ptr->size)
 			ptr->size++;
-		ptr->size *= 2;
-		tmp = ft_array_realloc(ptr->data, ptr->size);
+		tmp = ft_array_realloc(ptr->data, ptr->size * 2);
 		if (!tmp)
 			return 1;
+		ptr->size *= 2;
 		ptr->data = tmp;
 	}
 	ptr->data[ptr->length] = new;
 	ptr->data[ptr->length + 1] = NULL;
+	ptr->length++;
 	return (0);
 }
 
-
-int	string_delete(t_string *ptr)
+int	string_delete(t_str_array *ptr)
 {
-	int i;
+	size_t i;
 
-	i = ptr->length;
-	while (ptr->data[i])
+	i = 0;
+	while (i < ptr->length)
 	{
 		free(ptr->data[i]);
 		i++;

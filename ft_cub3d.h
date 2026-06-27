@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/27 20:05:38 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/27 21:14:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,13 @@
 
 // General
 
-typedef struct s_mlx_iamge
+typedef struct s_mlx_image
 {
 	void	*img;
+	char	*addr;
+	int		bpp;
+	int		line_size;
+	int		endian;
 	int		width;
 	int		height;
 }	t_mlx_image;
@@ -41,6 +45,14 @@ typedef struct s_vistuals
 	int			ceil;
 }	t_visuals;
 
+typedef struct s_character
+{
+	int		pos_x;
+	int		pos_y;
+	int		dir_x;
+	int		dir_y;
+}	t_character;
+
 typedef struct s_context
 {
 	t_visuals	visuals;
@@ -48,20 +60,21 @@ typedef struct s_context
 	void		*window;
 	int			width;
 	int			height;
+	t_character	player;
 }	t_context;
 
 // String
 
-typedef	struct s_string
+typedef	struct s_str_array
 {
 	char	**data;
 	size_t	size;
 	size_t	length;
-}	t_string;
+}	t_str_array;
 
-void	init_string(t_string *str);
-int		string_pushback(t_string *ptr, char *new);
-int		string_delete(t_string *str);
+void	init_string(t_str_array *str);
+int		string_pushback(t_str_array *ptr, char *new);
+int		string_delete(t_str_array *str);
 
 
 

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/27 19:53:32 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/27 21:48:59 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,8 @@ int	check_args(int argc, char **argv)
 
 int	set_config(t_context *ctx, char *file_name)
 {
-	printf("reading file %s\n", file_name);
-	ctx->mlx = NULL;
-	ctx->window = NULL;
+	ft_bzero(ctx, sizeof(t_context));
+	
 	return (0);
 }
 
@@ -39,17 +38,28 @@ int	close_window(void *arg)
 	t_context	*ctx;
 
 	ctx = arg;
+	mlx_destroy_image(ctx->mlx, ctx->visuals.north.img);
 	mlx_destroy_window(ctx->mlx, ctx->window);
+	mlx_destroy_display(ctx->mlx);
+	free(ctx->mlx);
+	exit (0);
 	return (0);
 }
 
-int	loop_hook(void	*arg)
-{
-	t_context	*ctx;
+// int	loop_hook(void	*arg)
+// {
+// 	t_context	*ctx;
 
-	ctx = arg;
-	(void) ctx;
-	printf("hola\n");
+// 	ctx = arg;
+// 	(void) ctx;
+// 	;
+// 	return (0);
+// }
+
+int	key_press_event(int key, t_context *ctx)
+{
+	if (key == XK_Escape)
+		return (close_window(ctx));
 	return (0);
 }
 
@@ -57,15 +67,23 @@ int	main(int argc, char **argv)
 {
 	t_context ctx;
 
-	if (check_args(argc, argv))
+	if (!check_args(argc, argv))
 		return (1);
 	if (set_config(&ctx, argv[1]))
 		return (2);
+
 	ctx.mlx = mlx_init();
+	if (!ctx.mlx)
+		return (3);
+	printf("%d, %d\n", ctx.width, ctx.height);
 	mlx_get_screen_size(ctx.mlx, &ctx.width, &ctx.height);
+	printf("%d, %d\n", ctx.width, ctx.height);
 	ctx.window = mlx_new_window(ctx.mlx, ctx.width, ctx.height, "cube3D");
+	if (!ctx.window)
+		return (3);	
 	mlx_hook(ctx.window, 17, 0, &close_window, &ctx);
-	mlx_loop_hook(ctx.mlx, loop_hook, &ctx);
+	mlx_hook(ctx.window, KeyPress, KeyPressMask, &key_press_event, &ctx);
+	// mlx_loop_hook(ctx.mlx, loop_hook, &ctx);
 	mlx_loop(ctx.mlx);
 	mlx_destroy_display(ctx.mlx);
 	free(ctx.mlx);
