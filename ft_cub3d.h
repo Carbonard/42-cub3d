@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cub3d.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/27 22:16:48 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/28 17:43:12 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,10 @@ typedef	struct s_str_array
 	size_t	length;
 }	t_str_array;
 
+char	**emergency_exit(char **ptr);
 void	init_string(t_str_array *str);
 int		string_pushback(t_str_array *ptr, char *new);
+int		add_string(t_str_array *ptr, char *new);
 int		string_delete(t_str_array *str);
 
 
