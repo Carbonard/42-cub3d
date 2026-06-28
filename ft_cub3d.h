@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cub3d.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 17:43:12 by elangari         ###   ########.fr       */
+/*   Updated: 2026/06/28 17:50:32 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,25 @@
 # include <stdio.h>
 # include <error.h>
 # include <sys/time.h>
+# include <math.h>
 # include "./minilibx-linux/mlx.h"
 # include "./minilibx-linux/mlx_int.h"
 # include "./libft/libft.h"
+
+
+// Math
+
+typedef float coordinate;
+
+typedef float angle;
+
+typedef struct	s_vector
+{
+	coordinate	x;
+	coordinate	y;
+}	t_vector;
+
+void	rotate_vector(t_vector *v, angle alpha);
 
 // General
 
@@ -47,17 +63,21 @@ typedef struct s_vistuals
 
 typedef struct s_character
 {
-	int		pos_x;
-	int		pos_y;
-	int		dir_x;
-	int		dir_y;
+	t_vector	pos;
+	t_vector	dir;
+	t_vector	ort;
+	angle		rot_ang;
+	t_mlx_image	minimap_img;
 }	t_character;
 
 typedef struct s_map
 {
-	char	**matrix;
-	int		width;
-	int		height;
+	char		**matrix;
+	int			width;
+	int			height;
+	int			size;
+	t_mlx_image	img;
+	int			scale;
 }	t_map;
 
 typedef struct s_context
@@ -82,11 +102,37 @@ typedef	struct s_str_array
 
 char	**emergency_exit(char **ptr);
 void	init_string(t_str_array *str);
-int		string_pushback(t_str_array *ptr, char *new);
 int		add_string(t_str_array *ptr, char *new);
 int		string_delete(t_str_array *str);
 
+// Initialize
 
+void	read_file(t_context *ctx, char *file_name);
 
+// Utils
+
+void	put_pixel(t_mlx_image *image, int x, int y, int color);
+unsigned int	rgb(int r, int g, int b);
+void	get_img_data(t_mlx_image *image);
+
+// Minimap
+
+void	initialize_minimap(t_context *ctx);
+void	render_minimap(t_context *ctx);
+
+// Events
+
+int	key_press_event(int key, t_context *ctx);
+
+// Player
+
+void	set_player_vectors(t_character *player);
+void	move_player(t_context *ctx, coordinate forward, coordinate side);
+void	rotate_player(t_context *ctx, float angle);
+
+// Close
+
+void	close_images(t_context *ctx);
+int		close_game(void *arg);
 
 #endif

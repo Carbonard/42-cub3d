@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/27 21:48:59 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/28 17:48:13 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,7 @@ int	check_args(int argc, char **argv)
 int	set_config(t_context *ctx, char *file_name)
 {
 	ft_bzero(ctx, sizeof(t_context));
-	
-	return (0);
-}
-
-int	close_window(void *arg)
-{
-	t_context	*ctx;
-
-	ctx = arg;
-	mlx_destroy_image(ctx->mlx, ctx->visuals.north.img);
-	mlx_destroy_window(ctx->mlx, ctx->window);
-	mlx_destroy_display(ctx->mlx);
-	free(ctx->mlx);
-	exit (0);
+	read_file(ctx, file_name);
 	return (0);
 }
 
@@ -59,7 +46,7 @@ int	close_window(void *arg)
 int	key_press_event(int key, t_context *ctx)
 {
 	if (key == XK_Escape)
-		return (close_window(ctx));
+		return (close_game(ctx));
 	return (0);
 }
 
@@ -81,9 +68,11 @@ int	main(int argc, char **argv)
 	ctx.window = mlx_new_window(ctx.mlx, ctx.width, ctx.height, "cube3D");
 	if (!ctx.window)
 		return (3);	
-	mlx_hook(ctx.window, 17, 0, &close_window, &ctx);
+	mlx_hook(ctx.window, 17, 0, &close_game, &ctx);
 	mlx_hook(ctx.window, KeyPress, KeyPressMask, &key_press_event, &ctx);
 	// mlx_loop_hook(ctx.mlx, loop_hook, &ctx);
+	initialize_minimap(&ctx);
+	render_minimap(&ctx);
 	mlx_loop(ctx.mlx);
 	mlx_destroy_display(ctx.mlx);
 	free(ctx.mlx);
