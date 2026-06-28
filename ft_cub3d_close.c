@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:59:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 14:05:18 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/28 17:38:01 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,16 @@ void	close_images(t_context *ctx)
 	}
 }
 
-int	close_window(void *arg)
+int	close_game(void *arg)
 {
 	t_context	*ctx;
 
 	ctx = arg;
 	close_images(ctx);
-	mlx_destroy_window(ctx->mlx, ctx->window);
-	mlx_destroy_display(ctx->mlx);
+	if (ctx->mlx && ctx->window)
+		mlx_destroy_window(ctx->mlx, ctx->window);
+	if (ctx->mlx)
+		mlx_destroy_display(ctx->mlx);
 	free(ctx->mlx);
 	exit (0);
 	return (0);

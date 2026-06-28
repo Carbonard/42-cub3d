@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 15:21:30 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/28 17:47:44 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,12 @@ typedef	struct s_str_array
 }	t_str_array;
 
 void	init_string(t_str_array *str);
-int		string_pushback(t_str_array *ptr, char *new);
+int		add_string(t_str_array *ptr, char *new);
 int		string_delete(t_str_array *str);
+
+// Initialize
+
+void	read_file(t_context *ctx, char *file_name);
 
 // Utils
 
@@ -128,6 +132,6 @@ void	rotate_player(t_context *ctx, float angle);
 // Close
 
 void	close_images(t_context *ctx);
-int		close_window(void *arg);
+int		close_game(void *arg);
 
 #endif

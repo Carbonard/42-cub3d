@@ -14,7 +14,7 @@ MINILIBX = $(MLX_DIR)/libmlx.a
 
 LIBFT = $(LIBFT_DIR)/libft.a
 
-FILES = ft_cub3d_main.c ft_cub3d_utils.c\
+FILES = ft_cub3d_main.c ft_cub3d_utils.c ft_cub3d_read_file.c\
 ft_cub3d_math.c\
 ft_cub3d_minimap_init.c ft_cub3d_minimap.c\
 ft_cub3d_events_key.c\

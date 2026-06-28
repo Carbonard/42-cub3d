@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 15:32:07 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/28 17:37:32 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	key_press_event(int key, t_context *ctx)
 {
 	if (key == XK_Escape)
-		return (close_window(ctx));
+		return (close_game(ctx));
 	else if (key == XK_a)
 		move_player(ctx, 0, -0.125);
 	else if (key == XK_d)
