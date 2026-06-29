@@ -5,35 +5,36 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/29 16:21:53 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/29 16:27:07 by rselva-2         ###   ########.fr       */
+/*   Created: 2026/06/27 23:57:56 by rselva-2          #+#    #+#             */
+/*   Updated: 2026/06/28 20:14:52 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-char	**copy_matrix(char **matrix, size_t size)
+void	put_pixel(t_mlx_image *image, int x, int y, int color)
 {
-	char	**copy;
-	size_t	i;
+	char	*dst;
 
-	copy = malloc((size + 1) * sizeof(char *));
-	if (!copy)
-		return (NULL);
-	i = 0;
-	while (i < size)
+	if (x < 0 || x > image->width || y < 0 || y > image->height)
 	{
-		copy[i] = ft_strdup(matrix[i]);
-		i++;
+		printf("Oh no...\n");
+		return ;
 	}
-	copy[i] = NULL;
-	return (copy);
+	dst = image->addr + (y * image->line_size + x * (image->bpp / 8));
+	*(unsigned int*)dst = color;
 }
 
-size_t	get_time(void)
+unsigned int	rgb(int r, int g, int b)
 {
-	struct timeval	tv;
+	return ((255 << 24) + (r << 16) + (g << 8) + b);
+}
 
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000000 + tv.tv_usec);
+void	get_img_data(t_mlx_image *image)
+{
+	image->addr = mlx_get_data_addr(
+		image->img,
+		&image->bpp,
+		&image->line_size,
+		&image->endian);
 }

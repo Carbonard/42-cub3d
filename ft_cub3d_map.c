@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:45:56 by elangari          #+#    #+#             */
-/*   Updated: 2026/06/28 21:08:35 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/29 16:22:26 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static int	init_map(t_context *ctx, t_str_array *raw_map)
 		if (!(ctx->map.matrix[y] = ft_str_malloc(ctx->map.width)))
 			return (1);
 		x = ft_strlen(raw_map->data[y]);
-		ft_strlcpy(ctx->map.matrix[y], raw_map->data[y], x);
+		ft_strlcpy(ctx->map.matrix[y], raw_map->data[y], x + 1);
 		while (x < ctx->map.width)
 		{
 			ctx->map.matrix[y][x] = '0';
@@ -86,8 +86,31 @@ static int	init_map(t_context *ctx, t_str_array *raw_map)
 	return (0);
 }
 
+static int	flood_fill(char **map, int x, int y, int width, int height)
+{
+	int	ret;
+
+	if (x < 0 || x >= width || y < 0 || y >= height)
+		return (1);
+	if (map[y][x] == '1')
+		return (0);
+	ret = 0;
+	map[y][x] = '1';
+	if (flood_fill(map, x + 1, y, width, height))
+		ret = 1;
+	else if (flood_fill(map, x - 1, y, width, height))
+		ret = 1;
+	else if (flood_fill(map, x, y + 1, width, height))
+		ret = 1;
+	else if (flood_fill(map, x, y - 1, width, height))
+		ret = 1;
+	return (ret);
+}
+
 void	set_map(t_context *ctx, t_str_array *raw_map)
 {
+	char	**map_copy;
+
 	if (parse_map(ctx, raw_map))
 	{
 		free_str_array(raw_map);
@@ -98,4 +121,13 @@ void	set_map(t_context *ctx, t_str_array *raw_map)
 		free_str_array(raw_map);
 		close_game(ctx, C3D_MALLOC);
 	}
+	for (int i = 0; ctx->map.matrix[i]; i++)
+		printf("%s\n", ctx->map.matrix[i]);
+	map_copy = copy_matrix(ctx->map.matrix, ctx->map.height);
+	if (flood_fill(map_copy, ctx->player.pos.x, ctx->player.pos.y, ctx->map.width, ctx->map.height))
+	{
+		free_split(map_copy);
+		close_game(ctx, C3D_OPEN_MAP);
+	}
+	free_split(map_copy);
 }

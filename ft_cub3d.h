@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 21:12:37 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/29 16:30:15 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ enum e_errors
 	C3D_MALLOC,
 	C3D_BAD_FILE,
 	C3D_FINISHED_PARSER,
-	C3D_FILE_PARSER,
-	C3D_MAP_PARSER
+	C3D_FILE_PARSER_ERROR,
+	C3D_MAP_PARSER,
+	C3D_OPEN_MAP
 };
 
 // Math
@@ -89,15 +90,27 @@ typedef struct s_map
 	int			scale;
 }	t_map;
 
+typedef struct	s_pressed_keys
+{
+	int	a;
+	int	s;
+	int	d;
+	int	w;
+	int	left;
+	int	right;
+}	t_pressed_keys;
+
+
 typedef struct s_context
 {
-	t_textures	textures;
-	void		*mlx;
-	void		*window;
-	int			width;
-	int			height;
-	t_map		map;
-	t_character	player;
+	t_textures		textures;
+	void			*mlx;
+	void			*window;
+	int				width;
+	int				height;
+	t_map			map;
+	t_character		player;
+	t_pressed_keys	pressed;
 }	t_context;
 
 // String
@@ -118,7 +131,7 @@ int		free_str_array(t_str_array *str);
 void	read_file(t_context *ctx, char *file_name);
 void	set_map(t_context *ctx, t_str_array *map);
 
-// Utils
+// MLX Utils
 
 void	put_pixel(t_mlx_image *image, int x, int y, int color);
 unsigned int	rgb(int r, int g, int b);
@@ -132,16 +145,23 @@ void	render_minimap(t_context *ctx);
 // Events
 
 int	key_press_event(int key, t_context *ctx);
+int	key_release_event(int key, t_context *ctx);
+int	loop_hook(t_context	*ctx);
 
 // Player
 
 void	set_player_vectors(t_character *player);
-void	move_player(t_context *ctx, t_coordinate forward, t_coordinate side);
-void	rotate_player(t_context *ctx, float t_angle);
+int		move_player(t_context *ctx, t_coordinate forward, t_coordinate side);
+int		rotate_player(t_context *ctx, float t_angle);
 
 // Close
 
 void	close_images(t_context *ctx);
 int		close_game(void *arg, int exit_code);
+
+// Utils
+
+char	**copy_matrix(char **matrix, size_t size);
+size_t	get_time(void);
 
 #endif

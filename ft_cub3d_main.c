@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 19:15:55 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/29 16:05:39 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,6 @@ int	set_config(t_context *ctx, char *file_name)
 	return (0);
 }
 
-// int	loop_hook(void	*arg)
-// {
-// 	t_context	*ctx;
-
-// 	ctx = arg;
-// 	(void) ctx;
-// 	;
-// 	return (0);
-// }
-
 int	main(int argc, char **argv)
 {
 	t_context ctx;
@@ -62,7 +52,8 @@ int	main(int argc, char **argv)
 		return (3);	
 	mlx_hook(ctx.window, 17, 0, &close_game, &ctx);
 	mlx_hook(ctx.window, KeyPress, KeyPressMask, &key_press_event, &ctx);
-	// mlx_loop_hook(ctx.mlx, loop_hook, &ctx);
+	mlx_hook(ctx.window, KeyRelease, KeyReleaseMask, &key_release_event, &ctx);
+	mlx_loop_hook(ctx.mlx, loop_hook, &ctx);
 	initialize_minimap(&ctx);
 	printf("Init map succeded\n");
 	render_minimap(&ctx);

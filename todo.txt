@@ -1,0 +1,11 @@
+
+Use speed variable?
+Adjust speed with time:
+	save last time checked and compare with that?
+
+Raycasting:
+	- display vision on minimap
+	- display main camera
+
+Accept png and xpm? check extension on texture files?
+

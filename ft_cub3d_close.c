@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:59:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 21:09:17 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/29 15:51:13 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,26 @@ void	close_textures(void *mlx, t_textures *textures)
 	}
 }
 
+void	print_error(int exit_code)
+{
+	if (exit_code == C3D_MALLOC)
+		write(2, "Malloc failed\n", 14);
+	if (exit_code == C3D_BAD_FILE)
+		write(2, "Wrong file\n", 11);
+	if (exit_code == C3D_FILE_PARSER_ERROR)
+		write(2, "Wrong file content format\n", 26);
+	if (exit_code == C3D_MAP_PARSER)
+		write(2, "Wrong character in map\n", 23);
+	if (exit_code == C3D_OPEN_MAP)
+		write(2, "The map is not closed\n", 22);
+}
+
 int	close_game(void *arg, int exit_code)
 {
 	t_context	*ctx;
 
 	ctx = arg;
+	print_error(exit_code);
 	close_images(ctx);
 	close_textures(ctx->mlx, &ctx->textures);
 	free_split(ctx->map.matrix);

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 17:46:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 21:05:04 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/29 14:58:24 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	load_image(t_context *ctx, t_mlx_image *image, char *file_name)
 	printf("Loading image '%s'\n", file_name);
 	image->img = mlx_xpm_file_to_image(ctx->mlx, file_name, &image->width, &image->height);
 	if (!image->img)
-		return (C3D_FILE_PARSER);
+		return (C3D_FILE_PARSER_ERROR);
 	get_img_data(image);
 	return (C3D_SUCCESS);
 }
@@ -52,7 +52,7 @@ int	parse_line(t_context *ctx, char *line)
 		line++;
 	if (line[0] == '1' || line [0] == '0')
 		return (C3D_FINISHED_PARSER);
-	return (C3D_FILE_PARSER);
+	return (C3D_FILE_PARSER_ERROR);
 }
 
 void	read_file(t_context *ctx, char *file_name)
@@ -70,7 +70,7 @@ void	read_file(t_context *ctx, char *file_name)
 		if (status == C3D_FINISHED_PARSER)
 			break ;
 		free(line);
-		if (status == C3D_FILE_PARSER)
+		if (status == C3D_FILE_PARSER_ERROR)
 		{
 			close(fd);
 			close_game(ctx, status);
