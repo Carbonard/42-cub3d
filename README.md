@@ -1,4 +1,4 @@
-_This project has been created as part of the 42 curriculum by rselva-2._
+_This project has been created as part of the 42 curriculum by elangari, rselva-2._
 
 # Description
 

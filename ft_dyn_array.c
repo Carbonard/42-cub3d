@@ -3,29 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_dyn_array.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:49:59 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 17:43:16 by elangari         ###   ########.fr       */
+/*   Updated: 2026/06/28 20:59:32 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "ft_cub3d.h"
-
-char	**emergency_exit(char **ptr)
-{
-	int i;
-
-	i = 0;
-	while (ptr[i])
-	{
-		free(ptr[i]);
-		i++;
-	}
-	free(ptr);
-	return (NULL);
-}
 
 char	**ft_array_realloc(char **ptr, size_t size)
 {
@@ -34,8 +20,9 @@ char	**ft_array_realloc(char **ptr, size_t size)
 
 	tmp = malloc(size * sizeof(char *));
 	if (!tmp)
-		return (emergency_exit(ptr));
-	while (ptr[i] && i + 1 < size)
+		return (NULL);
+	i = 0;
+	while (ptr && ptr[i] && i + 1 < size)
 	{
 		tmp[i] = ptr[i];
 		i++;
@@ -45,7 +32,7 @@ char	**ft_array_realloc(char **ptr, size_t size)
 	return (tmp);
 }
 
-void	init_string(t_str_array *ptr)
+void	init_array(t_str_array *ptr)
 {
 	ptr->data = NULL;
 	ptr->size = 0;
@@ -62,7 +49,7 @@ int		add_string(t_str_array *ptr, char *new)
 			ptr->size++;
 		tmp = ft_array_realloc(ptr->data, ptr->size * 2);
 		if (!tmp)
-			return 1;
+			return (1);
 		ptr->size *= 2;
 		ptr->data = tmp;
 	}
@@ -72,7 +59,7 @@ int		add_string(t_str_array *ptr, char *new)
 	return (0);
 }
 
-int	string_delete(t_str_array *ptr)
+int	free_str_array(t_str_array *ptr)
 {
 	size_t i;
 
