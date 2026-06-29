@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:41:24 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 13:41:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/28 21:15:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,11 @@ static void	fill_minimap_image(t_map *map)
 
 void	initialize_minimap(t_context *ctx)
 {
+	ctx->map.size = ctx->width * 2 / 3;
 	ctx->map.scale = ctx->map.size / ctx->map.width;
 	ctx->map.img.width = ctx->map.size;
 	ctx->map.img.height = ctx->map.size * ctx->map.height / ctx->map.width;
+	printf("width: %d\nheight: %d\nscale: %d\n", ctx->map.img.width, ctx->map.img.height, ctx->map.scale);
 	ctx->map.img.img = mlx_new_image(ctx->mlx,
 		ctx->map.img.width + ctx->map.scale,
 		ctx->map.img.height + ctx->map.scale);

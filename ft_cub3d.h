@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 17:50:32 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/28 21:12:37 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,29 @@
 # include "./minilibx-linux/mlx_int.h"
 # include "./libft/libft.h"
 
+enum e_errors
+{
+	C3D_SUCCESS,
+	C3D_MALLOC,
+	C3D_BAD_FILE,
+	C3D_FINISHED_PARSER,
+	C3D_FILE_PARSER,
+	C3D_MAP_PARSER
+};
 
 // Math
 
-typedef float coordinate;
+typedef float t_coordinate;
 
-typedef float angle;
+typedef float t_angle;
 
 typedef struct	s_vector
 {
-	coordinate	x;
-	coordinate	y;
+	t_coordinate	x;
+	t_coordinate	y;
 }	t_vector;
 
-void	rotate_vector(t_vector *v, angle alpha);
+void	rotate_vector(t_vector *v, t_angle alpha);
 
 // General
 
@@ -51,7 +60,7 @@ typedef struct s_mlx_image
 	int		height;
 }	t_mlx_image;
 
-typedef struct s_vistuals
+typedef struct s_textures
 {
 	t_mlx_image	north;
 	t_mlx_image	south;
@@ -59,14 +68,14 @@ typedef struct s_vistuals
 	t_mlx_image	east;
 	int			floor;
 	int			ceil;
-}	t_visuals;
+}	t_textures;
 
 typedef struct s_character
 {
 	t_vector	pos;
 	t_vector	dir;
 	t_vector	ort;
-	angle		rot_ang;
+	t_angle		rot_ang;
 	t_mlx_image	minimap_img;
 }	t_character;
 
@@ -82,7 +91,7 @@ typedef struct s_map
 
 typedef struct s_context
 {
-	t_visuals	visuals;
+	t_textures	textures;
 	void		*mlx;
 	void		*window;
 	int			width;
@@ -100,14 +109,14 @@ typedef	struct s_str_array
 	size_t	length;
 }	t_str_array;
 
-char	**emergency_exit(char **ptr);
-void	init_string(t_str_array *str);
+void	init_array(t_str_array *str);
 int		add_string(t_str_array *ptr, char *new);
-int		string_delete(t_str_array *str);
+int		free_str_array(t_str_array *str);
 
 // Initialize
 
 void	read_file(t_context *ctx, char *file_name);
+void	set_map(t_context *ctx, t_str_array *map);
 
 // Utils
 
@@ -127,12 +136,12 @@ int	key_press_event(int key, t_context *ctx);
 // Player
 
 void	set_player_vectors(t_character *player);
-void	move_player(t_context *ctx, coordinate forward, coordinate side);
-void	rotate_player(t_context *ctx, float angle);
+void	move_player(t_context *ctx, t_coordinate forward, t_coordinate side);
+void	rotate_player(t_context *ctx, float t_angle);
 
 // Close
 
 void	close_images(t_context *ctx);
-int		close_game(void *arg);
+int		close_game(void *arg, int exit_code);
 
 #endif

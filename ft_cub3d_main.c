@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 17:48:13 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/28 19:15:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ int	check_args(int argc, char **argv)
 int	set_config(t_context *ctx, char *file_name)
 {
 	ft_bzero(ctx, sizeof(t_context));
+	ctx->mlx = mlx_init();
+	printf("mlx: %p\n", ctx->mlx);
+	if (!ctx->mlx)
+		exit (2);
 	read_file(ctx, file_name);
 	return (0);
 }
@@ -43,25 +47,13 @@ int	set_config(t_context *ctx, char *file_name)
 // 	return (0);
 // }
 
-int	key_press_event(int key, t_context *ctx)
-{
-	if (key == XK_Escape)
-		return (close_game(ctx));
-	return (0);
-}
-
 int	main(int argc, char **argv)
 {
 	t_context ctx;
 
-	if (!check_args(argc, argv))
+	if (check_args(argc, argv))
 		return (1);
-	if (set_config(&ctx, argv[1]))
-		return (2);
-
-	ctx.mlx = mlx_init();
-	if (!ctx.mlx)
-		return (3);
+	set_config(&ctx, argv[1]);
 	printf("%d, %d\n", ctx.width, ctx.height);
 	mlx_get_screen_size(ctx.mlx, &ctx.width, &ctx.height);
 	printf("%d, %d\n", ctx.width, ctx.height);
@@ -72,6 +64,7 @@ int	main(int argc, char **argv)
 	mlx_hook(ctx.window, KeyPress, KeyPressMask, &key_press_event, &ctx);
 	// mlx_loop_hook(ctx.mlx, loop_hook, &ctx);
 	initialize_minimap(&ctx);
+	printf("Init map succeded\n");
 	render_minimap(&ctx);
 	mlx_loop(ctx.mlx);
 	mlx_destroy_display(ctx.mlx);

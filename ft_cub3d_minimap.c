@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:29:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 15:23:32 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/28 21:12:37 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-static int	is_player(coordinate x, coordinate y, int scale, angle rot)
+static int	is_player(t_coordinate x, t_coordinate y, int scale, t_angle rot)
 {
 	t_vector	tmp;
 
@@ -33,7 +33,7 @@ static int	is_player(coordinate x, coordinate y, int scale, angle rot)
 	return (0);
 }
 
-static void	fill_minimap_player_image(t_character *player, coordinate scale)
+static void	fill_minimap_player_image(t_character *player, t_coordinate scale)
 {
 	int	i;
 	int	j;

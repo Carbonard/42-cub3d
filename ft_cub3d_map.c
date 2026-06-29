@@ -3,93 +3,99 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cub3d_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:45:56 by elangari          #+#    #+#             */
-/*   Updated: 2026/06/28 17:44:27 by elangari         ###   ########.fr       */
+/*   Updated: 2026/06/28 21:08:35 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-// read_file
-// init data //
-// init map
-// 
+static void	set_player(t_character *player, char **map, int x, int y)
+{
+	char	orientation;
 
+	orientation = map[y][x];
+	map[y][x] = '0';
+	player->pos.x = x;
+	player->pos.y = y;
+	if (orientation == 'N')
+		player->rot_ang = -M_PI / 2;
+	else if (orientation == 'S')
+		player->rot_ang = +M_PI / 2;
+	else if (orientation == 'W')
+		player->rot_ang = -M_PI;
+	else if (orientation == 'E')
+		player->rot_ang = 0;
+	set_player_vectors(player);
+}
 
-
-int	parse_map(t_context *ctx, t_str_array *og_map)
+static int	parse_map(t_context *ctx, t_str_array *raw_map)
 {
 	int i;
 	int c;
 
 	i = 0;
-	while(og_map->data[i])
+	while(raw_map->data[i])
 	{
 		c = 0;
-		while (og_map->data[i][c])
+		while (raw_map->data[i][c] && raw_map->data[i][c] != '\n')
 		{
-			if (og_map->data[i][c] == " ")
-				og_map->data[i][c] = "0";
-			else if (og_map->data[i][c] == "N" || og_map->data[i][c] == "S"
-				|| og_map->data[i][c] == "W" || og_map->data[i][c] == "E")
-				set_player();
-			else if (og_map->data[i][c] != "1" && og_map->data[i][c] != "0")
+			if (ft_strchr("NSWE", raw_map->data[i][c]))
+				set_player(&ctx->player, raw_map->data, c, i);
+			else if (raw_map->data[i][c] == ' ')
+				raw_map->data[i][c] = '0';
+			else if (raw_map->data[i][c] != '1' && raw_map->data[i][c] != '0')
 				return (1);
 			c++;
 		}
-		if ((c + 1) > ctx->map.width)
-			ctx->map.width = c + 1;
+		if (raw_map->data[i][c] == '\n')
+			raw_map->data[i][c] = 0;
+		if (c > ctx->map.width)
+			ctx->map.width = c;
 		i++;
 	}
-	ctx->map.height = i + 1;
+	ctx->map.height = i;
 	return (0);
 }
 
-int	init_map(t_context *ctx, t_str_array *map)
+static int	init_map(t_context *ctx, t_str_array *raw_map)
 {
 	int y;
 	int	x;
 
+	if (!(ctx->map.matrix = malloc((ctx->map.height + 1) * sizeof(char *))))
+		return (1);
 	y = 0;
-	if (!(ctx->map.matrix = malloc(ctx->map.height + 1 * sizeof(char *))))
-		return 1;
-	while (map->data[y])
+	while (raw_map->data[y])
 	{
-		x = 0;
-		if (!(ctx->map.matrix[y] = ft_calloc(ctx->map.width + 1, sizeof(char))))
-			return (emergency_exit(ctx->map.matrix), 1);
-		while (map->data[y][x])
-		{
-			ctx->map.matrix[y][x] = map->data[y][x];
-			x++;
-		}
+		if (!(ctx->map.matrix[y] = ft_str_malloc(ctx->map.width)))
+			return (1);
+		x = ft_strlen(raw_map->data[y]);
+		ft_strlcpy(ctx->map.matrix[y], raw_map->data[y], x);
 		while (x < ctx->map.width)
 		{
-			ctx->map.matrix[y][x] = "0";
+			ctx->map.matrix[y][x] = '0';
 			x++;
 		}
 		y++;
 	}
-	string_delete(map);
+	ctx->map.matrix[y] = NULL;
+	free_str_array(raw_map);
+	return (0);
 }
 
-char	*get_map(t_context *ctx, char *file_name)
+void	set_map(t_context *ctx, t_str_array *raw_map)
 {
-	int 		fd;
-	int			x;
-	char		*tmp;
-	t_str_array	map;
-
-	fd = open(file_name, O_RDONLY);
-	init_string(map);
-	while ((tmp = get_next_line(fd)) > 0)
+	if (parse_map(ctx, raw_map))
 	{
-		if (add_string(&map, tmp))
-			return NULL;
+		free_str_array(raw_map);
+		close_game(ctx, C3D_MAP_PARSER);
 	}
-	if (parse_map(&map))
-		return NULL;
-	init_map(ctx, &map, x);
+	if (init_map(ctx, raw_map))
+	{
+		free_str_array(raw_map);
+		close_game(ctx, C3D_MALLOC);
+	}
 }

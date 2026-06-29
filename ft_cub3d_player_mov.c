@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:22:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 15:46:50 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/28 21:12:37 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	set_player_vectors(t_character *player)
 	player->ort.y = sin(player->rot_ang + M_PI / 2);
 }
 
-void	move_player(t_context *ctx, coordinate forward, coordinate side)
+void	move_player(t_context *ctx, t_coordinate forward, t_coordinate side)
 {
 	t_character *p;
 	t_vector	new_pos;
@@ -37,16 +37,9 @@ void	move_player(t_context *ctx, coordinate forward, coordinate side)
 	}
 }
 
-void	rotate_player(t_context *ctx, float angle)
+void	rotate_player(t_context *ctx, float t_angle)
 {
-	ctx->player.rot_ang += angle;
+	ctx->player.rot_ang += t_angle;
 	set_player_vectors(&ctx->player);
 	return ;
-	t_character *p;
-
-	p = &ctx->player;
-	rotate_vector(&ctx->player.dir, angle);
-	p->ort.x = p->dir.x;
-	p->ort.y = p->dir.y;
-	rotate_vector(&p->ort, M_PI / 2);
 }

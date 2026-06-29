@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 23:57:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/27 23:58:34 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/28 20:14:52 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	put_pixel(t_mlx_image *image, int x, int y, int color)
 	dst = image->addr + (y * image->line_size + x * (image->bpp / 8));
 	*(unsigned int*)dst = color;
 }
-
 
 unsigned int	rgb(int r, int g, int b)
 {
