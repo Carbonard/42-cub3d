@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:29:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 21:12:37 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/30 20:11:14 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static int	is_player(t_coordinate x, t_coordinate y, int scale, t_angle rot)
 {
 	t_vector	tmp;
 
+	return (1);
 	tmp.x = x - scale / 2;
 	tmp.y = y - scale / 2;
 	rotate_vector(&tmp, -M_PI / 2 - rot);

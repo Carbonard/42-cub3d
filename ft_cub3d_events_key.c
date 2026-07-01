@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/29 16:13:08 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/01 13:51:51 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	loop_hook(t_context *ctx)
 {
 	int	render;
 
+	render = 0;
 	if (ctx->pressed.a)
 		render = move_player(ctx, 0, -0.125);
 	if (ctx->pressed.d)
@@ -67,6 +68,8 @@ int	loop_hook(t_context *ctx)
 	if (ctx->pressed.right)
 		render = rotate_player(ctx, +M_PI * 0.03125);
 	if (render)
-		render_minimap(ctx);
+	{
+		render_screen(ctx);
+	}
 	return (0);
 }

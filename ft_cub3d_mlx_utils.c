@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_cub3d_utils.c                                   :+:      :+:    :+:   */
+/*   ft_cub3d_mlx_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 23:57:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 20:14:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/06/30 19:51:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	put_pixel(t_mlx_image *image, int x, int y, int color)
 
 	if (x < 0 || x > image->width || y < 0 || y > image->height)
 	{
-		printf("Oh no...\n");
+		printf("Oh no...\nTrying to print inf (%d,%d)\nThe limits are (%d, %d)\n", x, y, image->width, image->height);
 		return ;
 	}
 	dst = image->addr + (y * image->line_size + x * (image->bpp / 8));

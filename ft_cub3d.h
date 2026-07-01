@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/29 16:30:15 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/01 13:07:21 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ enum e_errors
 
 // Math
 
-typedef float t_coordinate;
+# define SQRT2_INV 0.707106781
 
-typedef float t_angle;
+typedef double t_coordinate;
+typedef double t_angle;
 
 typedef struct	s_vector
 {
@@ -47,6 +48,8 @@ typedef struct	s_vector
 }	t_vector;
 
 void	rotate_vector(t_vector *v, t_angle alpha);
+void	normalize_vector(t_vector *v);
+double dist(t_vector *u, t_vector *v);
 
 // General
 
@@ -100,12 +103,12 @@ typedef struct	s_pressed_keys
 	int	right;
 }	t_pressed_keys;
 
-
 typedef struct s_context
 {
 	t_textures		textures;
 	void			*mlx;
 	void			*window;
+	t_mlx_image		screen;
 	int				width;
 	int				height;
 	t_map			map;
@@ -153,6 +156,10 @@ int	loop_hook(t_context	*ctx);
 void	set_player_vectors(t_character *player);
 int		move_player(t_context *ctx, t_coordinate forward, t_coordinate side);
 int		rotate_player(t_context *ctx, float t_angle);
+
+// Render
+
+void	render_screen(t_context *ctx);
 
 // Close
 
