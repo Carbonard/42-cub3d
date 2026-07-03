@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:45:56 by elangari          #+#    #+#             */
-/*   Updated: 2026/06/29 16:22:26 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/02 21:08:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ static void	set_player(t_character *player, char **map, int x, int y)
 
 	orientation = map[y][x];
 	map[y][x] = '0';
-	player->pos.x = x;
-	player->pos.y = y;
+	player->pos.x = x + 0.5;
+	player->pos.y = y + 0.5;
 	if (orientation == 'N')
 		player->rot_ang = -M_PI / 2;
 	else if (orientation == 'S')

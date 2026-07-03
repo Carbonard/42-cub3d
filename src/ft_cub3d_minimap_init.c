@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:41:24 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/01 14:05:51 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/03 19:05:50 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	put_square(t_map *map, int x, int y, int color)
 	}
 }
 
-static void	fill_minimap_image(t_map *map)
+void	fill_minimap_image(t_map *map)
 {
 	int	i;
 	int	j;

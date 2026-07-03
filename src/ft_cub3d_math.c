@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 15:07:38 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/01 14:18:28 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/03 15:47:04 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,27 @@ void	normalize_vector(t_vector *v)
 {
 	float	m;
 
-	m = sqrt(v->x * v->x + v->y * v->y);
+	m = 1 / sqrt(v->x * v->x + v->y * v->y);
 	v->x *= m;
 	v->y *= m;
 }
 
 double dist(t_vector *u, t_vector *v)
 {
-	// return (fabs(u->x - v->x));
 	return (sqrt((u->x - v->x) * (u->x - v->x)
 		+ (u->y - v->y) * (u->y - v->y)));
+}
+
+double	v_mod(t_vector *v)
+{
+	static t_vector o = {0,0};
+
+	return (dist(&o, v));
+}
+
+double	v_cos(t_vector *u, t_vector *v)
+{
+	static t_vector o = {0,0};
+
+	return ((u->x * v->x + u->y * v->y) / (dist(&o, u) * dist(&o, v)));
 }

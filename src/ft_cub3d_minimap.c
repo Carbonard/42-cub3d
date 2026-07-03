@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:29:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/30 20:11:14 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/02 21:20:25 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,24 @@ static void	fill_minimap_player_image(t_character *player, t_coordinate scale)
 	}
 }
 
+void	put_minimap(t_context *ctx)
+{
+	int			x_margin;
+	int			y_margin;
+
+	x_margin = 20;
+	y_margin = 20;
+	mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->map.img.img, x_margin, y_margin);
+	mlx_put_image_to_window(ctx->mlx, ctx->window,
+		ctx->player.minimap_img.img, x_margin + (ctx->player.pos.x - 0.5) * ctx->map.scale,
+		y_margin + (ctx->player.pos.y - 0.5) * ctx->map.scale);
+}
+
 void	render_minimap(t_context *ctx)
 {
 	t_mlx_image	*player_img;
-	int			x;
-	int			y;
 
 	player_img = &ctx->player.minimap_img;
-	x = 20;
-	y = 20;
 	if (player_img->img)
 		mlx_destroy_image(ctx->mlx, player_img->img);
 	player_img->width = ctx->map.scale;
@@ -73,8 +82,5 @@ void	render_minimap(t_context *ctx)
 	player_img->img = mlx_new_image(ctx->mlx, ctx->map.scale, ctx->map.scale);
 	get_img_data(player_img);
 	fill_minimap_player_image(&ctx->player, ctx->map.scale);
-	mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->map.img.img, x, y);
-	mlx_put_image_to_window(ctx->mlx, ctx->window,
-		ctx->player.minimap_img.img, x + ctx->player.pos.x * ctx->map.scale,
-		y + ctx->player.pos.y * ctx->map.scale);
+	put_minimap(ctx);
 }

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/01 13:07:21 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/03 23:27:07 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 # include <error.h>
 # include <sys/time.h>
 # include <math.h>
-# include "./minilibx-linux/mlx.h"
-# include "./minilibx-linux/mlx_int.h"
-# include "./libft/libft.h"
+# include "../minilibx-linux/mlx.h"
+# include "../minilibx-linux/mlx_int.h"
+# include "../libft/libft.h"
 
 enum e_errors
 {
@@ -50,6 +50,8 @@ typedef struct	s_vector
 void	rotate_vector(t_vector *v, t_angle alpha);
 void	normalize_vector(t_vector *v);
 double dist(t_vector *u, t_vector *v);
+double	v_cos(t_vector *u, t_vector *v);
+double	v_mod(t_vector *v);
 
 // General
 
@@ -66,19 +68,25 @@ typedef struct s_mlx_image
 
 typedef struct s_textures
 {
-	t_mlx_image	north;
-	t_mlx_image	south;
-	t_mlx_image	west;
-	t_mlx_image	east;
-	int			floor;
-	int			ceil;
+	t_mlx_image		north;
+	t_mlx_image		south;
+	t_mlx_image		west;
+	t_mlx_image		east;
+	unsigned int	floor;
+	unsigned int	ceil;
+	unsigned int	c_north;
+	unsigned int	c_south;
+	unsigned int	c_west;
+	unsigned int	c_east;
 }	t_textures;
 
 typedef struct s_character
 {
+	float		velocity;
 	t_vector	pos;
 	t_vector	dir;
 	t_vector	ort;
+	float		ang_velocity;
 	t_angle		rot_ang;
 	t_mlx_image	minimap_img;
 }	t_character;
@@ -140,10 +148,17 @@ void	put_pixel(t_mlx_image *image, int x, int y, int color);
 unsigned int	rgb(int r, int g, int b);
 void	get_img_data(t_mlx_image *image);
 
+// Map Utils
+
+int	on_map(t_map *map, t_vector *ray);
+int	is_wall(t_context *ctx, t_vector *pos);
+
 // Minimap
 
 void	initialize_minimap(t_context *ctx);
+void	fill_minimap_image(t_map *map);
 void	render_minimap(t_context *ctx);
+void	put_minimap(t_context *ctx);
 
 // Events
 

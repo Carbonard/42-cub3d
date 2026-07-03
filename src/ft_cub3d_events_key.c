@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/01 13:51:51 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/03 19:44:23 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,17 +56,17 @@ int	loop_hook(t_context *ctx)
 
 	render = 0;
 	if (ctx->pressed.a)
-		render = move_player(ctx, 0, -0.125);
+		render = move_player(ctx, 0, -ctx->player.velocity);
 	if (ctx->pressed.d)
-		render = move_player(ctx, 0, +0.125);
+		render = move_player(ctx, 0, +ctx->player.velocity);
 	if (ctx->pressed.w)
-		render = move_player(ctx, +0.125, 0);
+		render = move_player(ctx, +ctx->player.velocity, 0);
 	if (ctx->pressed.s)
-		render = move_player(ctx, -0.125, 0);
+		render = move_player(ctx, -ctx->player.velocity, 0);
 	if (ctx->pressed.left)
-		render = rotate_player(ctx, -M_PI * 0.03125);
+		render = rotate_player(ctx, -ctx->player.ang_velocity);
 	if (ctx->pressed.right)
-		render = rotate_player(ctx, +M_PI * 0.03125);
+		render = rotate_player(ctx, +ctx->player.ang_velocity);
 	if (render)
 	{
 		render_screen(ctx);

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 17:46:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/29 14:58:24 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/03 16:35:31 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	load_image(t_context *ctx, t_mlx_image *image, char *file_name)
 	return (C3D_SUCCESS);
 }
 
-int	load_color(int *color, char *file_name)
+int	load_color(unsigned int *color, char *file_name)
 {
 	*color = 42;
 	(void) file_name;
