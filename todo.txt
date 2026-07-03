@@ -9,3 +9,6 @@ Raycasting:
 
 Accept png and xpm? check extension on texture files?
 
+Improve file parser:
+	- If no player is set
+	- if empty lines

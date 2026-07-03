@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/03 23:14:36 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/04 00:06:15 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,6 @@ void	trace_ray_2(t_context *ctx, t_vector *ray, t_vector *ray_dir, int screen_x)
 			sleep(1);
 			return ;
 		}
-		if (ray_dir->y == 0)
-			display_minimap_point(&ctx->map, ray->x, ray->y, rgb(100,100,100), 3);
 		if (is_wall(ctx, &tmp))
 		{
 			// 	display_minimap_point(&ctx->map, tmp.x, tmp.y, rgb(0,0,0), 1);
@@ -154,8 +152,6 @@ void	trace_ray_2(t_context *ctx, t_vector *ray, t_vector *ray_dir, int screen_x)
 		sleep(4);
 	}
 	display_ray(ctx, screen_x, ctx->height / (screen_dist(&ctx->player, ray_dir, ray)), color);
-	if (color == rgb(255,255,0))//ctx->textures.c_west)
-		display_miniray(ctx, ray, rgb(55,55,55));
 }
 
 void	trace_ray(t_context *ctx, int screen_x)

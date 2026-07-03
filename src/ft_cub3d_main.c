@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/03 19:50:36 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/04 00:00:26 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ int	set_config(t_context *ctx, char *file_name)
 	ctx->textures.c_west = rgb(84, 84, 84);
 	ctx->textures.floor = rgb(0, 42, 21);
 	ctx->textures.ceil = rgb(0, 0, 50);
-	ctx->player.velocity = 0.125;
-	ctx->player.ang_velocity = M_PI * 0.015625;
+	ctx->player.velocity = 0.33;
+	ctx->player.ang_velocity = M_PI * 0.0625;
 	return (0);
 }
 

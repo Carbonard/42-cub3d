@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/03 19:44:23 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/03 23:52:35 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,24 +52,28 @@ int	key_release_event(int key, t_context *ctx)
 
 int	loop_hook(t_context *ctx)
 {
-	int	render;
+	static size_t	last_time;
+	double			time_increment;
+	int				render;
 
 	render = 0;
+	if (!last_time)
+		last_time = get_time();
+	time_increment = (double)(get_time() - last_time) / 100000;
+	last_time = get_time();
 	if (ctx->pressed.a)
-		render = move_player(ctx, 0, -ctx->player.velocity);
+		render = move_player(ctx, 0, -ctx->player.velocity * time_increment);
 	if (ctx->pressed.d)
-		render = move_player(ctx, 0, +ctx->player.velocity);
+		render = move_player(ctx, 0, +ctx->player.velocity * time_increment);
 	if (ctx->pressed.w)
-		render = move_player(ctx, +ctx->player.velocity, 0);
+		render = move_player(ctx, +ctx->player.velocity * time_increment, 0);
 	if (ctx->pressed.s)
-		render = move_player(ctx, -ctx->player.velocity, 0);
+		render = move_player(ctx, -ctx->player.velocity * time_increment, 0);
 	if (ctx->pressed.left)
-		render = rotate_player(ctx, -ctx->player.ang_velocity);
+		render = rotate_player(ctx, -ctx->player.ang_velocity * time_increment);
 	if (ctx->pressed.right)
-		render = rotate_player(ctx, +ctx->player.ang_velocity);
+		render = rotate_player(ctx, +ctx->player.ang_velocity * time_increment);
 	if (render)
-	{
 		render_screen(ctx);
-	}
 	return (0);
 }
