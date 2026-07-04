@@ -12,3 +12,5 @@ Accept png and xpm? check extension on texture files?
 Improve file parser:
 	- If no player is set
 	- if empty lines
+
+If player looking diagonal to a wall and try to walk, walks?

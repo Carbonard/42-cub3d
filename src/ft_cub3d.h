@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/03 23:27:07 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/04 01:34:18 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,12 @@ void	normalize_vector(t_vector *v);
 double dist(t_vector *u, t_vector *v);
 double	v_cos(t_vector *u, t_vector *v);
 double	v_mod(t_vector *v);
+
+typedef struct s_mobile_vector
+{
+	t_vector	pos;
+	t_vector	dir;
+}	t_mobile_vector;
 
 // General
 
@@ -144,9 +150,10 @@ void	set_map(t_context *ctx, t_str_array *map);
 
 // MLX Utils
 
-void	put_pixel(t_mlx_image *image, int x, int y, int color);
+void			put_pixel(t_mlx_image *image, int x, int y, unsigned int color);
+unsigned int	get_pixel(t_mlx_image *image, int x, int y);
 unsigned int	rgb(int r, int g, int b);
-void	get_img_data(t_mlx_image *image);
+void			get_img_data(t_mlx_image *image);
 
 // Map Utils
 

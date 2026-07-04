@@ -6,7 +6,7 @@
 #    By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/07/03 23:21:50 by rselva-2          #+#    #+#              #
-#    Updated: 2026/07/03 23:22:45 by rselva-2         ###   ########.fr        #
+#    Updated: 2026/07/04 01:19:30 by rselva-2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,3 +61,6 @@ clean:
 fclean: clean
 	make -C $(LIBFT_DIR) fclean
 	rm -f $(NAME)
+
+re: fclean $(NAME)
+
