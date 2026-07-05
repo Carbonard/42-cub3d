@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cub3d.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/04 16:37:38 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/05 14:42:14 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ enum e_errors
 	C3D_FINISHED_PARSER,
 	C3D_FILE_PARSER_ERROR,
 	C3D_MAP_PARSER,
-	C3D_OPEN_MAP
+	C3D_OPEN_MAP,
+	C3D_EMPTY_FIELD,
+	C3D_BAD_COLOR
 };
 
 // Math
@@ -80,6 +82,8 @@ typedef struct s_textures
 	t_mlx_image		east;
 	unsigned int	floor;
 	unsigned int	ceil;
+	unsigned int	floor_set;
+	unsigned int	ceil_set;
 	unsigned int	c_north;
 	unsigned int	c_south;
 	unsigned int	c_west;
