@@ -1,16 +1,16 @@
 
-Use speed variable?
-Adjust speed with time:
-	save last time checked and compare with that?
+Use speed variable? (read it from file in bonus (and maybe more things))
 
 Raycasting:
-	- display vision on minimap
-	- display main camera
+	- display vision on minimap?
 
 Accept png and xpm? check extension on texture files?
 
 Improve file parser:
 	- If no player is set
-	- if empty lines
+	- If empty lines
 
 If player looking diagonal to a wall and try to walk, walks?
+
+Errors:
+	- Print "Error\n" followed by an explicit message

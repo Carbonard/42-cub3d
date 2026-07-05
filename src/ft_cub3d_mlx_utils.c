@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 23:57:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/04 01:33:48 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/04 16:25:10 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,9 @@ unsigned int	get_pixel(t_mlx_image *image, int x, int y)
 
 	if (x < 0 || x > image->width || y < 0 || y > image->height)
 	{
-		printf("Oh no...\nTrying to print inf (%d,%d)\nThe limits are (%d, %d)\n", x, y, image->width, image->height);
-		return (0);
+		printf("Oh no...\nTrying to read inf (%d,%d)\nThe limits are (%d, %d)\n", x, y, image->width, image->height);
+		// usleep(5500000);
+		return (rgb(255,0,0));
 	}
 	src = image->addr + (y * image->line_size + x * (image->bpp / 8));
 	return (*(unsigned int*)src);

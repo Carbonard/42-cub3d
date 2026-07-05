@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:22:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/03 22:55:06 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/04 14:18:39 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,26 @@ int	move_player(t_context *ctx, t_coordinate forward, t_coordinate side)
 {
 	t_character *p;
 	t_vector	new_pos;
+	int			ret;
 
+	ret = 0;
 	p = &ctx->player;
-	new_pos.x = p->pos.x + p->dir.x * forward;
-	new_pos.y = p->pos.y + p->dir.y * forward;
-	new_pos.x += p->ort.x * side;
-	new_pos.y += p->ort.y * side;
+	new_pos.x = p->pos.x + p->dir.x * forward + p->ort.x * side;
+	new_pos.y = ctx->player.pos.y;
 	if (!is_wall(ctx, &new_pos))
 	{
 		p->pos.x = new_pos.x;
-		p->pos.y = new_pos.y;
-		return (1);
+		ret = 1;
 	}
-	return (0);
+	else
+		new_pos.x = ctx->player.pos.x;
+	new_pos.y = p->pos.y + p->dir.y * forward + p->ort.y * side;
+	if (!is_wall(ctx, &new_pos))
+	{
+		p->pos.y = new_pos.y;
+		ret = 1;
+	}
+	return (ret);
 }
 
 int	rotate_player(t_context *ctx, float t_angle)

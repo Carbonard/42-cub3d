@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/04 01:34:18 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/04 16:37:38 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ typedef struct s_context
 	t_map			map;
 	t_character		player;
 	t_pressed_keys	pressed;
+	int				rain_mode;
 }	t_context;
 
 // String

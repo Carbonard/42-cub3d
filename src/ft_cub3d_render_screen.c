@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/04 02:04:37 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/04 21:08:28 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,19 @@
 
 typedef double (*t_dist)(double);
 
-double	get_step_size(t_vector *ray_pos, t_dist h_dist, t_dist v_dist)
+typedef struct	s_axis_distances
+{
+	t_dist	horizontal;
+	t_dist	vertical;
+}	t_axis_dist;
+
+double	get_step_size(t_vector *ray_pos, t_axis_dist *d)
 {
 	double	x_step;
 	double	y_step;
 
-	x_step = h_dist(ray_pos->x);
-	y_step = v_dist(ray_pos->y);
+	x_step = d->horizontal(ray_pos->x);
+	y_step = d->vertical(ray_pos->y);
 	if (x_step < 0.000000001 && y_step < 0.000000001)
 		return (1);
 	return ((x_step + y_step) / 2);
@@ -48,7 +54,6 @@ unsigned int	get_texture_pixel(t_context *ctx, t_mlx_image *texture, int wall_he
 	double	texture_coord_y;
 	double	texture_coord_x;
 
-	// printf("%lf, %lf\n", wall_point->x, wall_point->y);
 	if (texture == &ctx->textures.north || texture == &ctx->textures.south)
 		texture_coord_x = lower_dist(wall_point->x) * (double)texture->width;
 	else
@@ -57,153 +62,113 @@ unsigned int	get_texture_pixel(t_context *ctx, t_mlx_image *texture, int wall_he
 	return (get_pixel(texture, texture_coord_x, texture_coord_y));
 }
 
-void	display_ray(t_context *ctx, int screen_x, t_mobile_vector *ray, t_mlx_image *texture)
+void	display_vertical_slice(t_context *ctx,
+			int screen_x, t_mobile_vector *ray, t_mlx_image *texture)
 {
 	int				i;
-	int				height;
+	int				wall_height;
 	unsigned int	color;
 
-	if (texture == &ctx->textures.north)
-		color = ctx->textures.c_north;
-	if (texture == &ctx->textures.west)
-		color = ctx->textures.c_west;
+	if (!texture)
+	{
+		printf("Debug: missing texture (display_vertical_slice)\n");
+		return ;
+	}
 	i = 0;
-	height = ctx->height / (screen_dist(&ctx->player, ray));
-	// if (height > ctx->height)
-	// {
-	// 	while (i < ctx->height)
-	// 	{
-	// 		put_pixel(&ctx->screen, screen_x, i, color);
-	// 		i++;
-	// 	}
-	// 	return ;
-	// }
+	wall_height = ctx->height / (screen_dist(&ctx->player, ray));
 	while (i < ctx->height)
 	{
-		if (i < (ctx->height - height) / 2)
+		if (ctx->rain_mode && get_time() % ctx->rain_mode == 0)
+			put_pixel(&ctx->screen, screen_x, i, rgb(16, 71, 192));
+		else if (i <= (ctx->height - wall_height) / 2)
 			put_pixel(&ctx->screen, screen_x, i, ctx->textures.ceil);
-		else if (ctx->height - i < (ctx->height - height) / 2)
+		else if (ctx->height - i <= (ctx->height - wall_height) / 2)
 			put_pixel(&ctx->screen, screen_x, i, ctx->textures.floor);
 		else
 		{
-			color = get_texture_pixel(ctx, texture, height, i, &ray->pos);
+			color = get_texture_pixel(ctx, texture, wall_height, i, &ray->pos);
 			put_pixel(&ctx->screen, screen_x, i, color);
 		}
 		i++;
 	}
 }
 
-void	display_minimap_point(t_map *map, t_coordinate x, t_coordinate y, unsigned int color, int size)
+t_mlx_image	*last_step(t_context *ctx, double last_step, t_mobile_vector *ray, t_axis_dist *d, t_vector *last_jump)
 {
-	int a = size;
-	for (int i = -a; i < a; i++)
-		for (int j = -a; j < a; j++)
-			put_pixel(&map->img, (int)(x  * map->scale + i), (int)(y * map->scale + j), color);
-}
-
-void	display_miniray(t_context *ctx, t_mobile_vector *ray, unsigned int color)
-{
-	t_vector	p;
-	double		i;
-
-	i = 0;
-	while (i < 1)
+	if (last_step < d->horizontal(ray->pos.x))
+		last_step = d->vertical(ray->pos.y) / fabs(ray->dir.y);
+	else
+		last_step = d->horizontal(ray->pos.x) / fabs(ray->dir.x);
+	last_jump->x = ray->pos.x;
+	ray->pos.y += last_step * ray->dir.y;
+	ray->pos.x += last_step * ray->dir.x;
+	if (!is_wall(ctx, last_jump))
 	{
-		p.x = ctx->player.pos.x + i * (ray->pos.x - ctx->player.pos.x);
-		p.y = ctx->player.pos.y + i * (ray->pos.y - ctx->player.pos.y);
-		display_minimap_point(&ctx->map, p.x, p.y, color, 2);
-		i += 0.01;
+		if (ray->dir.x > 0)
+			return (&ctx->textures.east);
+		else
+			return (&ctx->textures.west);
 	}
-	put_pixel(&ctx->map.img, (int)(p.x * ctx->map.scale), (int)(p.y * ctx->map.scale), rgb(255,0,0));
+	else
+	{
+		if (ray->dir.y > 0)
+			return (&ctx->textures.south);
+		else
+			return (&ctx->textures.north);
+	}
 }
 
-void	trace_ray_2(t_context *ctx, t_mobile_vector *ray, int screen_x)
+void	trace_ray_2(t_context *ctx,
+			t_mobile_vector *ray, t_axis_dist *d, int screen_x)
 {
 	double			step;
-	t_dist			h_dist;
-	t_dist			v_dist;
-	int				last_dir;
 	t_mlx_image		*texture;
-	int				finish = 0;
 	t_vector		tmp;
 
-	h_dist = lower_dist;
-	if (ray->dir.x > 0)
-		h_dist = upper_dist;
-	v_dist = lower_dist;
-	if (ray->dir.y > 0)
-		v_dist = upper_dist;
-	while (!finish && on_map(&ctx->map, &ray->pos) && ctx->map.matrix[(int)ray->pos.y][(int)ray->pos.x] == '0')
+	while (on_map(&ctx->map, &ray->pos) && ctx->map.matrix[(int)ray->pos.y][(int)ray->pos.x] == '0')
 	{
-		step = get_step_size(&ray->pos, h_dist, v_dist);
-		last_dir = 2;
-		if (step >= h_dist(ray->pos.x))
-		{
-			last_dir = 1;
-		}
+		step = get_step_size(&ray->pos, d);
 		tmp.x = ray->pos.x + ray->dir.x * step;
 		tmp.y = ray->pos.y + ray->dir.y * step;
-		// display_minimap_point(&ctx->map, tmp.x, tmp.y, rgb(100,100,200), 1);
 		if (!on_map(&ctx->map, &tmp))
 		{
 			printf("Segmentation fault (core dumped)\n");
-			// Forbidden function!!
-			sleep(1);
 			return ;
 		}
 		if (is_wall(ctx, &tmp))
 		{
-			// 	display_minimap_point(&ctx->map, tmp.x, tmp.y, rgb(0,0,0), 1);
-			if (last_dir == 2)
-				step = v_dist(ray->pos.y) / fabs(ray->dir.y);
-			else if (last_dir == 1)
-				step = h_dist(ray->pos.x) / fabs(ray->dir.x);
-			finish = 1;
-			tmp.x = ray->pos.x;
-			if (!is_wall(ctx, &tmp))
-			{
-				if (ray->dir.x > 0)
-					texture = &ctx->textures.east;
-				else
-					texture = &ctx->textures.west;
-			}
-			else
-			{
-				if (ray->dir.y > 0)
-					texture = &ctx->textures.south;
-				else
-					texture = &ctx->textures.north;
-			}
+			texture = last_step(ctx, step, ray, d, &tmp);
+			break ;
 		}
 		ray->pos.y += step * ray->dir.y;
 		ray->pos.x += step * ray->dir.x;
 	}
-	// display_minimap_point(&ctx->map, ray->pos.x, ray->pos.y, rgb(20,20,20), 3);
 	if (!on_map(&ctx->map, &ray->pos))
-	{
 		texture = NULL;
-		printf("fuck: (%lf,%lf)\n", ray->pos.x, ray->pos.y);
-		sleep(4);
-	}
-	display_ray(ctx, screen_x, ray, texture);
+	display_vertical_slice(ctx, screen_x, ray, texture);
 }
 
 void	trace_ray(t_context *ctx, int screen_x)
 {
-	t_mobile_vector	ray;
+	t_mobile_vector			ray;
+	double					scale_screen_factor;
+	struct s_axis_distances	distances;
 
-	ray.dir.x = ctx->player.dir.x
-		+ ((double) screen_x * 2 / (double) ctx->width - 1) * ctx->player.ort.x;
-	ray.dir.y = ctx->player.dir.y
-		+ ((double) screen_x * 2 / (double) ctx->width - 1) * ctx->player.ort.y;
-	// t_vector O={0,0};
-	// printf("before: %lf\n", dist(&O, &ray_dir));
+	scale_screen_factor = (double) screen_x * 2 / (double) ctx->width - 1;
+	ray.dir.x = ctx->player.dir.x + scale_screen_factor * ctx->player.ort.x;
+	ray.dir.y = ctx->player.dir.y + scale_screen_factor * ctx->player.ort.y;
 	normalize_vector(&ray.dir);
-	// printf("after: %lf\n\n", dist(&O, &ray_dir));
-
 	ray.pos.x = ctx->player.pos.x;
 	ray.pos.y = ctx->player.pos.y;
-	trace_ray_2(ctx, &ray, screen_x);
+	if (ray.dir.x > 0)
+		distances.horizontal = upper_dist;
+	else
+		distances.horizontal = lower_dist;
+	if (ray.dir.y > 0)
+		distances.vertical = upper_dist;
+	else
+		distances.vertical = lower_dist;
+	trace_ray_2(ctx, &ray, &distances, screen_x);
 }
 
 void	render_screen(t_context *ctx)
@@ -223,10 +188,8 @@ void	render_screen(t_context *ctx)
 	while (screen_x < ctx->width)
 	{
 		trace_ray(ctx, screen_x);
-		screen_x += 1;
+		screen_x++;
 	}
 	mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->screen.img, 0, 0);
 	put_minimap(ctx);
-	// mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->map.img.img, 20, 20);
-	// mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->player.minimap_img.img, 20 + ctx->player.pos.x * ctx->map.scale, 20 + ctx->player.pos.y * ctx->map.scale);
 }

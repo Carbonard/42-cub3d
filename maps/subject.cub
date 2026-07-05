@@ -1,7 +1,7 @@
 NO ./img/bricks.xpm
 SO ./img/circles.xpm
 EA ./img/wood.xpm
-WE ./img/blue_hole.xpm
+WE ./img/tree_bark.xpm
 F 0,50,100
 C 0,50,20
 111111111111111111111111100
