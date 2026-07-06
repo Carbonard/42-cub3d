@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cub3d.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/05 14:42:14 by elangari         ###   ########.fr       */
+/*   Updated: 2026/07/05 19:42:29 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ enum e_errors
 	C3D_MAP_PARSER,
 	C3D_OPEN_MAP,
 	C3D_EMPTY_FIELD,
+	C3D_BAD_TEX_FILE,
 	C3D_BAD_COLOR
 };
 
@@ -103,12 +104,15 @@ typedef struct s_character
 
 typedef struct s_map
 {
-	char		**matrix;
-	int			width;
-	int			height;
-	int			size;
-	t_mlx_image	img;
-	int			scale;
+	char			**matrix;
+	int				width;
+	int				height;
+	int				size;
+	t_mlx_image		img;
+	int				minimap_scale;
+	unsigned int	minimap_wall_color;
+	unsigned int	minimap_floor_color;
+	unsigned int	minimap_player_color;
 }	t_map;
 
 typedef struct	s_pressed_keys
@@ -158,6 +162,7 @@ void	set_map(t_context *ctx, t_str_array *map);
 void			put_pixel(t_mlx_image *image, int x, int y, unsigned int color);
 unsigned int	get_pixel(t_mlx_image *image, int x, int y);
 unsigned int	rgb(int r, int g, int b);
+unsigned int	argb(int a, int r, int g, int b);
 void			get_img_data(t_mlx_image *image);
 
 // Map Utils

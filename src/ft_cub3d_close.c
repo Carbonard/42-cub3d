@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:59:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/29 15:51:13 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/05 15:09:11 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void	print_error(int exit_code)
 		write(2, "Wrong character in map\n", 23);
 	if (exit_code == C3D_OPEN_MAP)
 		write(2, "The map is not closed\n", 22);
+	if (exit_code == C3D_BAD_TEX_FILE)
+		perror(NULL);
 }
 
 int	close_game(void *arg, int exit_code)
@@ -75,6 +77,8 @@ int	close_game(void *arg, int exit_code)
 	free_split(ctx->map.matrix);
 	if (ctx->mlx && ctx->window)
 		mlx_destroy_window(ctx->mlx, ctx->window);
+	if (ctx->mlx && ctx->screen.img)
+		mlx_destroy_image(ctx->mlx, ctx->screen.img);
 	if (ctx->mlx)
 		mlx_destroy_display(ctx->mlx);
 	free(ctx->mlx);

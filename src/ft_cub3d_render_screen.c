@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/04 21:08:28 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/05 19:39:31 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ void	render_screen(t_context *ctx)
 {
 	int	screen_x;
 
-	fill_minimap_image(&ctx->map);
+	// fill_minimap_image(&ctx->map);
 	if (!ctx->screen.img)
 	{
 		printf("Creating screen with %d x %d\n", ctx->width, ctx->height);
@@ -190,6 +190,6 @@ void	render_screen(t_context *ctx)
 		trace_ray(ctx, screen_x);
 		screen_x++;
 	}
-	mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->screen.img, 0, 0);
-	put_minimap(ctx);
+	// mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->screen.img, 0, 0);
+	render_minimap(ctx);
 }

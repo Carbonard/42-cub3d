@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/04 20:26:07 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/04 20:26:16 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/05 18:32:48 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	display_minimap_point(t_map *map, t_coordinate x, t_coordinate y, unsigned 
 	int a = size;
 	for (int i = -a; i < a; i++)
 		for (int j = -a; j < a; j++)
-			put_pixel(&map->img, (int)(x  * map->scale + i), (int)(y * map->scale + j), color);
+			put_pixel(&map->img, (int)(x  * map->minimap_scale + i), (int)(y * map->minimap_scale + j), color);
 }
 
 void	display_miniray(t_context *ctx, t_mobile_vector *ray, unsigned int color)
@@ -33,5 +33,5 @@ void	display_miniray(t_context *ctx, t_mobile_vector *ray, unsigned int color)
 		display_minimap_point(&ctx->map, p.x, p.y, color, 2);
 		i += 0.01;
 	}
-	put_pixel(&ctx->map.img, (int)(p.x * ctx->map.scale), (int)(p.y * ctx->map.scale), rgb(255,0,0));
+	put_pixel(&ctx->map.img, (int)(p.x * ctx->map.minimap_scale), (int)(p.y * ctx->map.minimap_scale), rgb(255,0,0));
 }

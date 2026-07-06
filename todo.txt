@@ -6,11 +6,24 @@ Raycasting:
 
 Accept png and xpm? check extension on texture files?
 
-Improve file parser:
-	- If no player is set
-	- If empty lines
-
-If player looking diagonal to a wall and try to walk, walks?
+If player looking diagonal to a wall and try to walk, walks better?
 
 Errors:
 	- Print "Error\n" followed by an explicit message
+
+Animated:
+	- Walls
+	- Doctor arm and sonic
+
+Textures on floor and ceil (?)
+
+Exit cell
+
+Menu:
+	- Start
+	- Maps
+	- Config
+		- Mode
+		- Speed
+		- Rain mode (?)
+	- Exit

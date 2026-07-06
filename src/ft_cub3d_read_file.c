@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cub3d_read_file.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 17:46:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/04 21:44:35 by elangari         ###   ########.fr       */
+/*   Updated: 2026/07/05 23:33:15 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,17 @@ int	load_image(t_context *ctx, t_mlx_image *image, char *file_name)
 	len = ft_strlen(file_name);
 	if (file_name[len - 1] == '\n')
 		file_name[len - 1] = 0;
-	printf("Loading image '%s'\n", file_name);
 	image->img = mlx_xpm_file_to_image(ctx->mlx, file_name, &image->width, &image->height);
 	if (!image->img)
-		return (C3D_FILE_PARSER_ERROR);
+	{
+		ft_putendl_fd("Error", 2);
+		ft_putstr_fd(file_name, 2);
+		ft_putstr_fd(": ", 2);
+		return (C3D_BAD_TEX_FILE);
+	}
 	get_img_data(image);
 	return (C3D_SUCCESS);
 }
-
-// int	load_color(t_context *ctx, unsigned int *color, char *file_name)
-// {
-// 	*color = 42;
-// 	(void) file_name;
-// 	return (C3D_SUCCESS);
-// }
 
 int parse_color(char *str, int color[3])
 {
@@ -65,7 +62,6 @@ int set_color(t_context *ctx, char *input)
 
 	if (parse_color(input + 1, color) != C3D_SUCCESS)
 		return (C3D_BAD_COLOR);
-	printf("fine\n");
 	if (*input == 'F')
 	{
 		ctx->textures.floor_set = 1;
@@ -81,7 +77,7 @@ int set_color(t_context *ctx, char *input)
 
 int	parse_line(t_context *ctx, char *line)
 {
-	printf("Line = %s...\n", line);
+	// printf("Line = %s...\n", line);
 	if (!ft_strncmp(line, "NO ", 3))
 		return (load_image(ctx, &ctx->textures.north, line + 3));
 	if (!ft_strncmp(line, "SO ", 3))
@@ -100,7 +96,7 @@ int	parse_line(t_context *ctx, char *line)
 		return(C3D_SUCCESS);
 	if (line[0] == '1' || line [0] == '0')
 		return (C3D_FINISHED_PARSER);
-	printf("help\n");
+	// printf("help\n");
 	return (C3D_FILE_PARSER_ERROR);
 }
 
@@ -141,7 +137,7 @@ void	read_file(t_context *ctx, char *file_name)
 		if (status == C3D_FINISHED_PARSER)
 			break ;
 		free(line);
-		if (status == C3D_FILE_PARSER_ERROR)
+		if (status != C3D_SUCCESS)
 		{
 			close(fd);
 			close_game(ctx, status);
