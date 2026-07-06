@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:22:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/04 14:18:39 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/06 19:28:29 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	set_player_vectors(t_character *player)
 
 int	move_player(t_context *ctx, t_coordinate forward, t_coordinate side)
 {
-	t_character *p;
+	t_character	*p;
 	t_vector	new_pos;
 	int			ret;
 

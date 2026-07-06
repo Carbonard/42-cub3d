@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 23:57:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/05 19:42:12 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/06 19:28:06 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,12 @@ void	put_pixel(t_mlx_image *image, int x, int y, unsigned int color)
 
 	if (x < 0 || x > image->width || y < 0 || y > image->height)
 	{
-		printf("Oh no...\nTrying to print inf (%d,%d)\nThe limits are (%d, %d)\n", x, y, image->width, image->height);
+		printf("Debug: Trying to print inf (%d,%d)\nThe limits are (%d, %d)\n",
+			x, y, image->width, image->height);
 		return ;
 	}
 	dst = image->addr + (y * image->line_size + x * (image->bpp / 8));
-	*(unsigned int*)dst = color;
+	*(unsigned int *) dst = color;
 }
 
 unsigned int	get_pixel(t_mlx_image *image, int x, int y)
@@ -31,11 +32,12 @@ unsigned int	get_pixel(t_mlx_image *image, int x, int y)
 
 	if (x < 0 || x > image->width || y < 0 || y > image->height)
 	{
-		printf("Oh no...\nTrying to read inf (%d,%d)\nThe limits are (%d, %d)\n", x, y, image->width, image->height);
-		return (rgb(255,0,0));
+		printf("Debug: Trying to read inf (%d,%d)\nThe limits are (%d, %d)\n",
+			x, y, image->width, image->height);
+		return (rgb(255, 0, 0));
 	}
 	src = image->addr + (y * image->line_size + x * (image->bpp / 8));
-	return (*(unsigned int*)src);
+	return (*(unsigned int *) src);
 }
 
 unsigned int	rgb(int r, int g, int b)
@@ -51,8 +53,8 @@ unsigned int	argb(int a, int r, int g, int b)
 void	get_img_data(t_mlx_image *image)
 {
 	image->addr = mlx_get_data_addr(
-		image->img,
-		&image->bpp,
-		&image->line_size,
-		&image->endian);
+			image->img,
+			&image->bpp,
+			&image->line_size,
+			&image->endian);
 }

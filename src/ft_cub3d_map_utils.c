@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/03 19:34:44 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/03 23:18:26 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/06 20:03:01 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,8 @@ int	is_wall(t_context *ctx, t_vector *pos)
 		aux.y = pos->y - 0.01;
 		if (is_wall(ctx, &aux))
 			return (1);
-	} 
+	}
 	if (ctx->map.matrix[(int)(pos->y)][(int)(pos->x)] == '1')
 		return (1);
-	// FOR GOD'S SAKE, REMOVE THIS LINE!!
-	if (pos->y <= 1)
-		printf("FUCK THIS GUY -> (%lf,%lf)\n", pos->x, pos->y);
 	return (0);
 }

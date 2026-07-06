@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:59:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/05 15:09:11 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/06 18:38:52 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,15 @@ void	close_textures(void *mlx, t_textures *textures)
 void	print_error(int exit_code)
 {
 	if (exit_code == C3D_MALLOC)
-		write(2, "Malloc failed\n", 14);
+		ft_putendl_fd("Malloc failed", 2);
 	if (exit_code == C3D_BAD_FILE)
-		write(2, "Wrong file\n", 11);
+		ft_putendl_fd("Wrong file", 2);
 	if (exit_code == C3D_FILE_PARSER_ERROR)
-		write(2, "Wrong file content format\n", 26);
+		ft_putendl_fd("Wrong file content format", 2);
 	if (exit_code == C3D_MAP_PARSER)
-		write(2, "Wrong character in map\n", 23);
+		ft_putendl_fd("Wrong character in map", 2);
 	if (exit_code == C3D_OPEN_MAP)
-		write(2, "The map is not closed\n", 22);
-	if (exit_code == C3D_BAD_TEX_FILE)
-		perror(NULL);
+		ft_putendl_fd("The map is not closed", 2);
 }
 
 int	close_game(void *arg, int exit_code)

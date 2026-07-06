@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 15:07:38 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/04 20:32:24 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/06 20:02:50 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	rotate_vector(t_vector *v, t_angle t_angle)
 {
-	t_coordinate tmp_x;
+	t_coordinate	tmp_x;
 
 	tmp_x = v->x * cos(t_angle) - v->y * sin(t_angle);
 	v->y = v->x * sin(t_angle) + v->y * cos(t_angle);
@@ -30,22 +30,22 @@ void	normalize_vector(t_vector *v)
 	v->y /= m;
 }
 
-double dist(t_vector *u, t_vector *v)
+double	dist(t_vector *u, t_vector *v)
 {
 	return (sqrt((u->x - v->x) * (u->x - v->x)
-		+ (u->y - v->y) * (u->y - v->y)));
+			+ (u->y - v->y) * (u->y - v->y)));
 }
 
 double	v_mod(t_vector *v)
 {
-	static t_vector o = {0,0};
+	static t_vector	o = {0, 0};
 
 	return (dist(&o, v));
 }
 
 double	v_cos(t_vector *u, t_vector *v)
 {
-	static t_vector o = {0,0};
+	static t_vector	o = {0, 0};
 
 	return ((u->x * v->x + u->y * v->y) / (dist(&o, u) * dist(&o, v)));
 }

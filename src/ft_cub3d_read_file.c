@@ -6,78 +6,14 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 17:46:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/05 23:33:15 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/06 19:50:43 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-int	load_image(t_context *ctx, t_mlx_image *image, char *file_name)
+static int	parse_line(t_context *ctx, char *line)
 {
-	size_t	len;
-
-	len = ft_strlen(file_name);
-	if (file_name[len - 1] == '\n')
-		file_name[len - 1] = 0;
-	image->img = mlx_xpm_file_to_image(ctx->mlx, file_name, &image->width, &image->height);
-	if (!image->img)
-	{
-		ft_putendl_fd("Error", 2);
-		ft_putstr_fd(file_name, 2);
-		ft_putstr_fd(": ", 2);
-		return (C3D_BAD_TEX_FILE);
-	}
-	get_img_data(image);
-	return (C3D_SUCCESS);
-}
-
-int parse_color(char *str, int color[3])
-{
-	int cnt;
-
-	cnt = 0;
-	while(*str == ' ')
-		str++;
-	while (*str && cnt <= 2)
-	{
-		color[cnt] = atoi(str);
-		while (ft_isdigit(*str))
-			str++;
-		if ((color[cnt] < 0 || color[cnt] > 255) || (*str != ',' && cnt != 2))
-			return (C3D_BAD_COLOR);
-		if (cnt != 2)
-			str++;
-		cnt++;
-	}
-	while (*str == ' ')
-		str++;
-	if (*str != '\n')
-		return (C3D_BAD_COLOR);
-	return (C3D_SUCCESS);
-}
-
-int set_color(t_context *ctx, char *input)
-{
-	int	color[3];
-
-	if (parse_color(input + 1, color) != C3D_SUCCESS)
-		return (C3D_BAD_COLOR);
-	if (*input == 'F')
-	{
-		ctx->textures.floor_set = 1;
-		ctx->textures.floor = rgb(color[0], color[1], color[2]);
-	}
-	else
-	{
-		ctx->textures.ceil_set = 1;
-		ctx->textures.ceil = rgb(color[0], color[1], color[2]);
-	}
-	return (C3D_SUCCESS);
-}
-
-int	parse_line(t_context *ctx, char *line)
-{
-	// printf("Line = %s...\n", line);
 	if (!ft_strncmp(line, "NO ", 3))
 		return (load_image(ctx, &ctx->textures.north, line + 3));
 	if (!ft_strncmp(line, "SO ", 3))
@@ -86,23 +22,25 @@ int	parse_line(t_context *ctx, char *line)
 		return (load_image(ctx, &ctx->textures.west, line + 3));
 	if (!ft_strncmp(line, "EA ", 3))
 		return (load_image(ctx, &ctx->textures.east, line + 3));
-	if (!ft_strncmp(line, "F ", 2))
-		return (set_color(ctx, line));
-	if (!ft_strncmp(line, "C ", 2))
+	if (!ft_strncmp(line, "F ", 2) || !ft_strncmp(line, "C ", 2))
 		return (set_color(ctx, line));
 	while (line[0] == ' ')
 		line++;
 	if (*line == '\n')
-		return(C3D_SUCCESS);
+		return (C3D_SUCCESS);
 	if (line[0] == '1' || line [0] == '0')
 		return (C3D_FINISHED_PARSER);
-	// printf("help\n");
+	if (line[ft_strlen(line) - 1] == '\n')
+		line[ft_strlen(line) - 1] = 0;
+	ft_putstr_fd("Error\nInvalid line: '", 2);
+	ft_putstr_fd(line, 2);
+	ft_putendl_fd("'", 2);
 	return (C3D_FILE_PARSER_ERROR);
 }
 
-int	empty_element(t_context *ctx)
+static int	empty_element(t_context *ctx)
 {
-	int ret;
+	int	ret;
 
 	ret = 0;
 	if (!(ctx->textures.north.img))
@@ -113,23 +51,20 @@ int	empty_element(t_context *ctx)
 		ret += ft_putnstr_fd("Error\nMissing west texture\n", 2, 50);
 	if (!(ctx->textures.east.img))
 		ret += ft_putnstr_fd("Error\nMissing east texture\n", 2, 50);
-	if (!(ctx->textures.ceil_set))	
+	if (!(ctx->textures.ceiling_set))
 		ret += ft_putnstr_fd("Error\nMissing ceiling color\n", 2, 50);
-	if (!(ctx->textures.floor_set))	
+	if (!(ctx->textures.floor_set))
 		ret += ft_putnstr_fd("Error\nMissing floor color\n", 2, 50);
 	if (!(ctx->player.pos.x))
 		ret += ft_putnstr_fd("Error\nMissing character position\n", 2, 50);
 	return (ret);
 }
 
-void	read_file(t_context *ctx, char *file_name)
+static char	*parse_config(t_context *ctx, int fd)
 {
-	int			fd;
 	char		*line;
 	int			status;
-	t_str_array	map;
 
-	fd = open(file_name, O_RDONLY);
 	line = get_next_line(fd);
 	while (line)
 	{
@@ -144,6 +79,17 @@ void	read_file(t_context *ctx, char *file_name)
 		}
 		line = get_next_line(fd);
 	}
+	return (line);
+}
+
+void	parse_file(t_context *ctx, char *file_name)
+{
+	int			fd;
+	char		*line;
+	t_str_array	map;
+
+	fd = open(file_name, O_RDONLY);
+	line = parse_config(ctx, fd);
 	init_array(&map);
 	while (line)
 	{
@@ -154,8 +100,4 @@ void	read_file(t_context *ctx, char *file_name)
 	set_map(ctx, &map);
 	if (empty_element(ctx))
 		close_game(ctx, C3D_EMPTY_FIELD);
-	for (int i = 0; ctx->map.matrix[i]; i++)
-	{
-		puts(ctx->map.matrix[i]);
-	}
 }

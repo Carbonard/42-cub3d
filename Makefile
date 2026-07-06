@@ -6,7 +6,7 @@
 #    By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/07/03 23:21:50 by rselva-2          #+#    #+#              #
-#    Updated: 2026/07/04 01:19:30 by rselva-2         ###   ########.fr        #
+#    Updated: 2026/07/06 20:30:31 by rselva-2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ MLX_DIR = ./minilibx-linux
 
 LIBFT_DIR = ./libft
 
-CFLAGS = -Wall -Werror -Wextra -g3
+CFLAGS = -Wall -Werror -Wextra -g3 -O3
 
 LIBS = -lmlx -lXext -lX11 -lm
 
@@ -26,18 +26,18 @@ MINILIBX = $(MLX_DIR)/libmlx.a
 
 LIBFT = $(LIBFT_DIR)/libft.a
 
-FILES = main utils read_file\
+FILES = main utils read_file load_config\
 mlx_utils map_utils\
 dyn_arrays math\
 map minimap_init minimap\
-render_screen\
+render_screen render_vertical render_utils\
 events_key\
 player_mov\
 close
 
 SRC = $(FILES:%=src/ft_cub3d_%.c)
 
-NAME = cube3D
+NAME = cub3D
 
 # %.o: %.c
 # 	$(CC) -Wall -Wextra -Werror -Imlx -c $< -o $@

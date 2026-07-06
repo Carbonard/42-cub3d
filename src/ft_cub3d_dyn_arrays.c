@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_dyn_array.c                                     :+:      :+:    :+:   */
+/*   ft_cub3d_dyn_arrays.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:49:59 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/06/28 20:59:32 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/06 20:01:02 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	init_array(t_str_array *ptr)
 	ptr->length = 0;
 }
 
-int		add_string(t_str_array *ptr, char *new)
+int	add_string(t_str_array *ptr, char *new)
 {
 	char	**tmp;
 
@@ -61,7 +61,7 @@ int		add_string(t_str_array *ptr, char *new)
 
 int	free_str_array(t_str_array *ptr)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (i < ptr->length)
