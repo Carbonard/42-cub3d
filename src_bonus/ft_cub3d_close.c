@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:59:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/07 18:13:56 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/07 19:43:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,17 @@ static void	close_images(t_context *ctx)
 	safe_close_image(ctx->mlx, &ctx->map.img);
 	safe_close_image(ctx->mlx, &ctx->player.minimap_img);
 	safe_close_image(ctx->mlx, &ctx->screen);
-	safe_close_image(ctx->mlx, &ctx->textures.north.image);
-	safe_close_image(ctx->mlx, &ctx->textures.south.image);
-	safe_close_image(ctx->mlx, &ctx->textures.west.image);
-	safe_close_image(ctx->mlx, &ctx->textures.east.image);
-	safe_close_image(ctx->mlx, &ctx->textures.floor.image);
-	safe_close_image(ctx->mlx, &ctx->textures.ceiling.image);
+	int i = 0;
+	while (i < 5)
+	{
+		safe_close_image(ctx->mlx, &ctx->textures.north.tex[i].image);
+		safe_close_image(ctx->mlx, &ctx->textures.south.tex[i].image);
+		safe_close_image(ctx->mlx, &ctx->textures.west.tex[i].image);
+		safe_close_image(ctx->mlx, &ctx->textures.east.tex[i].image);
+		safe_close_image(ctx->mlx, &ctx->textures.floor.tex[i].image);
+		safe_close_image(ctx->mlx, &ctx->textures.ceiling.tex[i].image);
+		i++;
+	}
 }
 
 static void	print_error(int exit_code)

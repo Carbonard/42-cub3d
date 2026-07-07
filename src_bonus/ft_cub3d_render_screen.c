@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/07 17:43:54 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/08 01:16:45 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-t_texture	*last_step(t_context *ctx,
+t_tex_array	*last_step(t_context *ctx,
 				double last_step, t_ray *ray, t_vector *last_jump)
 {
 	if (last_step < ray->h_dist(ray->pos.x))
@@ -41,7 +41,7 @@ t_texture	*last_step(t_context *ctx,
 static void	trace_ray_2(t_context *ctx, t_ray *ray, int screen_x)
 {
 	double			step;
-	t_texture		*texture;
+	t_tex_array		*texture;
 	t_vector		tmp;
 
 	texture = NULL;
@@ -61,8 +61,8 @@ static void	trace_ray_2(t_context *ctx, t_ray *ray, int screen_x)
 			texture = last_step(ctx, step, ray, &tmp);
 			break ;
 		}
-		ray->pos.y += step * ray->dir.y;
-		ray->pos.x += step * ray->dir.x;
+		ray->pos.x = tmp.x;
+		ray->pos.y = tmp.y;
 	}
 	if (!on_map(&ctx->map, &ray->pos))
 		texture = NULL;

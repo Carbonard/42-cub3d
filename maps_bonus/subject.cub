@@ -1,9 +1,9 @@
-NO ./img/brick_big.xpm
-SO ./img/brick_big.xpm
-EA ./img/brick_big.xpm
-WE ./img/brick_big.xpm
-F ./img/wood.xpm
-C ./img/rain.xpm
+NO ./img/brick_torch_1.xpm ./img/brick_torch_2.xpm ./img/brick_torch_3.xpm
+SO ./img/brick_torch_1.xpm ./img/brick_torch_2.xpm ./img/brick_torch_3.xpm
+EA ./img/brick_torch_1.xpm ./img/brick_torch_2.xpm ./img/brick_torch_3.xpm
+WE ./img/brick_torch_1.xpm ./img/brick_torch_2.xpm ./img/brick_torch_3.xpm
+F 0,25,0
+C 0,0,25
 111111111111111111111111100
 100000000011000000000000100
 10110000011100000E000000100

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/04 20:23:11 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/08 01:09:51 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int	key_release_event(int key, t_context *ctx)
 int	loop_hook(t_context *ctx)
 {
 	static size_t	last_time;
+	static size_t	last_time_2;
 	double			time_increment;
 	int				render;
 
@@ -81,7 +82,15 @@ int	loop_hook(t_context *ctx)
 		render = rotate_player(ctx, -ctx->player.ang_velocity * time_increment);
 	if (ctx->pressed.right)
 		render = rotate_player(ctx, +ctx->player.ang_velocity * time_increment);
-	if (render || (ctx->rain_mode && last_time % 1000 == 0))
+	if (last_time - last_time_2 > 150000)
+	{
+		last_time_2 = last_time;
+		ctx->current_tex++;
+		render = 0;
+	}
+	if (render)
+	{
 		render_screen(ctx);
+	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/07 18:56:25 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/07 19:56:20 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,20 +92,26 @@ typedef struct s_texture
 	short int		set;
 }	t_texture;
 
+typedef struct s_tex_array
+{
+	t_texture	tex[20];
+	short int	size;
+}	t_tex_array;
+
 typedef struct s_str_to_tex
 {
 	char		*str;
-	t_texture	*texture;
+	t_tex_array	*texture;
 }	t_str_to_tex;
 
 typedef struct s_textures
 {
-	t_texture	north;
-	t_texture	south;
-	t_texture	west;
-	t_texture	east;
-	t_texture	floor;
-	t_texture	ceiling;
+	t_tex_array	north;
+	t_tex_array	south;
+	t_tex_array	west;
+	t_tex_array	east;
+	t_tex_array	floor;
+	t_tex_array	ceiling;
 }	t_textures;
 
 typedef struct s_character
@@ -153,6 +159,7 @@ typedef struct s_context
 	t_map			map;
 	t_character		player;
 	t_pressed_keys	pressed;
+	unsigned int	current_tex;
 	int				rain_mode;
 }	t_context;
 
@@ -212,7 +219,7 @@ int				rotate_player(t_context *ctx, float t_angle);
 
 void			render_screen(t_context *ctx);
 void			display_vertical_slice(t_context *ctx,
-					int screen_x, t_ray *ray, t_texture *texture);
+					int screen_x, t_ray *ray, t_tex_array *texture);
 double			get_step_size(t_ray *ray);
 double			upper_dist(double z);
 double			lower_dist(double z);

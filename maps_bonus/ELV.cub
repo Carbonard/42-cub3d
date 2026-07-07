@@ -1,10 +1,10 @@
-NO ./img/korosensei.xpm
+NO ./img/korosensei.xpm ./img/bricks.xpm
 
 
-SO ./img/korosensei.xpm
+SO ./img/korosensei.xpm ./img/bricks.xpm
 
-EA   ./img/korosensei.xpm
-WE    ./img/korosensei.xpm
+EA ./img/bricks.xpm ./img/korosensei.xpm
+WE   ./img/bricks.xpm  ./img/korosensei.xpm
 
 
 

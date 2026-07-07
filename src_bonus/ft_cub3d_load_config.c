@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 18:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/07 17:37:36 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/08 01:03:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ static int	load_image(t_context *ctx, char *file_name, t_mlx_image *img)
 	len = ft_strlen(file_name);
 	if (file_name[len - 1] == '\n')
 		file_name[len - 1] = 0;
-	printf("%p, %p\n", ctx->mlx, img->img);
 	img->img = mlx_xpm_file_to_image(
 			ctx->mlx, file_name, &img->width, &img->height);
 	if (!img->img)
@@ -55,13 +54,13 @@ static int	set_color(char *str, t_texture *texture)
 	}
 	while (*str == ' ')
 		str++;
-	if (*str != '\n')
+	if (*str != '\n' && *str != '\0')
 		return (C3D_BAD_COLOR);
 	texture->color = rgb(color[0], color[1], color[2]);
 	return (C3D_SUCCESS);
 }
 
-static t_texture	*get_texture(t_context *ctx, char *line)
+static t_tex_array	*get_texture(t_context *ctx, char *line)
 {
 	int	i;
 	const t_str_to_tex	textures[] = {
@@ -86,19 +85,29 @@ static t_texture	*get_texture(t_context *ctx, char *line)
 
 int	load_texture(t_context *ctx, char *line)
 {
-	t_texture	*texture;
+	t_tex_array	*texture;
+	char		**texture_inputs;
 
 	texture = get_texture(ctx, line);
 	if (!texture)
 		return (C3D_NO_TEXTURE);
 	while (*line != ' ')
 		line++;
-	printf("%p\n", texture->image.img);
-	if ((set_color(line, texture) == C3D_SUCCESS)
-		|| (load_image(ctx, line, &texture->image) == C3D_SUCCESS))
+	texture_inputs = ft_split(line, ' ');
+	while (texture_inputs[texture->size])
 	{
-		texture->set = 1;
-		return (C3D_SUCCESS);
+		if (set_color(texture_inputs[texture->size],
+						&texture->tex[texture->size]) != C3D_SUCCESS)
+			if (load_image(ctx,
+							texture_inputs[texture->size],
+							&texture->tex[texture->size].image) != C3D_SUCCESS)
+			{
+				free_split(texture_inputs);
+				return (C3D_FILE_PARSER_ERROR);
+			}
+		texture->tex[texture->size].set = 1;
+		texture->size++;
 	}
-	return (C3D_FILE_PARSER_ERROR);
+	free_split(texture_inputs);
+	return (C3D_SUCCESS);
 }

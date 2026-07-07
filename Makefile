@@ -6,7 +6,7 @@
 #    By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/07/03 23:21:50 by rselva-2          #+#    #+#              #
-#    Updated: 2026/07/07 16:21:00 by rselva-2         ###   ########.fr        #
+#    Updated: 2026/07/08 01:08:28 by rselva-2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ MLX_DIR = ./minilibx-linux
 
 LIBFT_DIR = ./libft
 
-CFLAGS = -Wall -Werror -Wextra -g3
+CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address,undefined
 
 LIBS = -lmlx -lXext -lX11 -lm
 
