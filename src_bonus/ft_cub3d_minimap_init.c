@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:41:24 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/06 19:44:15 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/07 18:08:10 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,6 @@ void	initialize_screen(t_context *ctx)
 	ctx->player.minimap_img.img = mlx_new_image(
 			ctx->mlx, ctx->map.minimap_scale, ctx->map.minimap_scale);
 	get_img_data(&ctx->player.minimap_img);
+	printf("player: %p\n", ctx->player.minimap_img.img);
 	fill_minimap_image(&ctx->map);
 }

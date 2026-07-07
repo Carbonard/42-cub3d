@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/07 02:13:07 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/07 18:56:25 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ enum e_errors
 	C3D_BAD_FILE,
 	C3D_FINISHED_PARSER,
 	C3D_FILE_PARSER_ERROR,
+	C3D_NO_TEXTURE,
 	C3D_MAP_PARSER,
 	C3D_OPEN_MAP,
 	C3D_EMPTY_FIELD,
@@ -41,8 +42,6 @@ enum e_errors
 	C3D_BAD_COLOR,
 	C3D_MLX
 };
-
-typedef unsigned int	t_uint;
 
 // Math
 
@@ -86,22 +85,27 @@ typedef struct s_mlx_image
 	int		height;
 }	t_mlx_image;
 
+typedef struct s_texture
+{
+	unsigned int	color;
+	t_mlx_image		image;
+	short int		set;
+}	t_texture;
+
+typedef struct s_str_to_tex
+{
+	char		*str;
+	t_texture	*texture;
+}	t_str_to_tex;
+
 typedef struct s_textures
 {
-	t_mlx_image		north;
-	t_mlx_image		south;
-	t_mlx_image		west;
-	t_mlx_image		east;
-	t_mlx_image		tex_ceiling;
-	t_mlx_image		tex_floor;
-	unsigned int	floor;
-	unsigned int	ceiling;
-	unsigned int	floor_set;
-	unsigned int	ceiling_set;
-	unsigned int	c_north;
-	unsigned int	c_south;
-	unsigned int	c_west;
-	unsigned int	c_east;
+	t_texture	north;
+	t_texture	south;
+	t_texture	west;
+	t_texture	east;
+	t_texture	floor;
+	t_texture	ceiling;
 }	t_textures;
 
 typedef struct s_character
@@ -168,8 +172,7 @@ int				free_str_array(t_str_array *str);
 // Initialize
 
 void			parse_file(t_context *ctx, char *file_name);
-int				load_image(t_context *ctx, t_mlx_image *image, char *file_name);
-int				set_color(t_context *ctx, char *input);
+int				load_texture(t_context *ctx, char *line);
 void			set_map(t_context *ctx, t_str_array *map);
 
 // MLX Utils
@@ -209,14 +212,14 @@ int				rotate_player(t_context *ctx, float t_angle);
 
 void			render_screen(t_context *ctx);
 void			display_vertical_slice(t_context *ctx,
-					int screen_x, t_ray *ray, t_mlx_image *texture);
+					int screen_x, t_ray *ray, t_texture *texture);
 double			get_step_size(t_ray *ray);
 double			upper_dist(double z);
 double			lower_dist(double z);
+double			screen_dist(t_character *player, t_ray *ray);
 
 // Close
 
-void			close_images(t_context *ctx);
 int				close_game(void *arg, int exit_code);
 
 // Utils

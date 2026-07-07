@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/06 20:29:33 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/07 17:43:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-t_mlx_image	*last_step(t_context *ctx,
+t_texture	*last_step(t_context *ctx,
 				double last_step, t_ray *ray, t_vector *last_jump)
 {
 	if (last_step < ray->h_dist(ray->pos.x))
@@ -41,7 +41,7 @@ t_mlx_image	*last_step(t_context *ctx,
 static void	trace_ray_2(t_context *ctx, t_ray *ray, int screen_x)
 {
 	double			step;
-	t_mlx_image		*texture;
+	t_texture		*texture;
 	t_vector		tmp;
 
 	texture = NULL;

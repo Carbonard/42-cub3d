@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 17:46:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/07 02:17:30 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/07 17:41:27 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,8 @@
 
 static int	parse_line(t_context *ctx, char *line)
 {
-	if (!ft_strncmp(line, "NO ", 3))
-		return (load_image(ctx, &ctx->textures.north, line + 3));
-	if (!ft_strncmp(line, "SO ", 3))
-		return (load_image(ctx, &ctx->textures.south, line + 3));
-	if (!ft_strncmp(line, "WE ", 3))
-		return (load_image(ctx, &ctx->textures.west, line + 3));
-	if (!ft_strncmp(line, "EA ", 3))
-		return (load_image(ctx, &ctx->textures.east, line + 3));
-	if (!ft_strncmp(line, "F ", 2))
-		return (load_image(ctx, &ctx->textures.tex_floor, line + 2));
-	if (!ft_strncmp(line, "C ", 2))
-		return (load_image(ctx, &ctx->textures.tex_ceiling, line + 2));
-	if (!ft_strncmp(line, "F ", 2) || !ft_strncmp(line, "C ", 2))
-		return (set_color(ctx, line));
+	if (load_texture(ctx, line) == C3D_SUCCESS)
+		return (C3D_SUCCESS);
 	while (line[0] == ' ')
 		line++;
 	if (*line == '\n')
@@ -47,18 +35,18 @@ static int	empty_element(t_context *ctx)
 	int	ret;
 
 	ret = 0;
-	if (!(ctx->textures.north.img))
+	if (!ctx->textures.north.set)
 		ret += ft_putnstr_fd("Error\nMissing north texture\n", 2, 50);
-	if (!(ctx->textures.south.img))
+	if (!ctx->textures.south.set)
 		ret += ft_putnstr_fd("Error\nMissing south texture\n", 2, 50);
-	if (!(ctx->textures.west.img))
+	if (!ctx->textures.west.set)
 		ret += ft_putnstr_fd("Error\nMissing west texture\n", 2, 50);
-	if (!(ctx->textures.east.img))
+	if (!ctx->textures.east.set)
 		ret += ft_putnstr_fd("Error\nMissing east texture\n", 2, 50);
-	// if (!(ctx->textures.ceiling_set))
-	// 	ret += ft_putnstr_fd("Error\nMissing ceiling color\n", 2, 50);
-	// if (!(ctx->textures.floor_set))
-	// 	ret += ft_putnstr_fd("Error\nMissing floor color\n", 2, 50);
+	if (!ctx->textures.ceiling.set)
+		ret += ft_putnstr_fd("Error\nMissing ceiling color\n", 2, 50);
+	if (!ctx->textures.floor.set)
+		ret += ft_putnstr_fd("Error\nMissing floor color\n", 2, 50);
 	if (!(ctx->player.pos.x))
 		ret += ft_putnstr_fd("Error\nMissing character position\n", 2, 50);
 	return (ret);
@@ -91,7 +79,7 @@ void	parse_file(t_context *ctx, char *file_name)
 	int			fd;
 	char		*line;
 	t_str_array	map;
-
+printf("parse_file: %p\n", ctx->mlx);
 	fd = open(file_name, O_RDONLY);
 	line = parse_config(ctx, fd);
 	init_array(&map);

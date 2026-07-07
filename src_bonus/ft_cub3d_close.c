@@ -6,51 +6,35 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:59:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/06 18:38:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/07 18:13:56 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-void	close_images(t_context *ctx)
+static void	safe_close_image(void *mlx, t_mlx_image *image)
 {
-	if (ctx->map.img.img)
+	if (image->img)
 	{
-		mlx_destroy_image(ctx->mlx, ctx->map.img.img);
-		ctx->map.img.img = NULL;
-	}
-	if (ctx->player.minimap_img.img)
-	{
-		mlx_destroy_image(ctx->mlx, ctx->player.minimap_img.img);
-		ctx->player.minimap_img.img = NULL;
+		mlx_destroy_image(mlx, image->img);
+		image->img = NULL;
 	}
 }
 
-void	close_textures(void *mlx, t_textures *textures)
+static void	close_images(t_context *ctx)
 {
-	if (textures->north.img)
-	{
-		mlx_destroy_image(mlx, textures->north.img);
-		textures->north.img = NULL;
-	}
-	if (textures->south.img)
-	{
-		mlx_destroy_image(mlx, textures->south.img);
-		textures->south.img = NULL;
-	}
-	if (textures->west.img)
-	{
-		mlx_destroy_image(mlx, textures->west.img);
-		textures->west.img = NULL;
-	}
-	if (textures->east.img)
-	{
-		mlx_destroy_image(mlx, textures->east.img);
-		textures->east.img = NULL;
-	}
+	safe_close_image(ctx->mlx, &ctx->map.img);
+	safe_close_image(ctx->mlx, &ctx->player.minimap_img);
+	safe_close_image(ctx->mlx, &ctx->screen);
+	safe_close_image(ctx->mlx, &ctx->textures.north.image);
+	safe_close_image(ctx->mlx, &ctx->textures.south.image);
+	safe_close_image(ctx->mlx, &ctx->textures.west.image);
+	safe_close_image(ctx->mlx, &ctx->textures.east.image);
+	safe_close_image(ctx->mlx, &ctx->textures.floor.image);
+	safe_close_image(ctx->mlx, &ctx->textures.ceiling.image);
 }
 
-void	print_error(int exit_code)
+static void	print_error(int exit_code)
 {
 	if (exit_code == C3D_MALLOC)
 		ft_putendl_fd("Malloc failed", 2);
@@ -71,12 +55,9 @@ int	close_game(void *arg, int exit_code)
 	ctx = arg;
 	print_error(exit_code);
 	close_images(ctx);
-	close_textures(ctx->mlx, &ctx->textures);
 	free_split(ctx->map.matrix);
 	if (ctx->mlx && ctx->window)
 		mlx_destroy_window(ctx->mlx, ctx->window);
-	if (ctx->mlx && ctx->screen.img)
-		mlx_destroy_image(ctx->mlx, ctx->screen.img);
 	if (ctx->mlx)
 		mlx_destroy_display(ctx->mlx);
 	free(ctx->mlx);

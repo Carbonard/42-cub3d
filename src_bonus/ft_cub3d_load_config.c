@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 18:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/06 19:25:53 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/07 17:37:36 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-int	load_image(t_context *ctx, t_mlx_image *img, char *file_name)
+static int	load_image(t_context *ctx, char *file_name, t_mlx_image *img)
 {
 	size_t	len;
 
@@ -21,6 +21,7 @@ int	load_image(t_context *ctx, t_mlx_image *img, char *file_name)
 	len = ft_strlen(file_name);
 	if (file_name[len - 1] == '\n')
 		file_name[len - 1] = 0;
+	printf("%p, %p\n", ctx->mlx, img->img);
 	img->img = mlx_xpm_file_to_image(
 			ctx->mlx, file_name, &img->width, &img->height);
 	if (!img->img)
@@ -33,8 +34,9 @@ int	load_image(t_context *ctx, t_mlx_image *img, char *file_name)
 	return (C3D_SUCCESS);
 }
 
-static int	parse_color(char *str, int color[3])
+static int	set_color(char *str, t_texture *texture)
 {
+	int	color[3];
 	int	cnt;
 
 	cnt = 0;
@@ -55,24 +57,48 @@ static int	parse_color(char *str, int color[3])
 		str++;
 	if (*str != '\n')
 		return (C3D_BAD_COLOR);
+	texture->color = rgb(color[0], color[1], color[2]);
 	return (C3D_SUCCESS);
 }
 
-int	set_color(t_context *ctx, char *input)
+static t_texture	*get_texture(t_context *ctx, char *line)
 {
-	int	color[3];
+	int	i;
+	const t_str_to_tex	textures[] = {
+		{.str = "NO ", .texture = &ctx->textures.north},
+		{.str = "SO ", .texture = &ctx->textures.south},
+		{.str = "WE ", .texture = &ctx->textures.west},
+		{.str = "EA ", .texture = &ctx->textures.east},
+		{.str = "F ", .texture = &ctx->textures.floor},
+		{.str = "C ", .texture = &ctx->textures.ceiling},
+		{.str = NULL, .texture = NULL}
+	};
 
-	if (parse_color(input + 1, color) != C3D_SUCCESS)
-		return (C3D_BAD_COLOR);
-	if (*input == 'F')
+	i = 0;
+	while (textures[i].str)
 	{
-		ctx->textures.floor_set = 1;
-		ctx->textures.floor = rgb(color[0], color[1], color[2]);
+		if (!ft_strncmp(line, textures[i].str, ft_strlen(textures[i].str)))
+			return (textures[i].texture);
+		i++;
 	}
-	else
+	return (NULL);
+}
+
+int	load_texture(t_context *ctx, char *line)
+{
+	t_texture	*texture;
+
+	texture = get_texture(ctx, line);
+	if (!texture)
+		return (C3D_NO_TEXTURE);
+	while (*line != ' ')
+		line++;
+	printf("%p\n", texture->image.img);
+	if ((set_color(line, texture) == C3D_SUCCESS)
+		|| (load_image(ctx, line, &texture->image) == C3D_SUCCESS))
 	{
-		ctx->textures.ceiling_set = 1;
-		ctx->textures.ceiling = rgb(color[0], color[1], color[2]);
+		texture->set = 1;
+		return (C3D_SUCCESS);
 	}
-	return (C3D_SUCCESS);
+	return (C3D_FILE_PARSER_ERROR);
 }

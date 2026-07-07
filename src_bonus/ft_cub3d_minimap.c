@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:29:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/06 20:05:04 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/07 18:45:42 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ unsigned int	merge_colors(unsigned int c1, unsigned int c2)
 	double			a;
 
 	a = (double)(c2 >> 24) / 0x100;
-	return (((t_uint)((1 - a) * (c1 & RED) + a * (c2 & RED)) & RED)
-		+ ((t_uint)((1 - a) * (c1 & GREEN) + a * (c2 & GREEN)) & GREEN)
-		+ ((t_uint)((1 - a) * (c1 & BLUE) + a * (c2 & BLUE)) & BLUE));
+	return (((unsigned int)((1 - a) * (c1 & RED) + a * (c2 & RED)) & RED)
+		+ ((unsigned int)((1 - a) * (c1 & GREEN) + a * (c2 & GREEN)) & GREEN)
+		+ ((unsigned int)((1 - a) * (c1 & BLUE) + a * (c2 & BLUE)) & BLUE));
 }
 
 void	merge_images(t_mlx_image *main, t_mlx_image *other, int x, int y)
@@ -96,7 +96,6 @@ void	render_minimap(t_context *ctx)
 	x_margin = 10;
 	y_margin = 10;
 	fill_minimap_player_image(ctx, &ctx->player, ctx->map.minimap_scale);
-	get_img_data(&ctx->player.minimap_img);
 	merge_images(&ctx->screen, &ctx->map.img, x_margin, y_margin);
 	merge_images(&ctx->screen, &ctx->player.minimap_img,
 		x_margin + (ctx->player.pos.x - 0.5) * ctx->map.minimap_scale,
