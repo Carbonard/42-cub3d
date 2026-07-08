@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 15:07:38 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/06 20:02:50 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/08 23:31:38 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ double	v_mod(t_vector *v)
 
 double	v_cos(t_vector *u, t_vector *v)
 {
-	static t_vector	o = {0, 0};
-
-	return ((u->x * v->x + u->y * v->y) / (dist(&o, u) * dist(&o, v)));
+	return ((u->x * v->x + u->y * v->y)
+		/ sqrt((u->x * u->x + u->y * u->y) * (v->x * v->x + v->y * v->y)));
 }

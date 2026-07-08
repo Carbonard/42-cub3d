@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/04 20:23:11 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/08 17:56:50 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,6 @@ int	key_press_event(int key, t_context *ctx)
 		ctx->pressed.left = 1;
 	else if (key == XK_Right)
 		ctx->pressed.right = 1;
-	else if (key == XK_r)
-	{
-		if (!ctx->rain_mode || ctx->rain_mode > 1000)
-			ctx->rain_mode = !ctx->rain_mode * 20;
-		else
-			ctx->rain_mode *= 5;
-		render_screen(ctx);
-	}
 	else
 		printf("Invalid key: %d\n", key);
 	return (0);
@@ -68,6 +60,8 @@ int	loop_hook(t_context *ctx)
 	if (!last_time)
 		last_time = get_time();
 	time_increment = (double)(get_time() - last_time) / 100000;
+	if (time_increment > 1)
+		time_increment = 1;
 	last_time = get_time();
 	if (ctx->pressed.a)
 		render = move_player(ctx, 0, -ctx->player.velocity * time_increment);
@@ -81,7 +75,7 @@ int	loop_hook(t_context *ctx)
 		render = rotate_player(ctx, -ctx->player.ang_velocity * time_increment);
 	if (ctx->pressed.right)
 		render = rotate_player(ctx, +ctx->player.ang_velocity * time_increment);
-	if (render || (ctx->rain_mode && last_time % 1000 == 0))
+	if (render)
 		render_screen(ctx);
 	return (0);
 }

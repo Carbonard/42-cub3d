@@ -17,3 +17,6 @@ NO ./path/to/north/texture/frame1.xpm ./path/to/north/texture/frame2.xpm
 ```
 
 # Resources
+
+https://lodev.org/cgtutor/raycasting.html
+

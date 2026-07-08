@@ -6,11 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/04 20:26:07 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/06 20:09:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/08 19:44:21 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_cub3d.h"
+// #include "ft_cub3d.h"
 
 // void	display_minimap_point(t_map *map,
 // t_coordinate x, t_coordinate y, unsigned int color, int size)
