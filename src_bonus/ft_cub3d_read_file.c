@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 17:46:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/07 19:41:45 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/09 23:47:49 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,14 @@ void	parse_file(t_context *ctx, char *file_name)
 	int			fd;
 	char		*line;
 	t_str_array	map;
-printf("parse_file: %p\n", ctx->mlx);
+
 	fd = open(file_name, O_RDONLY);
+	if (fd < 0)
+	{
+		ft_putstr_fd("error\n", 2);
+		perror(file_name);
+		close_game(ctx, C3D_BAD_FILE);
+	}
 	line = parse_config(ctx, fd);
 	init_array(&map);
 	while (line)

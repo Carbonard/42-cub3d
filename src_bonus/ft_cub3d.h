@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/09 18:03:55 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/09 20:23:12 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,16 @@ typedef struct s_pressed_keys
 	int	right;
 }	t_pressed_keys;
 
+typedef struct s_wall
+{
+	int			top;
+	int			bottom;
+	t_texture	*texture;
+	double		tex_x;
+	double		tex_y;
+	double		y_step;
+}	t_wall_limits;
+
 typedef struct s_context
 {
 	t_textures		textures;
@@ -170,6 +180,7 @@ typedef struct s_context
 	t_character		player;
 	t_pressed_keys	pressed;
 	unsigned int	current_tex;
+	t_wall_limits	w_limits[2048];
 	int				rain_mode;
 }	t_context;
 
@@ -194,8 +205,8 @@ void			set_map(t_context *ctx, t_str_array *map);
 
 // MLX Utils
 
-void			put_pixel(t_mlx_image *image, int x, int y, unsigned int color);
-unsigned int	get_pixel(t_mlx_image *image, int x, int y);
+void			put_pixel(const t_mlx_image *image, int x, int y, unsigned int color);
+unsigned int	get_pixel(const t_mlx_image *image, int x, int y);
 unsigned int	rgb(int r, int g, int b);
 unsigned int	argb(int a, int r, int g, int b);
 void			get_img_data(t_mlx_image *image);
@@ -228,12 +239,13 @@ int				rotate_player(t_context *ctx, float t_angle);
 // Render
 
 void			render_screen(t_context *ctx);
-void			display_vertical_slice(t_context *ctx,
+void			save_walls(t_context *ctx,
 					t_int_vector *screen, t_ray *ray, t_texture *texture);
 double			get_step_size(t_ray *ray);
 double			upper_dist(double z);
 double			lower_dist(double z);
 double			screen_dist(t_character *player, t_ray *ray);
+void			fill_screen(t_context *ctx);
 
 // Textures
 

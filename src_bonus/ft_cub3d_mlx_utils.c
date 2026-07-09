@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 23:57:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/09 18:04:31 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/09 21:11:18 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-void	put_pixel(t_mlx_image *image, int x, int y, unsigned int color)
+void	put_pixel(const t_mlx_image *image, int x, int y, unsigned int color)
 {
 	char	*dst;
 
@@ -22,11 +22,11 @@ void	put_pixel(t_mlx_image *image, int x, int y, unsigned int color)
 	// 		x, y, image->width, image->height);
 	// 	return ;
 	// }
-	dst = image->addr + (y * image->line_size + x * (image->bpp >> 3));
+	dst = image->addr + (y * image->line_size + x * (image->bpp / 8));
 	*(unsigned int *) dst = color;
 }
 
-unsigned int	get_pixel(t_mlx_image *image, int x, int y)
+unsigned int	get_pixel(const t_mlx_image *image, int x, int y)
 {
 	char	*src;
 
@@ -36,7 +36,7 @@ unsigned int	get_pixel(t_mlx_image *image, int x, int y)
 	// 		x, y, image->width, image->height);
 	// 	return (rgb(255, 0, 0));
 	// }
-	src = image->addr + (y * image->line_size + x * (image->bpp >> 3));
+	src = image->addr + (y * image->line_size + x * (image->bpp / 8));
 	return (*(unsigned int *) src);
 }
 

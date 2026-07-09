@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/09 15:27:26 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/09 21:29:07 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static void	trace_ray_2(t_context *ctx, t_ray *ray, t_int_vector *screen)
 			last_cross = 'y';
 		}
 	}
-	display_vertical_slice(ctx, screen, ray,
+	save_walls(ctx, screen, ray,
 		last_step(ctx, ray, &dist_to, last_cross));
 }
 
@@ -127,6 +127,7 @@ static void	trace_ray(t_context *ctx, t_int_vector *screen)
 void	render_screen(t_context *ctx)
 {
 	t_int_vector	screen_coord;
+
 	set_textures(ctx);
 time(1);
 	screen_coord.x = 0;
@@ -136,6 +137,7 @@ time(1);
 		trace_ray(ctx, &screen_coord);
 		screen_coord.x++;
 	}
+	fill_screen(ctx);
 time(2);
 	render_minimap(ctx);
 }
