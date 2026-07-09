@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/08 01:09:51 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/09 15:31:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,21 @@ int	key_release_event(int key, t_context *ctx)
 	return (0);
 }
 
+static void	set_tex(t_tex_array *texture, int current)
+{
+	texture->current = &texture->tex[current % texture->size];
+}
+
+void	set_textures(t_context *ctx)
+{
+	set_tex(&ctx->textures.north, ctx->current_tex);
+	set_tex(&ctx->textures.south, ctx->current_tex);
+	set_tex(&ctx->textures.west, ctx->current_tex);
+	set_tex(&ctx->textures.east, ctx->current_tex);
+	set_tex(&ctx->textures.floor, ctx->current_tex);
+	set_tex(&ctx->textures.ceiling, ctx->current_tex);
+}
+
 int	loop_hook(t_context *ctx)
 {
 	static size_t	last_time;
@@ -86,7 +101,8 @@ int	loop_hook(t_context *ctx)
 	{
 		last_time_2 = last_time;
 		ctx->current_tex++;
-		render = 0;
+		set_textures(ctx);
+		render = 1;
 	}
 	if (render)
 	{

@@ -6,37 +6,89 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:26:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/07 19:50:27 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/09 17:38:51 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
 static int	texture_coord_x(t_context *ctx,
-	t_tex_array *texture, t_vector *wall_point)
+	t_texture *texture, t_vector *wall_point)
 {
-	if (texture == &ctx->textures.north || texture == &ctx->textures.south)
-		return (lower_dist(wall_point->x) * (double)texture->tex[ctx->current_tex % texture->size].image.width);
+	if (texture == ctx->textures.north.current || texture == ctx->textures.south.current)
+		return (lower_dist(wall_point->x) * (double)texture->image.width);
 	else
-		return (lower_dist(wall_point->y) * (double)texture->tex[ctx->current_tex % texture->size].image.width);
+		return (lower_dist(wall_point->y) * (double)texture->image.width);
 }
 
-static int	texture_coord_y(t_context *ctx,
-	t_tex_array *texture, int wall_height, int screen_y)
+// static int	texture_coord_y(t_context *ctx,
+// 	t_tex_array *texture, int wall_height, int screen_y)
+// {
+// 	return ((screen_y - ((double)ctx->height - wall_height) / 2)
+// 		* texture->tex[ctx->current_tex % texture->size].image.height / wall_height);
+// }
+
+static double	texture_coord_y(t_context *ctx,
+	t_mlx_image *texture, int wall_height, int *y_partition)
 {
-	return ((screen_y - ((double)ctx->height - wall_height) / 2)
-		* texture->tex[ctx->current_tex % texture->size].image.height / wall_height);
+	*y_partition = (ctx->height - wall_height) * 0.5;
+	if (*y_partition > 0)
+		return (0);
+	return (-(double)(*y_partition) * texture->height / wall_height);
 }
 
-static void screen_to_map(t_context *ctx, t_vector *floor_pos, int screen_x, int screen_y)
-{
-	double	floor_dist_to_screen;
+// static double floor_dist_to_screen(t_context *ctx, int screen_y)
+// {
+// 	static double	cache[2048];
+// 	static int		height;
+// 	int				y;
 
-	floor_dist_to_screen = (double) ctx->height / (ctx->height - screen_y * 2);
-	double	s_x = ((double) screen_x * 2 / ctx->width - 1) * floor_dist_to_screen;
-	floor_pos->x = ctx->player.pos.x + ctx->player.ort.x * s_x + ctx->player.dir.x * floor_dist_to_screen;
-	floor_pos->y = ctx->player.pos.y + ctx->player.ort.y * s_x + ctx->player.dir.y * floor_dist_to_screen;
-}
+// 	if (height != ctx->height)
+// 	{
+// 		height = ctx->height;
+// 		y = 0;
+// 		while (y < height)
+// 		{
+// 			cache[y] = (double) height / (height - y * 2);
+// 			y++;
+// 		}	
+// 	}
+// 	return (cache[screen_y]);
+// }
+
+// static double floor_dist_ortogonal(t_context *ctx, int screen_x)
+// {
+// 	static double	cache[2048];
+// 	static int		width;
+// 	int				x;
+
+// 	if (width != ctx->width)
+// 	{
+// 		width = ctx->width;
+// 		x = 0;
+// 		while (x < width)
+// 		{
+// 			cache[x] = (double) x * 2 / width - 1;
+// 			x++;
+// 		}
+// 	}
+// 	return (cache[screen_x]);
+// }
+
+// static void screen_to_map(t_context *ctx, t_vector *floor_pos, int screen_x, int screen_y)
+// {
+// 	double	dist;
+// 	double	s_x;
+
+// 	dist = (double) ctx->height / (ctx->height - screen_y * 2);
+// 	s_x = (double) screen_x * 2 / ctx->width - 1;
+// 	floor_pos->x = ctx->player.pos.x
+// 		+ ctx->player.ort.x * s_x
+// 		+ ctx->player.dir.x * dist;
+// 	floor_pos->y = ctx->player.pos.y
+// 		+ ctx->player.ort.y * s_x
+// 		+ ctx->player.dir.y * dist;
+// }
 
 // LSD
 // static unsigned int	get_floor_color(t_context *ctx,
@@ -53,50 +105,60 @@ static void screen_to_map(t_context *ctx, t_vector *floor_pos, int screen_x, int
 // }
 
 static unsigned int	get_floor_ceiling_color(t_context *ctx,
-	t_tex_array *text, int screen_x, int screen_y)
+	t_texture *texture, int screen_x, int screen_y)
 {
-	t_vector	floor_point;
-	t_texture	*texture;
+	t_vector		floor_point;
+	double			dist;
+	static double	s_x;
+	static int		cache_x;
 
-	texture = &text->tex[ctx->current_tex % text->size];
 	if (!texture->image.img)
 		return (texture->color);
-	screen_to_map(ctx, &floor_point, screen_x, screen_y);
+	dist = (double) ctx->height / (double) (ctx->height - screen_y * 2);
+	if (cache_x != screen_x)
+	{
+		s_x = ((double) screen_x * 2 / ctx->width - 1);
+		cache_x = screen_x;
+	}
+	floor_point.x = ctx->player.pos.x
+		+ (ctx->player.ort.x * s_x + ctx->player.dir.x) * dist;
+	floor_point.y = ctx->player.pos.y
+		+ (ctx->player.ort.y * s_x + ctx->player.dir.y) * dist;
+	// screen_to_map(ctx, &floor_point, screen_x, screen_y);
 	return (get_pixel(&texture->image,
-		lower_dist(floor_point.x) * texture->image.width,
-		lower_dist(floor_point.y) * texture->image.height));
+		(floor_point.x - (int) floor_point.x) * texture->image.width,
+		(floor_point.y - (int) floor_point.y) * texture->image.height));
 	// if (((int)(floor_point.x * 2) * 1031 / (int)(floor_point.y * 2 + 2)) % 50 == 0)
 	// 	return (rgb(50,50,30));
 }
 
 void	display_vertical_slice(t_context *ctx,
-			int screen_x, t_ray *ray, t_tex_array *texture)
+			t_int_vector *screen, t_ray *ray, t_texture *texture)
 {
-	int				i;
-	int				wall_height;
+	int			wall_height;
+	int			y_partition;
+	t_vector	tex;
+	double		y_step;
 
-	if (!texture)
-	{
-		printf("Debug: missing texture (display_vertical_slice)\n");
-		return ;
-	}
-	i = 0;
-	wall_height = ctx->height / (screen_dist(&ctx->player, ray));
-	while (i < ctx->height)
+	wall_height = ctx->height / ray->dist;
+	tex.x = texture_coord_x(ctx, texture, &ray->pos);
+	tex.y = texture_coord_y(ctx, &texture->image, wall_height, &y_partition);
+	y_step = (double)texture->image.height / wall_height;
+	while (screen->y < ctx->height)
 	{
 		if (ctx->rain_mode && get_time() % ctx->rain_mode == 0)
-			put_pixel(&ctx->screen, screen_x, i, rgb(16, 71, 192));
-		else if (i <= (ctx->height - wall_height) / 2)
-			put_pixel(&ctx->screen, screen_x, i, get_floor_ceiling_color(ctx, &ctx->textures.ceiling, screen_x, i));
-		else if (ctx->height - i <= (ctx->height - wall_height) / 2)
-			put_pixel(&ctx->screen, screen_x, i, get_floor_ceiling_color(ctx, &ctx->textures.floor, screen_x, ctx->height - i));
+			put_pixel(&ctx->screen, screen->x, screen->y, rgb(16, 71, 192));
+		else if (screen->y <= y_partition)
+			put_pixel(&ctx->screen, screen->x, screen->y, get_floor_ceiling_color(ctx, ctx->textures.ceiling.current, screen->x, screen->y));
+		else if (ctx->height - screen->y <= y_partition)
+			put_pixel(&ctx->screen, screen->x, screen->y, get_floor_ceiling_color(ctx, ctx->textures.floor.current, screen->x, ctx->height - screen->y));
 		else
 		{
-			put_pixel(&ctx->screen, screen_x, i,
-				get_pixel(&texture->tex[ctx->current_tex % texture->size].image,
-					texture_coord_x(ctx, texture, &ray->pos),
-					texture_coord_y(ctx, texture, wall_height, i)));
+			put_pixel(&ctx->screen, screen->x, screen->y,
+				get_pixel(&texture->image,
+					tex.x, tex.y));
+			tex.y += y_step;
 		}
-		i++;
+		screen->y++;
 	}
 }

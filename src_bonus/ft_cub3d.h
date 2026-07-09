@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/08 17:01:11 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/09 18:03:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,12 @@ typedef struct s_vector
 	t_coordinate	y;
 }	t_vector;
 
+typedef struct s_int_vector
+{
+	int	x;
+	int	y;
+}	t_int_vector;
+
 void			rotate_vector(t_vector *v, t_angle alpha);
 void			normalize_vector(t_vector *v);
 double			dist(t_vector *u, t_vector *v);
@@ -66,10 +72,13 @@ typedef double			(*t_dist)(double);
 
 typedef struct s_ray
 {
-	t_vector	pos;
-	t_vector	dir;
-	t_dist		h_dist;
-	t_dist		v_dist;
+	t_vector		pos;
+	t_vector		dir;
+	t_int_vector	dir_sgn;
+	t_vector		dir_inv;
+	double			dist;
+	t_dist			h_dist;
+	t_dist			v_dist;
 }	t_ray;
 
 // General
@@ -95,6 +104,7 @@ typedef struct s_texture
 typedef struct s_tex_array
 {
 	t_texture	tex[20];
+	t_texture	*current;
 	short int	size;
 }	t_tex_array;
 
@@ -193,7 +203,7 @@ void			get_img_data(t_mlx_image *image);
 // Map Utils
 
 int				on_map(t_map *map, t_vector *ray);
-int				is_wall(t_context *ctx, t_vector *pos);
+int				is_wall(t_map *map, t_vector *pos);
 
 // Minimap
 
@@ -219,11 +229,15 @@ int				rotate_player(t_context *ctx, float t_angle);
 
 void			render_screen(t_context *ctx);
 void			display_vertical_slice(t_context *ctx,
-					int screen_x, t_ray *ray, t_tex_array *texture);
+					t_int_vector *screen, t_ray *ray, t_texture *texture);
 double			get_step_size(t_ray *ray);
 double			upper_dist(double z);
 double			lower_dist(double z);
 double			screen_dist(t_character *player, t_ray *ray);
+
+// Textures
+
+void			set_textures(t_context *ctx);
 
 // Close
 

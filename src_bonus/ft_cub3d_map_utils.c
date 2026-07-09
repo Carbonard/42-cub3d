@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/03 19:34:44 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/06 20:03:01 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/09 02:50:47 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	is_int(double n)
 	return (n - floor(n) == 0);
 }
 
-int	is_wall(t_context *ctx, t_vector *pos)
+int	is_wall(t_map *map, t_vector *pos)
 {
 	t_vector	aux;
 
@@ -35,17 +35,17 @@ int	is_wall(t_context *ctx, t_vector *pos)
 	{
 		aux.x = pos->x - 0.01;
 		aux.y = pos->y;
-		if (is_wall(ctx, &aux))
+		if (is_wall(map, &aux))
 			return (1);
 	}
 	if (is_int(pos->y))
 	{
 		aux.x = pos->x;
 		aux.y = pos->y - 0.01;
-		if (is_wall(ctx, &aux))
+		if (is_wall(map, &aux))
 			return (1);
 	}
-	if (ctx->map.matrix[(int)(pos->y)][(int)(pos->x)] == '1')
+	if (map->matrix[(int)(pos->y)][(int)(pos->x)] == '1')
 		return (1);
 	return (0);
 }
