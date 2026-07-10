@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:26:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/09 23:44:47 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/10 14:50:30 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,32 +184,31 @@
 // 	return (-(double)(*y_partition) * texture->height / wall_height);
 // }
 
-void	save_walls(t_context *ctx,
-			t_int_vector *screen, t_ray *ray, t_texture *texture)
+void	save_walls(t_context *ctx, t_ray_info *ray, t_texture *tex)
 {
 	int			wall_height;
 	int			y_partition;
 
 	wall_height = ctx->height / ray->dist;
-	ctx->w_limits[screen->x].texture = texture;
-// ctx->w_limits[screen->x].tex_x = texture_coord_x(ctx, texture, &ray->pos);
-	if (texture == ctx->textures.north.current || texture == ctx->textures.south.current)
-		ctx->w_limits[screen->x].tex_x = lower_dist(ray->pos.x);
+	ctx->walls[ray->screen_x].texture = tex;
+// ctx->walls[screen->x].tex_x = texture_coord_x(ctx, texture, &ray->pos);
+	if (ray->tex.orientation == AXIS_Y)
+		ctx->walls[ray->screen_x].tex_x = lower_dist(ray->pos.x);
 	else
-		ctx->w_limits[screen->x].tex_x = lower_dist(ray->pos.y);
-	ctx->w_limits[screen->x].tex_x *= (double)texture->image.width;
-// ctx->w_limits[screen->x].tex_y = texture_coord_y(ctx, &texture->image, wall_height, &y_partition);
+		ctx->walls[ray->screen_x].tex_x = lower_dist(ray->pos.y);
+	ctx->walls[ray->screen_x].tex_x *= (double)tex->image.width;
+// ctx->walls[screen->x].tex_y = texture_coord_y(ctx, &texture->image, wall_height, &y_partition);
 	y_partition = (ctx->height - wall_height) * 0.5;
-	ctx->w_limits[screen->x].tex_y = 0;
+	ctx->walls[ray->screen_x].tex_y = 0;
 	if (y_partition <= 0)
-		ctx->w_limits[screen->x].tex_y = -(double)(y_partition) * texture->image.height / wall_height;
-	ctx->w_limits[screen->x].y_step = (double)texture->image.height / wall_height;
-	ctx->w_limits[screen->x].bottom = 0;
-	ctx->w_limits[screen->x].top = ctx->height;
+		ctx->walls[ray->screen_x].tex_y = -(double)(y_partition) * tex->image.height / wall_height;
+	ctx->walls[ray->screen_x].y_step = (double)tex->image.height / wall_height;
+	ctx->walls[ray->screen_x].bottom = 0;
+	ctx->walls[ray->screen_x].top = ctx->height;
 	if (y_partition > 0)
 	{
-		ctx->w_limits[screen->x].bottom = y_partition;
-		ctx->w_limits[screen->x].top = ctx->height - y_partition;
+		ctx->walls[ray->screen_x].bottom = y_partition;
+		ctx->walls[ray->screen_x].top = ctx->height - y_partition;
 	}
 	return;
 }
@@ -219,18 +218,18 @@ void put_floor_and_ceiling(t_context *ctx, t_int_vector *screen, t_vector *floor
 	const t_texture		*floor = ctx->textures.floor.current;
 	const t_texture		*ceiling = ctx->textures.ceiling.current;
 
-	if (!floor->image.img)
-		put_pixel(&ctx->screen, screen->x, screen->y, floor->color);
-	if (!ceiling->image.img)
-		put_pixel(&ctx->screen, screen->x, ctx->height - screen->y, ceiling->color);
 	if (floor_point->x < 0 || floor_point->y < 0 || floor_point->x > ctx->width || floor_point->y > ctx->height)
 		return ;
-	if (ceiling->image.img)
+	if (!ceiling->image.img)
+		put_pixel(&ctx->screen, screen->x, screen->y, ceiling->color);
+	else
 		put_pixel(&ctx->screen, screen->x, screen->y,
 			get_pixel(&ceiling->image,
 			(floor_point->x - (int)(floor_point->x)) * ceiling->image.width,
 			(floor_point->y - (int)(floor_point->y)) * ceiling->image.height));
-	if (floor->image.img)
+	if (!floor->image.img)
+		put_pixel(&ctx->screen, screen->x, ctx->height - screen->y, floor->color);
+	else
 		put_pixel(&ctx->screen, screen->x, ctx->height - screen->y,
 			get_pixel(&floor->image,
 			(floor_point->x - (int)(floor_point->x)) * floor->image.width,
@@ -242,7 +241,7 @@ void	fill_background(t_context *ctx)
 	t_int_vector		screen;
 	t_vector			floor_point;
 	double				dist;
-	const double				x_step = (double) 2 / ctx->width;
+	const double		x_step = (double) 2 / ctx->width;
 
 	screen.y = 0;
 	while (screen.y < ctx->height / 2)
@@ -270,20 +269,26 @@ void	fill_screen(t_context *ctx)
 	t_vector		tex;
 	double			y_step;
 	t_texture		*texture;
+	unsigned int	color;
 
 	fill_background(ctx);
 	screen.x = 0;
 	while (screen.x < ctx->width)
 	{
-		tex.x = ctx->w_limits[screen.x].tex_x;
-		tex.y = ctx->w_limits[screen.x].tex_y;
-		texture = ctx->w_limits[screen.x].texture;
-		y_step = ctx->w_limits[screen.x].y_step;
-		screen.y = ctx->w_limits[screen.x].bottom + 1;
-		while (screen.y < ctx->w_limits[screen.x].top)
+		tex.x = ctx->walls[screen.x].tex_x;
+		tex.y = ctx->walls[screen.x].tex_y;
+		texture = ctx->walls[screen.x].texture;
+		y_step = ctx->walls[screen.x].y_step;
+		screen.y = ctx->walls[screen.x].bottom + 1;
+		while (screen.y < ctx->walls[screen.x].top)
 		{
-			put_pixel(&ctx->screen, screen.x, screen.y,
-				get_pixel(&texture->image, tex.x, tex.y));
+			if (tex.x < 0 || tex.y < 0)
+				printf("tex_x: %lf, tex_y: %lf\t%.10lf\n", tex.x, tex.y, y_step);
+			if (texture->image.img)
+				color = get_pixel(&texture->image, tex.x, tex.y);
+			else
+				color = texture->color;
+			put_pixel(&ctx->screen, screen.x, screen.y, color);
 			tex.y += y_step;
 			screen.y++;
 		}

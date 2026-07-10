@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:45:56 by elangari          #+#    #+#             */
-/*   Updated: 2026/07/06 19:49:35 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/10 22:19:53 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	parse_map(t_context *ctx, t_str_array *raw_map)
 				set_player(&ctx->player, raw_map->data, c, i);
 			else if (raw_map->data[i][c] == ' ')
 				raw_map->data[i][c] = '0';
-			else if (raw_map->data[i][c] != '1' && raw_map->data[i][c] != '0')
+			else if (!ft_strchr(VALID_MAP_CHARS, raw_map->data[i][c]))
 				return (1);
 			c++;
 		}

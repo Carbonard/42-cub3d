@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 23:57:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/09 21:11:18 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/10 05:33:53 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ void	put_pixel(const t_mlx_image *image, int x, int y, unsigned int color)
 {
 	char	*dst;
 
-	// if (x < 0 || x > image->width || y < 0 || y > image->height)
-	// {
-	// 	printf("Debug: Trying to print in (%d,%d)\nThe limits are (%d, %d)\n",
-	// 		x, y, image->width, image->height);
-	// 	return ;
-	// }
+	if (x < 0 || x > image->width || y < 0 || y > image->height)
+	{
+		printf("Debug: Trying to print in (%d,%d)\nThe limits are (%d, %d)\n",
+			x, y, image->width, image->height);
+		sleep(5);
+		return ;
+	}
 	dst = image->addr + (y * image->line_size + x * (image->bpp / 8));
 	*(unsigned int *) dst = color;
 }
@@ -30,12 +31,13 @@ unsigned int	get_pixel(const t_mlx_image *image, int x, int y)
 {
 	char	*src;
 
-	// if (x < 0 || x > image->width || y < 0 || y > image->height)
-	// {
-	// 	printf("Debug: Trying to read in (%d,%d)\nThe limits are (%d, %d)\n",
-	// 		x, y, image->width, image->height);
-	// 	return (rgb(255, 0, 0));
-	// }
+	if (x < 0 || x > image->width || y < 0 || y > image->height)
+	{
+		printf("Debug: Trying to read in (%d,%d)\nThe limits are (%d, %d)\n",
+			x, y, image->width, image->height);
+		sleep(5);
+		return (rgb(255, 0, 0));
+	}
 	src = image->addr + (y * image->line_size + x * (image->bpp / 8));
 	return (*(unsigned int *) src);
 }

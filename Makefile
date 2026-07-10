@@ -1,16 +1,4 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/07/03 23:21:50 by rselva-2          #+#    #+#              #
-#    Updated: 2026/07/09 04:09:04 by rselva-2         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-.PHONY: all clean fclean
+.PHONY: all clean fclean bonus
 
 MLX_DIR = ./minilibx-linux
 
@@ -58,13 +46,16 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 
 
 
+FILES_BONUS = $(FILES)\
+doors
+
 SRC_DIR_BONUS = src_bonus
 
 OBJ_DIR_BONUS = obj_bonus
 
-SRC_BONUS = $(FILES:%=$(SRC_DIR_BONUS)/ft_cub3d_%.c)
+SRC_BONUS = $(FILES_BONUS:%=$(SRC_DIR_BONUS)/ft_cub3d_%.c)
 
-OBJ_BONUS = $(FILES:%=$(OBJ_DIR_BONUS)/ft_cub3d_%.o)
+OBJ_BONUS = $(FILES_BONUS:%=$(OBJ_DIR_BONUS)/ft_cub3d_%.o)
 
 bonus: $(OBJ_BONUS) $(MINILIBX) $(LIBFT)
 	cc $(CFLAGS) $(INCLUDES) $^ $(LIBS) -o $(NAME)

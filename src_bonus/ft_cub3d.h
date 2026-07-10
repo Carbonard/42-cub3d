@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/09 20:23:12 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/10 22:19:48 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 # define RED 0xFF0000
 # define GREEN 0xFF00
 # define BLUE 0xFF
+
+# define VALID_MAP_CHARS "01De"
 
 enum e_errors
 {
@@ -68,9 +70,32 @@ double			dist(t_vector *u, t_vector *v);
 double			v_cos(t_vector *u, t_vector *v);
 double			v_mod(t_vector *v);
 
+// General
+
+enum e_axis
+{
+	AXIS_X,
+	AXIS_Y,
+};
+
+enum e_map_elements
+{
+	FLOOR = '0',
+	WALL = '1',
+	CLOSED_DOOR = 'D',
+	OPEN_DOOR = 'd',
+	EXIT = 'e'
+};
+
+typedef struct s_tex_info
+{
+	char	orientation;
+	char	type;
+}	t_tex_info;
+
 typedef double			(*t_dist)(double);
 
-typedef struct s_ray
+typedef struct s_ray_info
 {
 	t_vector		pos;
 	t_vector		dir;
@@ -79,9 +104,9 @@ typedef struct s_ray
 	double			dist;
 	t_dist			h_dist;
 	t_dist			v_dist;
-}	t_ray;
-
-// General
+	int				screen_x;
+	t_tex_info		tex;
+}	t_ray_info;
 
 typedef struct s_mlx_image
 {
@@ -122,6 +147,7 @@ typedef struct s_textures
 	t_tex_array	east;
 	t_tex_array	floor;
 	t_tex_array	ceiling;
+	t_tex_array	door;
 }	t_textures;
 
 typedef struct s_character
@@ -180,7 +206,7 @@ typedef struct s_context
 	t_character		player;
 	t_pressed_keys	pressed;
 	unsigned int	current_tex;
-	t_wall_limits	w_limits[2048];
+	t_wall_limits	walls[2048];
 	int				rain_mode;
 }	t_context;
 
@@ -215,6 +241,7 @@ void			get_img_data(t_mlx_image *image);
 
 int				on_map(t_map *map, t_vector *ray);
 int				is_wall(t_map *map, t_vector *pos);
+int				is_floor(t_map *map, t_vector *pos);
 
 // Minimap
 
@@ -239,17 +266,20 @@ int				rotate_player(t_context *ctx, float t_angle);
 // Render
 
 void			render_screen(t_context *ctx);
-void			save_walls(t_context *ctx,
-					t_int_vector *screen, t_ray *ray, t_texture *texture);
-double			get_step_size(t_ray *ray);
+void			save_walls(t_context *ctx, t_ray_info *ray, t_texture *texture);
+double			get_step_size(t_ray_info *ray);
 double			upper_dist(double z);
 double			lower_dist(double z);
-double			screen_dist(t_character *player, t_ray *ray);
+double			screen_dist(t_character *player, t_ray_info *ray);
 void			fill_screen(t_context *ctx);
 
 // Textures
 
 void			set_textures(t_context *ctx);
+
+// Doors
+
+void			open_door(t_context *ctx);
 
 // Close
 

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 18:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/08 01:03:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/10 00:36:16 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static t_tex_array	*get_texture(t_context *ctx, char *line)
 		{.str = "EA ", .texture = &ctx->textures.east},
 		{.str = "F ", .texture = &ctx->textures.floor},
 		{.str = "C ", .texture = &ctx->textures.ceiling},
+		{.str = "D ", .texture = &ctx->textures.door},
 		{.str = NULL, .texture = NULL}
 	};
 

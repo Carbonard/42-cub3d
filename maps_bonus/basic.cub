@@ -1,9 +1,9 @@
-NO ./img/circles.xpm
-SO ./img/circles.xpm
-EA ./img/circles.xpm
-WE ./img/circles.xpm
-F 250,200,100
-C 250,200,100
+NO 100,0,0
+SO 0,100,0
+EA 0,0,100
+WE 100,100,0
+F 100,0,100
+C 0,100,100
 
 
 
