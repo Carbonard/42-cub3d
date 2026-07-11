@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:28:43 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/10 04:24:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/11 17:06:45 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ double	lower_dist(double z)
 
 // This function is an optimization for:
 // v_cos(&player->dir, &ray->dir) * dist(&player->pos, &ray->pos)
-double	screen_dist(t_character *player, t_ray_info *ray)
-{
-	return ((player->dir.x * ray->dir.x + player->dir.y * ray->dir.y)
-			* sqrt((
-				((player->pos.x - ray->pos.x)
-					* (player->pos.x - ray->pos.x))
-				+ ((player->pos.y - ray->pos.y)
-					* (player->pos.y - ray->pos.y)))));
-}
+// double	screen_dist(t_character *player, t_ray_info *ray)
+// {
+// 	return ((player->dir.x * ray->dir.x + player->dir.y * ray->dir.y)
+// 			* sqrt((
+// 				((player->pos.x - ray->pos.x)
+// 					* (player->pos.x - ray->pos.x))
+// 				+ ((player->pos.y - ray->pos.y)
+// 					* (player->pos.y - ray->pos.y)))));
+// }

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 00:07:25 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/11 17:46:43 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,17 +93,18 @@ typedef struct s_tex_info
 	char	type;
 }	t_tex_info;
 
-typedef double			(*t_dist)(double);
+typedef struct s_ray_cast
+{
+	t_int_vector	map_cell;
+	t_int_vector	step;
+	t_vector		delta;
+	t_vector		next_cell;
+}	t_ray_cast;
 
 typedef struct s_ray_info
 {
-	t_vector		pos;
-	t_vector		dir;
-	t_int_vector	dir_sgn;
-	t_vector		dir_inv;
 	double			dist;
-	t_dist			h_dist;
-	t_dist			v_dist;
+	t_vector		pos;
 	int				screen_x;
 	t_tex_info		tex;
 }	t_ray_info;
@@ -273,6 +274,10 @@ double			upper_dist(double z);
 double			lower_dist(double z);
 double			screen_dist(t_character *player, t_ray_info *ray);
 void			fill_screen(t_context *ctx);
+
+// Ray Casting
+
+void			init_ray_casting(t_context *ctx, t_ray_cast *rc, t_vector *dir);
 
 // Textures
 
