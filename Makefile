@@ -18,7 +18,7 @@ FILES = main utils read_file load_config\
 mlx_utils map_utils\
 dyn_arrays math\
 map minimap_init minimap\
-render_screen render_vertical render_utils\
+render_screen render_vertical render_utils raycasting\
 events_key\
 player_mov\
 close

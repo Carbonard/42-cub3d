@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cub3d_main.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 20:22:00 by elangari         ###   ########.fr       */
+/*   Updated: 2026/07/11 20:47:37 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	set_config(t_context *ctx, char *file_name)
 	ctx->map.minimap_player_color = argb(200, 200, 20, 20);
 	ctx->player.velocity = 0.33;
 	ctx->player.ang_velocity = M_PI * 0.0625;
+	set_textures(ctx);
 	return (0);
 }
 

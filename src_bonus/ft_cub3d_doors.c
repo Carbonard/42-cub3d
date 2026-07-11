@@ -6,55 +6,34 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 17:33:54 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/10 21:02:53 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/11 16:59:18 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-char	*colision_map_point(t_context *ctx, t_int_vector *coord, t_int_vector *step, t_vector *delta)
+void	open_door(t_context *ctx)
 {
-	t_vector		dist;
+	t_ray_cast	rc;
+	char		*colision_point;
 
-	if (ctx->player.dir.x > 0)
-		dist.x = upper_dist(ctx->player.pos.x) * delta->x;
-	else
-		dist.x = lower_dist(ctx->player.pos.x) * delta->x;
-	if (ctx->player.dir.y > 0)
-		dist.y = upper_dist(ctx->player.pos.y) * delta->y;
-	else
-		dist.y = lower_dist(ctx->player.pos.y) * delta->y;
-	while (ctx->map.matrix[coord->y][coord->x] == FLOOR
-		|| (coord->x == (int)ctx->player.pos.x && coord->y == (int)ctx->player.pos.y))
+	init_ray_casting(ctx, &rc, &ctx->player.dir);
+	while (ctx->map.matrix[rc.map_cell.y][rc.map_cell.x] == FLOOR
+		|| (rc.map_cell.x == (int)ctx->player.pos.x
+			&& rc.map_cell.y == (int)ctx->player.pos.y))
 	{
-		if (dist.x < dist.y)
+		if (rc.next_cell.x < rc.next_cell.y)
 		{
-			dist.x += delta->x;
-			coord->x += step->x;
+			rc.next_cell.x += rc.delta.x;
+			rc.map_cell.x += rc.step.x;
 		}
 		else
 		{
-			dist.y += delta->y;
-			coord->y += step->y;
+			rc.next_cell.y += rc.delta.y;
+			rc.map_cell.y += rc.step.y;
 		}
 	}
-	return (&ctx->map.matrix[coord->y][coord->x]);
-}
-
-void	open_door(t_context *ctx)
-{
-	t_int_vector	coord;
-	t_int_vector	step;
-	t_vector		delta;
-	char			*colision_point;
-
-	coord.x = ctx->player.pos.x;
-	coord.y = ctx->player.pos.y;
-	step.x = (ctx->player.dir.x > 0) - (ctx->player.dir.x < 0);
-	step.y = (ctx->player.dir.y > 0) - (ctx->player.dir.y < 0);
-	delta.x = 1 / fabs(ctx->player.dir.x);
-	delta.y = 1 / fabs(ctx->player.dir.y);
-	colision_point = colision_map_point(ctx, &coord, &step, &delta);
+	colision_point = &ctx->map.matrix[rc.map_cell.y][rc.map_cell.x];
 	if (*colision_point == OPEN_DOOR || *colision_point == CLOSED_DOOR)
 		*colision_point ^= CLOSED_DOOR ^ OPEN_DOOR;
 }
