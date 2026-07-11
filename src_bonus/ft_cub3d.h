@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 20:48:24 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/11 20:55:06 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ typedef struct s_textures
 	t_tex_array	floor;
 	t_tex_array	ceiling;
 	t_tex_array	door;
+	t_tex_array	exit;
 }	t_textures;
 
 typedef struct s_character

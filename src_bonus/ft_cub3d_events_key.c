@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 20:42:15 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/11 20:57:32 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	set_textures(t_context *ctx)
 	set_tex(&ctx->textures.floor, ctx->current_tex);
 	set_tex(&ctx->textures.ceiling, ctx->current_tex);
 	set_tex(&ctx->textures.door, ctx->current_tex);
+	set_tex(&ctx->textures.exit, ctx->current_tex);
 }
 
 int	loop_hook(t_context *ctx)

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:26:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 16:57:20 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/11 21:01:58 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,8 +282,8 @@ void	fill_screen(t_context *ctx)
 		screen.y = ctx->walls[screen.x].bottom + 1;
 		while (screen.y < ctx->walls[screen.x].top)
 		{
-			if (tex.x < 0 || tex.y < 0)
-				printf("tex_x: %lf, tex_y: %lf\t%.10lf\n", tex.x, tex.y, y_step);
+			// if (tex.x < 0 || tex.y < 0)
+			// 	printf("tex_x: %lf, tex_y: %lf\t%.10lf\n", tex.x, tex.y, y_step);
 			if (texture->image.img)
 				color = get_pixel(&texture->image, tex.x, tex.y);
 			else

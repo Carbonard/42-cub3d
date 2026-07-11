@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cub3d_player_mov.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:22:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 19:40:05 by elangari         ###   ########.fr       */
+/*   Updated: 2026/07/11 21:05:49 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ int	move_player(t_context *ctx, t_coordinate forward, t_coordinate side)
 	{
 		p->pos.y = new_pos.y;
 		ret = 1;
+	}
+	if (ctx->map.matrix[(int)p->pos.y][(int)p->pos.x] == EXIT)
+	{
+		printf("\n\n\nCONGRATULATIONS!!\n\nYou have spent %.2lf seconds!\n\n\n", ctx->time / 10);
+		close_game(ctx, C3D_SUCCESS);
 	}
 	return (ret);
 }

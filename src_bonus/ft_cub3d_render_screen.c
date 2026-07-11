@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 17:39:57 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/11 20:59:52 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,9 @@ t_texture	*get_texture(t_context *ctx, t_ray_info *ray, t_vector *dir)
 			return (ctx->textures.north.current);
 	}
 	else if (ray->tex.type == CLOSED_DOOR)
-	{
 		return (ctx->textures.door.current);
-		if (ray->tex.orientation == AXIS_X && dir->x > 0)
-			return (ctx->textures.east.current);
-		else if (ray->tex.orientation == AXIS_X)
-			return (ctx->textures.west.current);
-		else if (dir->y > 0)
-			return (ctx->textures.south.current);
-		else
-			return (ctx->textures.north.current);
-	}
+	else if (ray->tex.type == EXIT)
+		return (ctx->textures.exit.current);
 	return (NULL);
 }
 
@@ -74,7 +66,8 @@ static void	trace_ray(t_context *ctx, t_ray_info *ray, t_vector *direction)
 
 	init_ray_casting(ctx, &rc, direction);
 	while (ctx->map.matrix[rc.map_cell.y][rc.map_cell.x] != WALL
-		&& ctx->map.matrix[rc.map_cell.y][rc.map_cell.x] != CLOSED_DOOR)
+		&& ctx->map.matrix[rc.map_cell.y][rc.map_cell.x] != CLOSED_DOOR
+		&& ctx->map.matrix[rc.map_cell.y][rc.map_cell.x] != EXIT)
 	{
 		if (rc.next_cell.x < rc.next_cell.y)
 		{
