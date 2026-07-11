@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/10 17:33:42 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/10 22:24:51 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int	loop_hook(t_context *ctx)
 	if (!last_time)
 		last_time = get_time();
 	time_increment = (double)(get_time() - last_time) / 100000;
+	ctx->time += time_increment;
 	last_time = get_time();
 	if (ctx->pressed.a)
 		render = move_player(ctx, 0, -ctx->player.velocity * time_increment);

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/10 22:19:48 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/11 00:07:25 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define GREEN 0xFF00
 # define BLUE 0xFF
 
-# define VALID_MAP_CHARS "01De"
+# define VALID_MAP_CHARS "01Dde"
 
 enum e_errors
 {
@@ -208,6 +208,7 @@ typedef struct s_context
 	unsigned int	current_tex;
 	t_wall_limits	walls[2048];
 	int				rain_mode;
+	double			time;
 }	t_context;
 
 // String

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:29:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/07 18:45:42 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/10 22:29:22 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,7 @@ void	render_minimap(t_context *ctx)
 		x_margin + (ctx->player.pos.x - 0.5) * ctx->map.minimap_scale,
 		y_margin + (ctx->player.pos.y - 0.5) * ctx->map.minimap_scale);
 	mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->screen.img, 0, 0);
+	char *time = ft_itoa(ctx->time / 10);
+	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 100, ctx->height - 50, rgb(10, 10, 100), time);
+	free(time);
 }
