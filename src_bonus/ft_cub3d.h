@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cub3d.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: elangari <elangari@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 00:07:25 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/11 19:13:29 by elangari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,7 @@ void			put_minimap(t_context *ctx);
 int				key_press_event(int key, t_context *ctx);
 int				key_release_event(int key, t_context *ctx);
 int				loop_hook(t_context	*ctx);
+int				check_mouse(t_context *ctx);
 
 // Player
 

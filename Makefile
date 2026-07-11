@@ -47,7 +47,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 
 
 FILES_BONUS = $(FILES)\
-doors
+doors mouse_utils
 
 SRC_DIR_BONUS = src_bonus
 
@@ -84,4 +84,3 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean $(NAME)
-
