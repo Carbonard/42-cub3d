@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:59:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/07 19:43:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/11 22:29:52 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ static void	close_images(t_context *ctx)
 		safe_close_image(ctx->mlx, &ctx->textures.east.tex[i].image);
 		safe_close_image(ctx->mlx, &ctx->textures.floor.tex[i].image);
 		safe_close_image(ctx->mlx, &ctx->textures.ceiling.tex[i].image);
+		safe_close_image(ctx->mlx, &ctx->textures.door.tex[i].image);
+		safe_close_image(ctx->mlx, &ctx->textures.exit.tex[i].image);
 		i++;
 	}
 }

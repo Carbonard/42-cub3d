@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 20:55:06 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/13 18:57:26 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define GREEN 0xFF00
 # define BLUE 0xFF
 
-# define VALID_MAP_CHARS "01Dde"
+# define VALID_MAP_CHARS "01Ddef"
 
 enum e_errors
 {
@@ -84,7 +84,8 @@ enum e_map_elements
 	WALL = '1',
 	CLOSED_DOOR = 'D',
 	OPEN_DOOR = 'd',
-	EXIT = 'e'
+	EXIT = 'e',
+	ENEMY = 'f'
 };
 
 typedef struct s_tex_info
@@ -150,6 +151,7 @@ typedef struct s_textures
 	t_tex_array	ceiling;
 	t_tex_array	door;
 	t_tex_array	exit;
+	t_tex_array	enemy;
 }	t_textures;
 
 typedef struct s_character
@@ -194,7 +196,17 @@ typedef struct s_wall
 	double		tex_x;
 	double		tex_y;
 	double		y_step;
+	double		dist;
 }	t_wall_limits;
+
+typedef struct s_enemy
+{
+	t_int_vector	screen_pos;
+	double			dist;
+	t_vector		map;
+	int				size;		
+}	t_enemy;
+
 
 typedef struct s_context
 {
@@ -211,6 +223,8 @@ typedef struct s_context
 	t_wall_limits	walls[2048];
 	int				rain_mode;
 	double			time;
+	t_enemy		enemies[64];
+	int				n_enemies;
 }	t_context;
 
 // String
@@ -252,6 +266,7 @@ void			initialize_screen(t_context *ctx);
 void			fill_minimap_image(t_map *map);
 void			render_minimap(t_context *ctx);
 void			put_minimap(t_context *ctx);
+unsigned int	merge_colors(unsigned int c1, unsigned int c2);
 
 // Events
 
@@ -275,7 +290,9 @@ double			get_step_size(t_ray_info *ray);
 double			upper_dist(double z);
 double			lower_dist(double z);
 double			screen_dist(t_character *player, t_ray_info *ray);
-void			fill_screen(t_context *ctx);
+void			render_background(t_context *ctx);
+void			render_walls(t_context *ctx);
+void			render_enemies(t_context *ctx);
 
 // Ray Casting
 
@@ -284,6 +301,7 @@ void			init_ray_casting(t_context *ctx, t_ray_cast *rc, t_vector *dir);
 // Textures
 
 void			set_textures(t_context *ctx);
+void			convert_transparencies(t_tex_array *texture);
 
 // Doors
 

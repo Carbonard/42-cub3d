@@ -18,7 +18,7 @@ FILES = main utils read_file load_config\
 mlx_utils map_utils\
 dyn_arrays math\
 map minimap_init minimap\
-render_screen render_vertical render_utils raycasting\
+render_screen render_vertical render_utils\
 events_key\
 player_mov\
 close
@@ -41,13 +41,13 @@ $(NAME): $(OBJ) $(MINILIBX) $(LIBFT)
 $(OBJ_DIR):
 	mkdir $@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(SRC_DIR)/ft_cub3d.h | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 
 
 FILES_BONUS = $(FILES)\
-doors mouse_utils
+doors mouse_utils raycasting enemies
 
 SRC_DIR_BONUS = src_bonus
 
@@ -63,7 +63,7 @@ bonus: $(OBJ_BONUS) $(MINILIBX) $(LIBFT)
 $(OBJ_DIR_BONUS):
 	mkdir $@
 
-$(OBJ_DIR_BONUS)/%.o: $(SRC_DIR_BONUS)/%.c | $(OBJ_DIR_BONUS)
+$(OBJ_DIR_BONUS)/%.o: $(SRC_DIR_BONUS)/%.c  $(SRC_DIR_BONUS)/ft_cub3d.h Makefile | $(OBJ_DIR_BONUS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 

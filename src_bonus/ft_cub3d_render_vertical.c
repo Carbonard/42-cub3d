@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:26:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 21:01:58 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 18:39:36 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,18 +184,20 @@
 // 	return (-(double)(*y_partition) * texture->height / wall_height);
 // }
 
+
 void	save_walls(t_context *ctx, t_ray_info *ray, t_texture *tex)
 {
 	int			wall_height;
 	int			y_partition;
 
 	wall_height = ctx->height / ray->dist;
+	ctx->walls[ray->screen_x].dist = ray->dist;
 	ctx->walls[ray->screen_x].texture = tex;
 // ctx->walls[screen->x].tex_x = texture_coord_x(ctx, texture, &ray->pos);
 	if (ray->tex.orientation == AXIS_Y)
-		ctx->walls[ray->screen_x].tex_x = lower_dist(ray->pos.x);
+		ctx->walls[ray->screen_x].tex_x = ray->pos.x - floor(ray->pos.x);
 	else
-		ctx->walls[ray->screen_x].tex_x = lower_dist(ray->pos.y);
+		ctx->walls[ray->screen_x].tex_x = ray->pos.y - floor(ray->pos.y);
 	ctx->walls[ray->screen_x].tex_x *= (double)tex->image.width;
 // ctx->walls[screen->x].tex_y = texture_coord_y(ctx, &texture->image, wall_height, &y_partition);
 	y_partition = (ctx->height - wall_height) * 0.5;
@@ -213,86 +215,93 @@ void	save_walls(t_context *ctx, t_ray_info *ray, t_texture *tex)
 	return;
 }
 
-void put_floor_and_ceiling(t_context *ctx, t_int_vector *screen, t_vector *floor_point)
+void	merge_enemy_images(t_context *ctx, t_mlx_image *other, t_enemy *enemy)
 {
-	const t_texture		*floor = ctx->textures.floor.current;
-	const t_texture		*ceiling = ctx->textures.ceiling.current;
+	int			i;
+	int			j;
+	t_vector	resize;
 
-	if (floor_point->x < 0 || floor_point->y < 0 || floor_point->x > ctx->width || floor_point->y > ctx->height)
-		return ;
-	if (!ceiling->image.img)
-		put_pixel(&ctx->screen, screen->x, screen->y, ceiling->color);
-	else
-		put_pixel(&ctx->screen, screen->x, screen->y,
-			get_pixel(&ceiling->image,
-			(floor_point->x - (int)(floor_point->x)) * ceiling->image.width,
-			(floor_point->y - (int)(floor_point->y)) * ceiling->image.height));
-	if (!floor->image.img)
-		put_pixel(&ctx->screen, screen->x, ctx->height - screen->y, floor->color);
-	else
-		put_pixel(&ctx->screen, screen->x, ctx->height - screen->y,
-			get_pixel(&floor->image,
-			(floor_point->x - (int)(floor_point->x)) * floor->image.width,
-			(floor_point->y - (int)(floor_point->y)) * floor->image.height));
-}
-
-void	fill_background(t_context *ctx)
-{
-	t_int_vector		screen;
-	t_vector			floor_point;
-	double				dist;
-	const double		x_step = (double) 2 / ctx->width;
-
-	screen.y = 0;
-	while (screen.y < ctx->height / 2)
+	resize.x = (double)other->width / (double)enemy->size;
+	resize.y = (double)other->height / (double)enemy->size;
+	j = fmax(0, -enemy->screen_pos.y);
+	while (j < enemy->size)
 	{
-		dist = (double) ctx->height / (ctx->height - screen.y * 2);
-		screen.x = 0;
-		floor_point.x = ctx->player.pos.x 
-			+ (ctx->player.dir.x - ctx->player.ort.x) * dist;
-		floor_point.y = ctx->player.pos.y 
-			+ (ctx->player.dir.y - ctx->player.ort.y) * dist;
-		while (screen.x < ctx->width)
+		i = fmax(0, -enemy->screen_pos.x);
+		while (i < enemy->size)
 		{
-			floor_point.x += x_step * ctx->player.ort.x * dist;
-			floor_point.y += x_step * ctx->player.ort.y * dist;
-			put_floor_and_ceiling(ctx, &screen, &floor_point);
-			screen.x++;
+			if (enemy->screen_pos.x + i < ctx->width
+				&& enemy->dist <= ctx->walls[enemy->screen_pos.x + i].dist)
+				put_pixel(&ctx->screen,
+					enemy->screen_pos.x + i, enemy->screen_pos.y + j,
+					merge_colors(
+						get_pixel(&ctx->screen,
+							enemy->screen_pos.x + i, enemy->screen_pos.y + j),
+						get_pixel(other, resize.x * i, resize.y * j)));
+			i++;
 		}
-		screen.y++;
+		j++;
 	}
 }
 
-void	fill_screen(t_context *ctx)
+void	fill_enemy_info(t_context *ctx, t_enemy *enemy)
 {
-	t_int_vector	screen;
-	t_vector		tex;
-	double			y_step;
-	t_texture		*texture;
-	unsigned int	color;
+	t_vector	dir;
+	double		cos;
+	double		screen_factor;
 
-	fill_background(ctx);
-	screen.x = 0;
-	while (screen.x < ctx->width)
+	dir.x = enemy->map.x - ctx->player.pos.x;
+	dir.y = enemy->map.y - ctx->player.pos.y;
+	cos = v_cos(&ctx->player.dir, &dir);
+	enemy->dist = dist(&ctx->player.pos, &enemy->map) * cos;
+	enemy->size = (float)ctx->height / (enemy->dist);
+	if (ctx->player.dir.x * dir.y < ctx->player.dir.y * dir.x)
+		cos *= -1;
+	screen_factor = sqrt(1 - cos * cos) / cos;
+	enemy->screen_pos.x = (screen_factor + 1) * ctx->width / 2 - enemy->size / 2;
+	enemy->screen_pos.y = (ctx->height - enemy->size) / 2;
+}
+
+void	sort_enemies(t_context *ctx)
+{
+	int		i;
+	int		j;
+	t_enemy	temp;
+
+	i = 0;
+	while (i < ctx->n_enemies)
 	{
-		tex.x = ctx->walls[screen.x].tex_x;
-		tex.y = ctx->walls[screen.x].tex_y;
-		texture = ctx->walls[screen.x].texture;
-		y_step = ctx->walls[screen.x].y_step;
-		screen.y = ctx->walls[screen.x].bottom + 1;
-		while (screen.y < ctx->walls[screen.x].top)
+		j = i + 1;
+		while (j < ctx->n_enemies)
 		{
-			// if (tex.x < 0 || tex.y < 0)
-			// 	printf("tex_x: %lf, tex_y: %lf\t%.10lf\n", tex.x, tex.y, y_step);
-			if (texture->image.img)
-				color = get_pixel(&texture->image, tex.x, tex.y);
-			else
-				color = texture->color;
-			put_pixel(&ctx->screen, screen.x, screen.y, color);
-			tex.y += y_step;
-			screen.y++;
+			if (ctx->enemies[i].dist < ctx->enemies[j].dist)
+			{
+				ft_memmove(&temp, &ctx->enemies[i], sizeof(t_enemy));
+				ft_memmove(&ctx->enemies[i], &ctx->enemies[j], sizeof(t_enemy));
+				ft_memmove(&ctx->enemies[j], &temp, sizeof(t_enemy));
+			}
+			j++;
 		}
-		screen.x++;
+		i++;
 	}
+}
+
+void	render_enemies(t_context *ctx)
+{
+	int	i;
+
+	i = 0;
+	while (i < ctx->n_enemies)
+	{
+		fill_enemy_info(ctx, &ctx->enemies[i]);
+		i++;
+	}
+	sort_enemies(ctx);
+	i = 0;
+	while (i < ctx->n_enemies)
+	{
+		merge_enemy_images(ctx, &ctx->textures.enemy.current->image, &ctx->enemies[i]);
+		i++;
+	}
+	ctx->n_enemies = 0;
 }
 

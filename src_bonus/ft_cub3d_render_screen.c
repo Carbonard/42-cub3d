@@ -6,35 +6,35 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 20:59:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/13 18:46:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-void time(int step)
+void time(int slot, int step)
 {
-	static size_t t = 0;
-	static size_t total_time = 0;
-	static size_t cnt = 0;
-	static int first_time = 1;
+	static size_t t[10] = {0};
+	static size_t total_time[10] = {0};
+	static size_t cnt[10] = {0};
+	static int first_time[10] = {0};
 
 	if (step == 1)
 	{
-		t = get_time();
+		t[slot] = get_time();
 	}
 	else
 	{
-		cnt++;
-		total_time += get_time() - t;
-		if (cnt % 100 == 0)
+		cnt[slot]++;
+		total_time[slot] += get_time() - t[slot];
+		if (cnt[slot] % 100 == 0)
 		{
-			printf("time mean after %lu iterations: %lf\n", cnt, (double)total_time / cnt);
-			if (first_time)
+			printf("%d: time mean after %lu iterations: %lf\n", slot, cnt[slot], (double)total_time[slot] / cnt[slot]);
+			if (!first_time[slot])
 			{
-				cnt = 0;
-				total_time = 0;
-				first_time = 0;
+				cnt[slot] = 0;
+				total_time[slot] = 0;
+				first_time[slot] = 1;
 			}
 		}
 	}
@@ -60,6 +60,22 @@ t_texture	*get_texture(t_context *ctx, t_ray_info *ray, t_vector *dir)
 	return (NULL);
 }
 
+static void	save_enemy(t_context *ctx, t_int_vector *cell)
+{
+	int	i;
+
+	i = 0;
+	while (i < ctx->n_enemies)
+	{
+		if ((int)ctx->enemies[i].map.x == cell->x && (int)ctx->enemies[i].map.y == cell->y)
+			return ;
+		i++;
+	}
+	ctx->enemies[ctx->n_enemies].map.x = cell->x + 0.5;
+	ctx->enemies[ctx->n_enemies].map.y = cell->y + 0.5;
+	ctx->n_enemies++;
+}
+
 static void	trace_ray(t_context *ctx, t_ray_info *ray, t_vector *direction)
 {
 	t_ray_cast	rc;
@@ -83,6 +99,8 @@ static void	trace_ray(t_context *ctx, t_ray_info *ray, t_vector *direction)
 			rc.next_cell.y += rc.delta.y;
 			ray->tex.orientation = AXIS_Y;
 		}
+		if (ctx->map.matrix[rc.map_cell.y][rc.map_cell.x] == ENEMY)
+			save_enemy(ctx, &rc.map_cell);
 	}
 	ray->tex.type = ctx->map.matrix[rc.map_cell.y][rc.map_cell.x];
 	ray->pos.x = ctx->player.pos.x + direction->x * ray->dist;
@@ -96,7 +114,10 @@ void	render_screen(t_context *ctx)
 	t_vector	direction;
 	double	scale_screen_factor;
 
-time(1);
+time(0,1);
+	render_background(ctx);
+time(0,2);
+time(1,1);
 	ray.screen_x = 0;
 	while (ray.screen_x < ctx->width)
 	{
@@ -108,7 +129,12 @@ time(1);
 		trace_ray(ctx, &ray, &direction);
 		ray.screen_x++;
 	}
-	fill_screen(ctx);
-time(2);
+time(1,2);
+time(2,1);
+	render_walls(ctx);
+time(2,2);
+time(3,1);
+	render_enemies(ctx);
+time(3,2);
 	render_minimap(ctx);
 }
