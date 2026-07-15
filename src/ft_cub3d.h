@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/08 23:31:59 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 19:13:36 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ typedef struct s_character
 	t_vector	pos;
 	t_vector	dir;
 	t_vector	ort;
-	float		ang_velocity;
+	float		rotation_velocity;
 	t_angle		rot_ang;
 	t_mlx_image	minimap_img;
 }	t_character;

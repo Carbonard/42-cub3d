@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/12 19:45:31 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 19:16:00 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int	set_config(t_context *ctx, char *file_name)
 	ctx->map.minimap_floor_color = argb(50, 255, 255, 255);
 	ctx->map.minimap_player_color = argb(200, 200, 20, 20);
 	ctx->player.velocity = 0.33;
-	ctx->player.ang_velocity = M_PI * 0.0625;
+	ctx->player.rotation_velocity = M_PI * 0.0625;
+	ctx->player.mouse_sensitivity = M_PI * 0.001953125;
 	if (ctx->textures.enemy.size)
 		convert_transparencies(&ctx->textures.enemy);
 	set_textures(ctx);

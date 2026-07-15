@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/13 18:57:26 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 19:13:56 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,8 @@ typedef struct s_character
 	t_vector	pos;
 	t_vector	dir;
 	t_vector	ort;
-	float		ang_velocity;
+	float		rotation_velocity;
+	float		mouse_sensitivity;
 	t_angle		rot_ang;
 	t_mlx_image	minimap_img;
 }	t_character;
@@ -225,6 +226,7 @@ typedef struct s_context
 	double			time;
 	t_enemy		enemies[64];
 	int				n_enemies;
+	int				fps;
 }	t_context;
 
 // String
@@ -280,7 +282,7 @@ int				check_mouse(t_context *ctx);
 void			set_player_vectors(t_character *player);
 int				move_player(t_context *ctx,
 					t_coordinate forward, t_coordinate side);
-int				rotate_player(t_context *ctx, float t_angle);
+int				rotate_player(t_context *ctx, double t_angle);
 
 // Render
 

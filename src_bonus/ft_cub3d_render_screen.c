@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/13 18:46:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 19:02:17 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,12 +108,29 @@ static void	trace_ray(t_context *ctx, t_ray_info *ray, t_vector *direction)
 	save_walls(ctx, ray, get_texture(ctx, ray, direction));
 }
 
+void	measure_fps(t_context *ctx)
+{
+	static int		frames;
+	static size_t	last_time;
+	size_t			current_time;
+
+	current_time = get_time();
+	if ((current_time - last_time) / 1000000 > 1)
+	{
+		ctx->fps = frames;
+		last_time = current_time;
+		frames = 0;
+	}
+	frames++;
+}
+
 void	render_screen(t_context *ctx)
 {
 	t_ray_info	ray;
 	t_vector	direction;
 	double	scale_screen_factor;
 
+	measure_fps(ctx);
 time(0,1);
 	render_background(ctx);
 time(0,2);
