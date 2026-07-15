@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:29:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 20:36:34 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/16 00:04:35 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,33 @@ void	merge_images(t_mlx_image *main, t_mlx_image *other, int x, int y)
 	}
 }
 
+static void	put_square(t_context *ctx, int x, int y, int color, int width, int height)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < width)
+	{
+		j = 0;
+		while (j < height)
+		{
+			put_pixel(
+				&ctx->screen,
+				x + i,
+				y + j,
+				color);
+			j++;
+		}
+		i++;
+	}
+}
+
 void	render_minimap(t_context *ctx)
 {
 	int			x_margin;
 	int			y_margin;
+	char		*aux;
 
 	x_margin = 10;
 	y_margin = 10;
@@ -100,11 +123,14 @@ void	render_minimap(t_context *ctx)
 	merge_images(&ctx->screen, &ctx->player.minimap_img,
 		x_margin + (ctx->player.pos.x - 0.5) * ctx->map.minimap_scale,
 		y_margin + (ctx->player.pos.y - 0.5) * ctx->map.minimap_scale);
+	put_square(ctx, ctx->width - 142, ctx->height - 63, rgb(200,200,200), 60, 40);
 	mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->screen.img, 0, 0);
-	char *time = ft_itoa(ctx->time / 10);
-	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 100, ctx->height - 50, rgb(10, 10, 100), time);
-	char *fps = ft_itoa(ctx->fps);
-	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 100, ctx->height - 30, rgb(10, 10, 100), fps);
-	free(time);
-	free(fps);
+	aux = ft_itoa(ctx->time / 10);
+	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 137, ctx->height - 50, rgb(10, 10, 10), "Time: ");
+	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 100, ctx->height - 50, rgb(10, 10, 10), aux);
+	free(aux);
+	aux = ft_itoa(ctx->real_fps);
+	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 130, ctx->height - 30, rgb(10, 10, 100), "FPS: ");
+	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 100, ctx->height - 30, rgb(10, 10, 100), aux);
+	free(aux);
 }

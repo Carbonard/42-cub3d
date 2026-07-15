@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:28:43 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 23:08:55 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 23:44:49 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ void	render_background(t_context *ctx)
 			floor_point.y += x_step * ctx->player.ort.y * dist;
 			floor_point.y -= floor(floor_point.y);
 	// printf("screen: (%d,%d)\ndist_ %lf, xstep: %lf\nfloor_point: (%lf,%lf)\n", screen.x, screen.y, dist, x_step, floor_point.x, floor_point.y);
-			put_floor_and_ceiling(ctx, &screen, &floor_point);
+			if (ctx->walls[screen.x].bottom >= screen.y)
+				put_floor_and_ceiling(ctx, &screen, &floor_point);
 			screen.x++;
 		}
 		screen.y++;

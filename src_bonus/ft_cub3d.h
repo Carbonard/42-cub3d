@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 22:47:15 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/16 00:07:47 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,7 +241,8 @@ typedef struct s_context
 	int				n_enemies;
 	t_explosion		explosions[MAX_ENEMIES];
 	int				n_explosions;
-	int				fps;
+	int				real_fps;
+	size_t			usec_per_frame;
 	int				render;
 }	t_context;
 
@@ -263,6 +264,10 @@ int				free_str_array(t_str_array *str);
 void			parse_file(t_context *ctx, char *file_name);
 int				load_texture(t_context *ctx, char *line);
 void			set_map(t_context *ctx, t_str_array *map);
+
+// Config
+
+void			limit_fps(t_context *ctx, int max_fps);
 
 // MLX Utils
 

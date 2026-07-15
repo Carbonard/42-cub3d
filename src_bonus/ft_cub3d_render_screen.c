@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 23:09:13 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 23:46:45 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,9 +167,9 @@ void	measure_fps(t_context *ctx)
 	size_t			current_time;
 
 	current_time = get_time();
-	if ((current_time - last_time) / 1000000 > 1)
+	if ((current_time - last_time) / 1000000 >= 1)
 	{
-		ctx->fps = frames;
+		ctx->real_fps = frames;
 		last_time = current_time;
 		frames = 0;
 	}
@@ -184,9 +184,6 @@ void	render_screen(t_context *ctx)
 
 	measure_fps(ctx);
 time(0,1);
-	render_background(ctx);
-time(0,2);
-time(1,1);
 	ray.screen_x = 0;
 	while (ray.screen_x < ctx->width)
 	{
@@ -198,6 +195,9 @@ time(1,1);
 		trace_ray(ctx, &ray, &direction);
 		ray.screen_x++;
 	}
+time(0,2);
+time(1,1);
+	render_background(ctx);
 time(1,2);
 time(2,1);
 	render_walls(ctx);

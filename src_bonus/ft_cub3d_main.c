@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 20:00:28 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/16 00:05:58 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	set_config(t_context *ctx, char *file_name)
 	if (ctx->textures.explosion.size)
 		convert_transparencies(&ctx->textures.explosion);
 	set_textures(ctx);
+	limit_fps(ctx, 42);
 	return (0);
 }
 
@@ -66,9 +67,9 @@ int	main(int argc, char **argv)
 	mlx_hook(ctx.window, KeyRelease, KeyReleaseMask, &key_release_event, &ctx);
 	mlx_loop_hook(ctx.mlx, loop_hook, &ctx);
 	initialize_screen(&ctx);
-	render_screen(&ctx);
 	mlx_mouse_move(ctx.mlx, ctx.window, ctx.screen.width / 2, ctx.screen.height / 2);
-	sleep(1);
+	usleep(500000);
+	render_screen(&ctx);
 	mlx_loop(ctx.mlx);
 	mlx_destroy_display(ctx.mlx);
 	free(ctx.mlx);

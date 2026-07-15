@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 22:24:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 23:47:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,16 @@ void	set_textures(t_context *ctx)
 int	loop_hook(t_context *ctx)
 {
 	static size_t	last_time;
-	static size_t	last_time_2;
+	static size_t	texture_render_time;
 	double			time_increment;
+	size_t			current_time;
 
 	if (!last_time)
 		last_time = get_time();
 	time_increment = (double)(get_time() - last_time) / 100000;
 	ctx->time += time_increment;
-	ctx->render |= check_mouse(ctx);
 	last_time = get_time();
+	ctx->render |= check_mouse(ctx);
 	if (ctx->pressed.a)
 		ctx->render |= move_player(ctx, 0, -ctx->player.velocity * time_increment);
 	if (ctx->pressed.d)
@@ -103,14 +104,17 @@ int	loop_hook(t_context *ctx)
 		ctx->render |= rotate_player(ctx, -ctx->player.rotation_velocity * time_increment);
 	if (ctx->pressed.right)
 		ctx->render |= rotate_player(ctx, +ctx->player.rotation_velocity * time_increment);
-	if (last_time - last_time_2 > 150000)
+	if (last_time - texture_render_time > 150000)
 	{
-		last_time_2 = last_time;
+		texture_render_time = last_time;
 		ctx->current_tex++;
 		set_textures(ctx);
 		ctx->render |= 1;
 	}
 	if (ctx->render)
 		render_screen(ctx);
+	current_time = get_time();
+	if (current_time - last_time < ctx->usec_per_frame)
+		usleep(ctx->usec_per_frame - (current_time - last_time));
 	return (0);
 }
