@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:28:43 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/13 18:35:53 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 23:08:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,15 @@ static void put_floor_and_ceiling(t_context *ctx, t_int_vector *screen, t_vector
 	else
 		put_pixel(&ctx->screen, screen->x, screen->y,
 			get_pixel(&ceiling->image,
-			(floor_point->x - (int)(floor_point->x)) * ceiling->image.width,
-			(floor_point->y - (int)(floor_point->y)) * ceiling->image.height));
+			floor_point->x * ceiling->image.width,
+			floor_point->y * ceiling->image.height));
 	if (!floor->image.img)
 		put_pixel(&ctx->screen, screen->x, ctx->height - screen->y, floor->color);
 	else
 		put_pixel(&ctx->screen, screen->x, ctx->height - screen->y,
 			get_pixel(&floor->image,
-			(floor_point->x - (int)(floor_point->x)) * floor->image.width,
-			(floor_point->y - (int)(floor_point->y)) * floor->image.height));
+			floor_point->x * floor->image.width,
+			floor_point->y * floor->image.height));
 }
 
 void	render_background(t_context *ctx)
@@ -41,7 +41,6 @@ void	render_background(t_context *ctx)
 	t_vector			floor_point;
 	double				dist;
 	const double		x_step = (double) 2 / ctx->width;
-
 	screen.y = 0;
 	while (screen.y < ctx->height / 2)
 	{
@@ -54,7 +53,10 @@ void	render_background(t_context *ctx)
 		while (screen.x < ctx->width)
 		{
 			floor_point.x += x_step * ctx->player.ort.x * dist;
+			floor_point.x -= floor(floor_point.x);
 			floor_point.y += x_step * ctx->player.ort.y * dist;
+			floor_point.y -= floor(floor_point.y);
+	// printf("screen: (%d,%d)\ndist_ %lf, xstep: %lf\nfloor_point: (%lf,%lf)\n", screen.x, screen.y, dist, x_step, floor_point.x, floor_point.y);
 			put_floor_and_ceiling(ctx, &screen, &floor_point);
 			screen.x++;
 		}

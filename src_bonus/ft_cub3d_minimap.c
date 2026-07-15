@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:29:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 19:04:34 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 20:36:34 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ void	fill_minimap_player_image(t_context *ctx,
 // This function just considers the c2 color transparency
 unsigned int	merge_colors(unsigned int c1, unsigned int c2)
 {
-	double			a;
+	double	a;
 
-	a = (double)(c2 >> 24) / 0x100;
+	a = (double)(c2 >> 24) / 0xFF;
 	return (((unsigned int)((1 - a) * (c1 & RED) + a * (c2 & RED)) & RED)
 		+ ((unsigned int)((1 - a) * (c1 & GREEN) + a * (c2 & GREEN)) & GREEN)
 		+ ((unsigned int)((1 - a) * (c1 & BLUE) + a * (c2 & BLUE)) & BLUE));

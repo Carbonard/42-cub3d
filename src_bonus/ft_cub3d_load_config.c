@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 18:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/12 19:56:23 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 21:28:27 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	load_image(t_context *ctx, char *file_name, t_mlx_image *img)
 {
 	size_t	len;
-printf("file: %s\n", file_name);
+
 	while (*file_name == ' ')
 		file_name++;
 	len = ft_strlen(file_name);
@@ -73,6 +73,7 @@ static t_tex_array	*get_texture(t_context *ctx, char *line)
 		{.str = "D ", .texture = &ctx->textures.door},
 		{.str = "e ", .texture = &ctx->textures.exit},
 		{.str = "f ", .texture = &ctx->textures.enemy},
+		{.str = "ex ", .texture = &ctx->textures.explosion},
 		{.str = NULL, .texture = NULL}
 	};
 

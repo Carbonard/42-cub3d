@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/12 02:18:32 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/12 19:58:07 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 21:28:56 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ void	convert(t_mlx_image *image)
 	unsigned int	color;
 
 	j = 0;
-	while (j < image->width)
+	while (j < image->height)
 	{
 		i = 0;
-		while (i < image->height)
+		while (i < image->width)
 		{
 			color = get_pixel(image, i, j);
-			if (color != TRANSPARENT)
+			if ((color & 0x00FFFFFF) != TRANSPARENT)
 				put_pixel(image, i, j, color | 0xFF000000);
 			else
 				put_pixel(image, i, j, 0);
@@ -44,7 +44,7 @@ void	convert_transparencies(t_tex_array *texture)
 	i = 0;
 	while (i < texture->size)
 	{
-		convert(&texture[i].tex->image);
+		convert(&texture->tex[i].image);
 		i++;
 	}
 }

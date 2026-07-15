@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 19:02:17 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 23:09:13 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,36 @@ void time(int slot, int step)
 	}
 }
 
+void	save_walls(t_context *ctx, t_ray_info *ray, t_texture *tex)
+{
+	int			wall_height;
+	int			y_partition;
+
+	wall_height = ctx->height / ray->dist;
+	ctx->walls[ray->screen_x].dist = ray->dist;
+	ctx->walls[ray->screen_x].texture = tex;
+// ctx->walls[screen->x].tex_x = texture_coord_x(ctx, texture, &ray->pos);
+	if (ray->tex.orientation == AXIS_Y)
+		ctx->walls[ray->screen_x].tex_x = ray->pos.x - floor(ray->pos.x);
+	else
+		ctx->walls[ray->screen_x].tex_x = ray->pos.y - floor(ray->pos.y);
+	ctx->walls[ray->screen_x].tex_x *= (double)tex->image.width;
+// ctx->walls[screen->x].tex_y = texture_coord_y(ctx, &texture->image, wall_height, &y_partition);
+	y_partition = (ctx->height - wall_height) * 0.5;
+	ctx->walls[ray->screen_x].tex_y = 0;
+	if (y_partition <= 0)
+		ctx->walls[ray->screen_x].tex_y = -(double)(y_partition) * tex->image.height / wall_height;
+	ctx->walls[ray->screen_x].y_step = (double)tex->image.height / wall_height;
+	ctx->walls[ray->screen_x].bottom = 0;
+	ctx->walls[ray->screen_x].top = ctx->height;
+	if (y_partition > 0)
+	{
+		ctx->walls[ray->screen_x].bottom = y_partition;
+		ctx->walls[ray->screen_x].top = ctx->height - y_partition;
+	}
+	return;
+}
+
 t_texture	*get_texture(t_context *ctx, t_ray_info *ray, t_vector *dir)
 {
 	if (ray->tex.type == WALL)
@@ -60,6 +90,24 @@ t_texture	*get_texture(t_context *ctx, t_ray_info *ray, t_vector *dir)
 	return (NULL);
 }
 
+static t_explosion	*save_explosion(t_context *ctx, t_int_vector *cell)
+{
+	int	i;
+
+	i = 0;
+	while (i < ctx->n_explosions)
+	{
+		if (ctx->explosions[i].map.x == cell->x && ctx->explosions[i].map.y == cell->y)
+			return (&ctx->explosions[i]);
+		i++;
+	}
+	ctx->explosions[ctx->n_explosions].map.x = cell->x;
+	ctx->explosions[ctx->n_explosions].map.y = cell->y;
+	ctx->explosions[ctx->n_explosions].time = get_time();
+	ctx->n_explosions++;
+	return (&ctx->explosions[ctx->n_explosions - 1]);
+}
+
 static void	save_enemy(t_context *ctx, t_int_vector *cell)
 {
 	int	i;
@@ -73,6 +121,9 @@ static void	save_enemy(t_context *ctx, t_int_vector *cell)
 	}
 	ctx->enemies[ctx->n_enemies].map.x = cell->x + 0.5;
 	ctx->enemies[ctx->n_enemies].map.y = cell->y + 0.5;
+	ctx->enemies[ctx->n_enemies].type = ctx->map.matrix[cell->y][cell->x];
+	if (ctx->enemies[ctx->n_enemies].type == EXPLOSION)
+		ctx->enemies[ctx->n_enemies].explosion = save_explosion(ctx, cell);
 	ctx->n_enemies++;
 }
 
@@ -99,7 +150,8 @@ static void	trace_ray(t_context *ctx, t_ray_info *ray, t_vector *direction)
 			rc.next_cell.y += rc.delta.y;
 			ray->tex.orientation = AXIS_Y;
 		}
-		if (ctx->map.matrix[rc.map_cell.y][rc.map_cell.x] == ENEMY)
+		if (ctx->map.matrix[rc.map_cell.y][rc.map_cell.x] == ENEMY
+			|| ctx->map.matrix[rc.map_cell.y][rc.map_cell.x] == EXPLOSION)
 			save_enemy(ctx, &rc.map_cell);
 	}
 	ray->tex.type = ctx->map.matrix[rc.map_cell.y][rc.map_cell.x];

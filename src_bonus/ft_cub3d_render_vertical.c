@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:26:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 18:39:36 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 22:30:34 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,36 +185,6 @@
 // }
 
 
-void	save_walls(t_context *ctx, t_ray_info *ray, t_texture *tex)
-{
-	int			wall_height;
-	int			y_partition;
-
-	wall_height = ctx->height / ray->dist;
-	ctx->walls[ray->screen_x].dist = ray->dist;
-	ctx->walls[ray->screen_x].texture = tex;
-// ctx->walls[screen->x].tex_x = texture_coord_x(ctx, texture, &ray->pos);
-	if (ray->tex.orientation == AXIS_Y)
-		ctx->walls[ray->screen_x].tex_x = ray->pos.x - floor(ray->pos.x);
-	else
-		ctx->walls[ray->screen_x].tex_x = ray->pos.y - floor(ray->pos.y);
-	ctx->walls[ray->screen_x].tex_x *= (double)tex->image.width;
-// ctx->walls[screen->x].tex_y = texture_coord_y(ctx, &texture->image, wall_height, &y_partition);
-	y_partition = (ctx->height - wall_height) * 0.5;
-	ctx->walls[ray->screen_x].tex_y = 0;
-	if (y_partition <= 0)
-		ctx->walls[ray->screen_x].tex_y = -(double)(y_partition) * tex->image.height / wall_height;
-	ctx->walls[ray->screen_x].y_step = (double)tex->image.height / wall_height;
-	ctx->walls[ray->screen_x].bottom = 0;
-	ctx->walls[ray->screen_x].top = ctx->height;
-	if (y_partition > 0)
-	{
-		ctx->walls[ray->screen_x].bottom = y_partition;
-		ctx->walls[ray->screen_x].top = ctx->height - y_partition;
-	}
-	return;
-}
-
 void	merge_enemy_images(t_context *ctx, t_mlx_image *other, t_enemy *enemy)
 {
 	int			i;
@@ -224,10 +194,10 @@ void	merge_enemy_images(t_context *ctx, t_mlx_image *other, t_enemy *enemy)
 	resize.x = (double)other->width / (double)enemy->size;
 	resize.y = (double)other->height / (double)enemy->size;
 	j = fmax(0, -enemy->screen_pos.y);
-	while (j < enemy->size)
+	while (j < enemy->size && j + enemy->screen_pos.y < ctx->height)
 	{
 		i = fmax(0, -enemy->screen_pos.x);
-		while (i < enemy->size)
+		while (i < enemy->size && i + enemy->screen_pos.x < ctx->width)
 		{
 			if (enemy->screen_pos.x + i < ctx->width
 				&& enemy->dist <= ctx->walls[enemy->screen_pos.x + i].dist)
@@ -259,6 +229,10 @@ void	fill_enemy_info(t_context *ctx, t_enemy *enemy)
 	screen_factor = sqrt(1 - cos * cos) / cos;
 	enemy->screen_pos.x = (screen_factor + 1) * ctx->width / 2 - enemy->size / 2;
 	enemy->screen_pos.y = (ctx->height - enemy->size) / 2;
+	if (enemy->type == ENEMY)
+		enemy->texture = ctx->textures.enemy.current;
+	else
+		enemy->texture = enemy->explosion->texture;
 }
 
 void	sort_enemies(t_context *ctx)
@@ -285,10 +259,32 @@ void	sort_enemies(t_context *ctx)
 	}
 }
 
+void	check_explosions(t_context *ctx)
+{
+	int	i;
+	int	tex;
+
+	i = 0;
+	while (i < ctx->n_explosions)
+	{
+		if (ctx->explosions[i].time)
+		{
+			tex = (get_time() - ctx->explosions[i].time) / 150000;
+			if (tex < ctx->textures.explosion.size)
+				ctx->explosions[i].texture = &ctx->textures.explosion.tex[tex];
+			else
+				ctx->map.matrix[ctx->explosions[i].map.y][ctx->explosions[i].map.x] = FLOOR;
+			ctx->render = 1;
+		}
+		i++;
+	}
+}
+
 void	render_enemies(t_context *ctx)
 {
 	int	i;
 
+	check_explosions(ctx);
 	i = 0;
 	while (i < ctx->n_enemies)
 	{
@@ -299,7 +295,7 @@ void	render_enemies(t_context *ctx)
 	i = 0;
 	while (i < ctx->n_enemies)
 	{
-		merge_enemy_images(ctx, &ctx->textures.enemy.current->image, &ctx->enemies[i]);
+		merge_enemy_images(ctx, &ctx->enemies[i].texture->image, &ctx->enemies[i]);
 		i++;
 	}
 	ctx->n_enemies = 0;

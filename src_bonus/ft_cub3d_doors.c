@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 17:33:54 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 16:59:18 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 22:08:42 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	open_door(t_context *ctx)
 
 	init_ray_casting(ctx, &rc, &ctx->player.dir);
 	while (ctx->map.matrix[rc.map_cell.y][rc.map_cell.x] == FLOOR
+		|| ctx->map.matrix[rc.map_cell.y][rc.map_cell.x] == EXPLOSION
 		|| (rc.map_cell.x == (int)ctx->player.pos.x
 			&& rc.map_cell.y == (int)ctx->player.pos.y))
 	{
@@ -36,6 +37,8 @@ void	open_door(t_context *ctx)
 	colision_point = &ctx->map.matrix[rc.map_cell.y][rc.map_cell.x];
 	if (*colision_point == OPEN_DOOR || *colision_point == CLOSED_DOOR)
 		*colision_point ^= CLOSED_DOOR ^ OPEN_DOOR;
+	if (*colision_point == ENEMY)
+		*colision_point = EXPLOSION;
 }
 
 // void	open_door(t_context *ctx)

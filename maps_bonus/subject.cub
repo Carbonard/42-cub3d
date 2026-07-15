@@ -9,6 +9,7 @@ D ./img/wood.xpm
 e ./img/Tardis.xpm
 
 f ./img/enemy_korosensei.xpm
+ex ./img/explosion_1_0.xpm ./img/explosion_1_1.xpm ./img/explosion_1_2.xpm ./img/explosion_1_3.xpm
 
 111111111111111111111111100
 100f00000f11f0000000000f100

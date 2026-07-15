@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 19:13:56 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 22:47:15 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ enum e_map_elements
 	CLOSED_DOOR = 'D',
 	OPEN_DOOR = 'd',
 	EXIT = 'e',
-	ENEMY = 'f'
+	ENEMY = 'f',
+	EXPLOSION = 'x'
 };
 
 typedef struct s_tex_info
@@ -132,7 +133,7 @@ typedef struct s_tex_array
 {
 	t_texture	tex[20];
 	t_texture	*current;
-	short int	size;
+	int			size;
 }	t_tex_array;
 
 typedef struct s_str_to_tex
@@ -152,6 +153,7 @@ typedef struct s_textures
 	t_tex_array	door;
 	t_tex_array	exit;
 	t_tex_array	enemy;
+	t_tex_array	explosion;
 }	t_textures;
 
 typedef struct s_character
@@ -200,14 +202,25 @@ typedef struct s_wall
 	double		dist;
 }	t_wall_limits;
 
+typedef struct s_explosion
+{
+	t_int_vector	map;
+	size_t			time;
+	t_texture		*texture;
+}	t_explosion;
+
 typedef struct s_enemy
 {
 	t_int_vector	screen_pos;
 	double			dist;
 	t_vector		map;
-	int				size;		
+	int				size;
+	char			type;
+	t_texture		*texture;
+	t_explosion		*explosion;
 }	t_enemy;
 
+# define MAX_ENEMIES 256
 
 typedef struct s_context
 {
@@ -224,9 +237,12 @@ typedef struct s_context
 	t_wall_limits	walls[2048];
 	int				rain_mode;
 	double			time;
-	t_enemy		enemies[64];
+	t_enemy			enemies[MAX_ENEMIES];
 	int				n_enemies;
+	t_explosion		explosions[MAX_ENEMIES];
+	int				n_explosions;
 	int				fps;
+	int				render;
 }	t_context;
 
 // String

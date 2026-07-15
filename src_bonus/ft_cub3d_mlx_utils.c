@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 23:57:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 21:01:34 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 22:52:07 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	put_pixel(const t_mlx_image *image, int x, int y, unsigned int color)
 
 	if (x < 0 || x > image->width || y < 0 || y > image->height)
 	{
-		// printf("Debug: Trying to print in (%d,%d)\nThe limits are (%d, %d)\n",
-		// 	x, y, image->width, image->height);
+		printf("Debug: Trying to print in (%d,%d)\nThe limits are (%d, %d)\n",
+			x, y, image->width, image->height);
 		// sleep(5);
 		return ;
 	}
@@ -33,8 +33,8 @@ unsigned int	get_pixel(const t_mlx_image *image, int x, int y)
 
 	if (x < 0 || x > image->width || y < 0 || y > image->height)
 	{
-		// printf("Debug: Trying to read in (%d,%d)\nThe limits are (%d, %d)\n",
-		// 	x, y, image->width, image->height);
+		printf("Debug: Trying to read in (%d,%d)\nThe limits are (%d, %d)\n",
+			x, y, image->width, image->height);
 		// sleep(5);
 		return (rgb(255, 0, 0));
 	}

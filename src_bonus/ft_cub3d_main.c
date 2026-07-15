@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 19:16:00 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/15 20:00:28 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	set_config(t_context *ctx, char *file_name)
 	ctx->player.mouse_sensitivity = M_PI * 0.001953125;
 	if (ctx->textures.enemy.size)
 		convert_transparencies(&ctx->textures.enemy);
+	if (ctx->textures.explosion.size)
+		convert_transparencies(&ctx->textures.explosion);
 	set_textures(ctx);
 	return (0);
 }
