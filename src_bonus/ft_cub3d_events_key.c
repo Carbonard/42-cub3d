@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 23:47:54 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/16 18:08:18 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ int	key_press_event(int key, t_context *ctx)
 		ctx->pressed.left = 1;
 	else if (key == XK_Right)
 		ctx->pressed.right = 1;
-	else if (key == XK_space)
+	else if (key == XK_Up)
+		ctx->focus = (ctx->focus + B_SIZE - 1) % B_SIZE;
+		// ctx->pressed.up = 1;
+	else if (key == XK_Down)
+		ctx->focus = (ctx->focus + 1) % B_SIZE;
+		// ctx->pressed.down = 1;
+	else if (key == XK_space && ctx->mode == GAME)
 		open_door(ctx);
-	// else if (key == XK_r)
-	// {
-	// 	if (!ctx->rain_mode || ctx->rain_mode > 1000)
-	// 		ctx->rain_mode = !ctx->rain_mode * 20;
-	// 	else
-	// 		ctx->rain_mode *= 5;
-	// 	render_screen(ctx);
-	// }
+	else if (key == XK_space && ctx->mode == MENU)
+		ctx->buttons[ctx->focus].action(ctx, 0);
 	else
 		printf("Invalid key: %d\n", key);
 	return (0);
@@ -57,6 +57,10 @@ int	key_release_event(int key, t_context *ctx)
 		ctx->pressed.left = 0;
 	else if (key == XK_Right)
 		ctx->pressed.right = 0;
+	// else if (key == XK_Up)
+	// 	ctx->pressed.up = 0;
+	// else if (key == XK_Down)
+	// 	ctx->pressed.down = 0;
 	return (0);
 }
 
@@ -91,6 +95,11 @@ int	loop_hook(t_context *ctx)
 	time_increment = (double)(get_time() - last_time) / 100000;
 	ctx->time += time_increment;
 	last_time = get_time();
+	if (ctx->mode == MENU)
+	{
+		open_menu(ctx);
+		return (0);
+	}
 	ctx->render |= check_mouse(ctx);
 	if (ctx->pressed.a)
 		ctx->render |= move_player(ctx, 0, -ctx->player.velocity * time_increment);
@@ -111,7 +120,7 @@ int	loop_hook(t_context *ctx)
 		set_textures(ctx);
 		ctx->render |= 1;
 	}
-	if (ctx->render)
+	if (ctx->render && ctx->mode == GAME)
 		render_screen(ctx);
 	current_time = get_time();
 	if (current_time - last_time < ctx->usec_per_frame)

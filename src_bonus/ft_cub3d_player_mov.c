@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:22:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 18:47:05 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/16 17:19:01 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	move_player(t_context *ctx, t_coordinate forward, t_coordinate side)
 	if (ctx->map.matrix[(int)p->pos.y][(int)p->pos.x] == EXIT)
 	{
 		printf("\n\n\nCONGRATULATIONS!!\n\nYou have spent %.2lf seconds!\n\n\n", ctx->time / 10);
-		close_game(ctx, C3D_SUCCESS);
+		ctx->mode = MENU;
+		return (0);
 	}
 	return (ret);
 }

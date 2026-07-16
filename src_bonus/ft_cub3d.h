@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/16 00:07:47 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/16 18:16:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,9 +129,11 @@ typedef struct s_texture
 	short int		set;
 }	t_texture;
 
+# define MAX_TEXTURES 20
+
 typedef struct s_tex_array
 {
-	t_texture	tex[20];
+	t_texture	tex[MAX_TEXTURES];
 	t_texture	*current;
 	int			size;
 }	t_tex_array;
@@ -189,6 +191,8 @@ typedef struct s_pressed_keys
 	int	w;
 	int	left;
 	int	right;
+	int	up;
+	int	down;
 }	t_pressed_keys;
 
 typedef struct s_wall
@@ -220,9 +224,36 @@ typedef struct s_enemy
 	t_explosion		*explosion;
 }	t_enemy;
 
-# define MAX_ENEMIES 256
+# define MAX_ENEMIES 512
 
-typedef struct s_context
+enum e_modes
+{
+	MENU,
+	// MAP_SELECTOR,
+	GAME
+};
+
+typedef struct s_context t_context;
+
+typedef int (*t_button_action)(t_context *ctx, int n);
+
+typedef struct s_menu_button
+{
+	t_mlx_image		image;
+	t_mlx_image		focus_image;
+	t_button_action	action;
+}	t_menu_button;
+
+enum e_buttons
+{
+	B_PLAY,
+	// B_MAPS,
+	// B_CONFIG,
+	B_EXIT,
+	B_SIZE
+};
+
+struct s_context
 {
 	t_textures		textures;
 	void			*mlx;
@@ -244,7 +275,11 @@ typedef struct s_context
 	int				real_fps;
 	size_t			usec_per_frame;
 	int				render;
-}	t_context;
+	int				mode;
+	t_menu_button	buttons[B_SIZE];
+	int				focus;
+	char			*map_file;
+};
 
 // String
 
@@ -286,6 +321,7 @@ int				is_floor(t_map *map, t_vector *pos);
 // Minimap
 
 void			initialize_screen(t_context *ctx);
+void			initialize_minimap(t_context *ctx);
 void			fill_minimap_image(t_map *map);
 void			render_minimap(t_context *ctx);
 void			put_minimap(t_context *ctx);
@@ -332,11 +368,16 @@ void			open_door(t_context *ctx);
 
 // Close
 
-int				close_game(void *arg, int exit_code);
+void			close_images(t_context *ctx);
+int				close_game(t_context *ctx, int exit_code);
 
 // Utils
 
 char			**copy_matrix(char **matrix, size_t size);
 size_t			get_time(void);
+
+// Menu
+
+void			open_menu(t_context *ctx);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/16 00:05:58 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/16 18:16:13 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,25 +26,76 @@ int	check_args(int argc, char **argv)
 	return (0);
 }
 
+int	play_game(t_context *ctx, int mode)
+{
+	(void)mode;
+	close_images(ctx);
+	free_split(ctx->map.matrix);
+	bzero(&ctx->enemies, sizeof(t_enemy));
+	ctx->n_enemies = 0;
+	bzero(&ctx->explosions, sizeof(t_explosion));
+	ctx->n_explosions = 0;
+	parse_file(ctx, ctx->map_file);
+	initialize_minimap(ctx);
+	if (ctx->textures.enemy.size)
+		convert_transparencies(&ctx->textures.enemy);
+	if (ctx->textures.explosion.size)
+		convert_transparencies(&ctx->textures.explosion);
+	set_textures(ctx);
+	mlx_mouse_move(ctx->mlx, ctx->window, ctx->screen.width / 2, ctx->screen.height / 2);
+	usleep(500000);
+	ctx->mode = GAME;
+	return (0);
+}
+
+void	new_button(t_context *ctx, t_menu_button *button, char *files[2], t_button_action act)
+{
+	button->image.img = mlx_xpm_file_to_image(
+		ctx->mlx, files[0],
+		&button->image.width,
+		&button->image.height);
+	get_img_data(&button->image);
+	button->focus_image.img = mlx_xpm_file_to_image(
+		ctx->mlx, files[1],
+		&button->focus_image.width,
+		&button->focus_image.height);
+	get_img_data(&button->focus_image);
+	button->action = act;
+}
+
+void	create_buttons(t_context *ctx)
+{
+	char *actions[2];
+
+	actions[0] = "./img/play.xpm";
+	actions[1] = "./img/play_focus.xpm";
+	new_button(ctx, &ctx->buttons[B_PLAY], actions, play_game);
+	actions[0] = "./img/exit.xpm";
+	actions[1] = "./img/exit_focus.xpm";
+	new_button(ctx, &ctx->buttons[B_EXIT], actions, close_game);
+	// actions[0] = "./img/exit.xpm";
+	// actions[1] = "./img/exit_focus.xpm";
+	// new_button(ctx, &ctx->buttons[B_MAPS], actions, close_game);
+	// actions[0] = "./img/exit.xpm";
+	// actions[1] = "./img/exit_focus.xpm";
+	// new_button(ctx, &ctx->buttons[B_CONFIG], actions, close_game);
+}
+
 int	set_config(t_context *ctx, char *file_name)
 {
 	ft_bzero(ctx, sizeof(t_context));
 	ctx->mlx = mlx_init();
 	if (!ctx->mlx)
 		exit (C3D_MLX);
-	parse_file(ctx, file_name);
+	ctx->map_file = file_name;
 	ctx->map.minimap_wall_color = argb(230, 0, 0, 0);
 	ctx->map.minimap_floor_color = argb(50, 255, 255, 255);
 	ctx->map.minimap_player_color = argb(200, 200, 20, 20);
 	ctx->player.velocity = 0.33;
 	ctx->player.rotation_velocity = M_PI * 0.0625;
 	ctx->player.mouse_sensitivity = M_PI * 0.001953125;
-	if (ctx->textures.enemy.size)
-		convert_transparencies(&ctx->textures.enemy);
-	if (ctx->textures.explosion.size)
-		convert_transparencies(&ctx->textures.explosion);
-	set_textures(ctx);
 	limit_fps(ctx, 42);
+	create_buttons(ctx);
 	return (0);
 }
 
@@ -61,15 +112,14 @@ int	main(int argc, char **argv)
 	ctx.window = mlx_new_window(ctx.mlx, ctx.width, ctx.height, "cube3D");
 	if (!ctx.window)
 		return (C3D_MLX);
-	mlx_mouse_hide(ctx.mlx, ctx.window);
+	// mlx_mouse_hide(ctx.mlx, ctx.window);
 	mlx_hook(ctx.window, 17, 0, &close_game, &ctx);
 	mlx_hook(ctx.window, KeyPress, KeyPressMask, &key_press_event, &ctx);
 	mlx_hook(ctx.window, KeyRelease, KeyReleaseMask, &key_release_event, &ctx);
 	mlx_loop_hook(ctx.mlx, loop_hook, &ctx);
 	initialize_screen(&ctx);
-	mlx_mouse_move(ctx.mlx, ctx.window, ctx.screen.width / 2, ctx.screen.height / 2);
-	usleep(500000);
-	render_screen(&ctx);
+	// render_screen(&ctx);
+	ctx.mode = MENU;
 	mlx_loop(ctx.mlx);
 	mlx_destroy_display(ctx.mlx);
 	free(ctx.mlx);

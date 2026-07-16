@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:59:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 22:29:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/16 18:11:14 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,33 @@ static void	safe_close_image(void *mlx, t_mlx_image *image)
 	}
 }
 
-static void	close_images(t_context *ctx)
+static void	close_tex_array(void *mlx, t_tex_array *texure)
+{
+	int	i;
+
+	i = 0;
+	while (i < texure->size)
+	{
+		safe_close_image(mlx, &texure->tex[i].image);
+		i++;
+	}
+	texure->size = 0;
+}
+
+void	close_images(t_context *ctx)
 {
 	safe_close_image(ctx->mlx, &ctx->map.img);
 	safe_close_image(ctx->mlx, &ctx->player.minimap_img);
-	safe_close_image(ctx->mlx, &ctx->screen);
-	int i = 0;
-	while (i < 5)
-	{
-		safe_close_image(ctx->mlx, &ctx->textures.north.tex[i].image);
-		safe_close_image(ctx->mlx, &ctx->textures.south.tex[i].image);
-		safe_close_image(ctx->mlx, &ctx->textures.west.tex[i].image);
-		safe_close_image(ctx->mlx, &ctx->textures.east.tex[i].image);
-		safe_close_image(ctx->mlx, &ctx->textures.floor.tex[i].image);
-		safe_close_image(ctx->mlx, &ctx->textures.ceiling.tex[i].image);
-		safe_close_image(ctx->mlx, &ctx->textures.door.tex[i].image);
-		safe_close_image(ctx->mlx, &ctx->textures.exit.tex[i].image);
-		i++;
-	}
+	close_tex_array(ctx->mlx, &ctx->textures.north);
+	close_tex_array(ctx->mlx, &ctx->textures.south);
+	close_tex_array(ctx->mlx, &ctx->textures.west);
+	close_tex_array(ctx->mlx, &ctx->textures.east);
+	close_tex_array(ctx->mlx, &ctx->textures.floor);
+	close_tex_array(ctx->mlx, &ctx->textures.ceiling);
+	close_tex_array(ctx->mlx, &ctx->textures.door);
+	close_tex_array(ctx->mlx, &ctx->textures.exit);
+	close_tex_array(ctx->mlx, &ctx->textures.enemy);
+	close_tex_array(ctx->mlx, &ctx->textures.explosion);
 }
 
 static void	print_error(int exit_code)
@@ -55,13 +64,20 @@ static void	print_error(int exit_code)
 		ft_putendl_fd("The map is not closed", 2);
 }
 
-int	close_game(void *arg, int exit_code)
+int	close_game(t_context *ctx, int exit_code)
 {
-	t_context	*ctx;
+	int	i;
 
-	ctx = arg;
 	print_error(exit_code);
 	close_images(ctx);
+	safe_close_image(ctx->mlx, &ctx->screen);
+	i = 0;
+	while (i < B_SIZE)
+	{
+		safe_close_image(ctx->mlx, &ctx->buttons[i].image);
+		safe_close_image(ctx->mlx, &ctx->buttons[i].focus_image);
+		i++;
+	}
 	free_split(ctx->map.matrix);
 	if (ctx->mlx && ctx->window)
 		mlx_destroy_window(ctx->mlx, ctx->window);

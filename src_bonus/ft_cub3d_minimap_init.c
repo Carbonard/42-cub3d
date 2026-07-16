@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:41:24 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 21:28:43 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/16 17:25:23 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,8 @@ int	max(int a, int b)
 		return (a);
 }
 
-void	initialize_screen(t_context *ctx)
+void	initialize_minimap(t_context *ctx)
 {
-	ctx->screen.width = ctx->width;
-	ctx->screen.height = ctx->height;
-	ctx->screen.img = mlx_new_image(ctx->mlx, ctx->width, ctx->height);
-	get_img_data(&ctx->screen);
 	ctx->map.size = ctx->width * 0.3;
 	ctx->map.minimap_scale = max((double)ctx->map.size / ctx->map.width, 3);
 	ctx->map.img.width = ctx->map.width * ctx->map.minimap_scale;
@@ -86,4 +82,12 @@ void	initialize_screen(t_context *ctx)
 			ctx->mlx, ctx->map.minimap_scale, ctx->map.minimap_scale);
 	get_img_data(&ctx->player.minimap_img);
 	fill_minimap_image(&ctx->map);
+}
+
+void	initialize_screen(t_context *ctx)
+{
+	ctx->screen.width = ctx->width;
+	ctx->screen.height = ctx->height;
+	ctx->screen.img = mlx_new_image(ctx->mlx, ctx->width, ctx->height);
+	get_img_data(&ctx->screen);
 }

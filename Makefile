@@ -47,7 +47,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(SRC_DIR)/ft_cub3d.h | $(OBJ_DIR)
 
 
 FILES_BONUS = $(FILES)\
-doors mouse_utils raycasting enemies set_config
+doors mouse_utils raycasting enemies set_config menu
 
 SRC_DIR_BONUS = src_bonus
 
