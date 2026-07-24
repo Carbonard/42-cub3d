@@ -4,7 +4,7 @@ MLX_DIR = ./minilibx-linux
 
 LIBFT_DIR = ./libft
 
-CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address,undefined
+CFLAGS = -Wall -Werror -Wextra -g3 -fsanitize=address,undefined
 
 LIBS = -lmlx -lXext -lX11 -lm
 
@@ -46,8 +46,15 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(SRC_DIR)/ft_cub3d.h | $(OBJ_DIR)
 
 
 
-FILES_BONUS = $(FILES)\
-doors mouse_utils raycasting enemies set_config menu
+FILES_BONUS = main utils read_file load_config\
+mlx_utils map_utils\
+dyn_arrays math\
+map minimap_init minimap\
+render_screen render_enemies render_utils\
+events_key\
+player_mov\
+close\
+shoot mouse_utils raycasting textures set_config menu
 
 SRC_DIR_BONUS = src_bonus
 

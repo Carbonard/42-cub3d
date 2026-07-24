@@ -6,16 +6,33 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/16 18:08:18 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/20 17:10:41 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
+void	menu_key_events(t_context *ctx, int key)
+{
+	if (key == XK_Up)
+		ctx->focus = (ctx->focus + B_SIZE - 1) % B_SIZE;
+	else if (key == XK_Down)
+		ctx->focus = (ctx->focus + 1) % B_SIZE;
+	else if (key == XK_space || key == 65293)
+		ctx->buttons[ctx->focus].action(ctx, 0);
+	else
+	{
+		printf("Invalid key: %d\n", key);
+	}
+	ctx->render = 1;
+}
+
 int	key_press_event(int key, t_context *ctx)
 {
 	if (key == XK_Escape)
 		return (close_game(ctx, 0));
+	else if (ctx->mode == MENU)
+		menu_key_events(ctx, key);
 	else if (key == XK_a)
 		ctx->pressed.a = 1;
 	else if (key == XK_d)
@@ -28,16 +45,8 @@ int	key_press_event(int key, t_context *ctx)
 		ctx->pressed.left = 1;
 	else if (key == XK_Right)
 		ctx->pressed.right = 1;
-	else if (key == XK_Up)
-		ctx->focus = (ctx->focus + B_SIZE - 1) % B_SIZE;
-		// ctx->pressed.up = 1;
-	else if (key == XK_Down)
-		ctx->focus = (ctx->focus + 1) % B_SIZE;
-		// ctx->pressed.down = 1;
-	else if (key == XK_space && ctx->mode == GAME)
-		open_door(ctx);
-	else if (key == XK_space && ctx->mode == MENU)
-		ctx->buttons[ctx->focus].action(ctx, 0);
+	else if (key == XK_space)
+		ctx->pressed.space = 1;
 	else
 		printf("Invalid key: %d\n", key);
 	return (0);
@@ -57,30 +66,9 @@ int	key_release_event(int key, t_context *ctx)
 		ctx->pressed.left = 0;
 	else if (key == XK_Right)
 		ctx->pressed.right = 0;
-	// else if (key == XK_Up)
-	// 	ctx->pressed.up = 0;
-	// else if (key == XK_Down)
-	// 	ctx->pressed.down = 0;
+	else if (key == XK_space)
+		ctx->pressed.space = 0;
 	return (0);
-}
-
-static void	set_tex(t_tex_array *texture, int current)
-{
-	if (texture->size)
-		texture->current = &texture->tex[current % texture->size];
-}
-
-void	set_textures(t_context *ctx)
-{
-	set_tex(&ctx->textures.north, ctx->current_tex);
-	set_tex(&ctx->textures.south, ctx->current_tex);
-	set_tex(&ctx->textures.west, ctx->current_tex);
-	set_tex(&ctx->textures.east, ctx->current_tex);
-	set_tex(&ctx->textures.floor, ctx->current_tex);
-	set_tex(&ctx->textures.ceiling, ctx->current_tex);
-	set_tex(&ctx->textures.door, ctx->current_tex);
-	set_tex(&ctx->textures.exit, ctx->current_tex);
-	set_tex(&ctx->textures.enemy, ctx->current_tex);
 }
 
 int	loop_hook(t_context *ctx)
@@ -120,6 +108,13 @@ int	loop_hook(t_context *ctx)
 		set_textures(ctx);
 		ctx->render |= 1;
 	}
+	if (ctx->pressed.space && last_time - ctx->last_time_shot > 500000)
+	{
+		shoot(ctx);
+		ctx->last_time_shot = last_time;
+	}
+	if (!ctx->pressed.space)
+		ctx->last_time_shot = 0;
 	if (ctx->render && ctx->mode == GAME)
 		render_screen(ctx);
 	current_time = get_time();

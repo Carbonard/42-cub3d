@@ -31,3 +31,5 @@ Menu:
 check textures for every char in map
 
 BAD_TEX_FILE shows no message in mandatory
+
+repeated textures(?)

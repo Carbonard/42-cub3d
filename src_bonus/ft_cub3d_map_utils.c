@@ -6,18 +6,18 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/03 19:34:44 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 21:01:01 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/16 23:03:02 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-int	on_map(t_map *map, t_vector *ray)
+int	on_map(t_map *map, t_vector *coord)
 {
-	if ((int)ray->x >= map->width
-		|| (int)ray->y >= map->height
-		|| (int)ray->x < 0
-		|| (int)ray->y < 0)
+	if ((int)coord->x >= map->width
+		|| (int)coord->y >= map->height
+		|| (int)coord->x < 0
+		|| (int)coord->y < 0)
 		return (0);
 	return (1);
 }
@@ -31,6 +31,8 @@ int	is_wall(t_map *map, t_vector *pos)
 {
 	t_vector	aux;
 
+	if (!on_map(map, pos))
+		return (1);
 	if (is_int(pos->x))
 	{
 		aux.x = pos->x - 0.01;

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 15:39:09 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/16 18:03:50 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/20 17:11:34 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,57 @@ void	fill_screen(t_context *ctx, unsigned int color)
 	}
 }
 
+int	put_title(t_context *ctx, t_mlx_image *title)
+{
+	int			i;
+	int			j;
+	t_vector	resize;
+	t_vector	screen_pos;
+	t_vector	size;
+
+	size.x = ctx->height * 0.6;
+	size.y = ctx->height * 0.3;
+	screen_pos.x = ctx->width * 0.05;
+	screen_pos.y = ctx->height * 0.05;
+	resize.x = (double)title->width / size.x;
+	resize.y = (double)title->height / size.y;
+	j = 0;
+	while (j < size.y)
+	{
+		i = 0;
+		while (i < size.x)
+		{
+			put_pixel(&ctx->screen,
+				screen_pos.x + i, screen_pos.y + j,
+				merge_colors(
+					get_pixel(&ctx->screen,
+						screen_pos.x + i, screen_pos.y + j),
+					get_pixel(title, resize.x * i, resize.y * j)));
+			i++;
+		}
+		j++;
+	}
+	return (screen_pos.y + j);
+}
+
 void	open_menu(t_context *ctx)
 {
 	int	i;
+	int	buttons_start;
 
-	fill_screen(ctx, rgb(50,50,50));
-	mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->screen.img, 0, 0);
-	i = 0;
-	while (i < B_SIZE)
+	if (ctx->render)
 	{
-		if (ctx->focus == i)
-			mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->buttons[i].focus_image.img, 100, 100 + i * 150);
-		else
-			mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->buttons[i].image.img, 100, 100 + i * 150);
-		i++;
+		fill_screen(ctx, rgb(0,20,50));
+		buttons_start = put_title(ctx, &ctx->textures.title) + 50;
+		mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->screen.img, 0, 0);
+		i = 0;
+		while (i < B_SIZE)
+		{
+			if (ctx->focus == i)
+				mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->buttons[i].focus_image.img, 100, buttons_start + i * 150);
+			else
+				mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->buttons[i].image.img, 100, buttons_start + i * 150);
+			i++;
+		}
 	}
 }

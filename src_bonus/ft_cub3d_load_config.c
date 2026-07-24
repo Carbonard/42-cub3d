@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 18:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 21:28:27 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/24 14:08:52 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	load_texture(t_context *ctx, char *line)
 	while (*line != ' ')
 		line++;
 	texture_inputs = ft_split(line, ' ');
-	while (texture_inputs[texture->size])
+	while (texture_inputs[texture->size] && texture->size < MAX_TEXTURES)
 	{
 		if (set_color(texture_inputs[texture->size],
 						&texture->tex[texture->size]) != C3D_SUCCESS)
@@ -109,7 +109,6 @@ int	load_texture(t_context *ctx, char *line)
 				free_split(texture_inputs);
 				return (C3D_FILE_PARSER_ERROR);
 			}
-		texture->tex[texture->size].set = 1;
 		texture->size++;
 	}
 	free_split(texture_inputs);

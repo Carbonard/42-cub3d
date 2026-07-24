@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/16 18:16:13 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/24 14:12:51 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,6 @@ void	create_buttons(t_context *ctx)
 	actions[0] = "./img/exit.xpm";
 	actions[1] = "./img/exit_focus.xpm";
 	new_button(ctx, &ctx->buttons[B_EXIT], actions, close_game);
-	// actions[0] = "./img/exit.xpm";
-	// actions[1] = "./img/exit_focus.xpm";
-	// new_button(ctx, &ctx->buttons[B_MAPS], actions, close_game);
-	// actions[0] = "./img/exit.xpm";
-	// actions[1] = "./img/exit_focus.xpm";
-	// new_button(ctx, &ctx->buttons[B_CONFIG], actions, close_game);
 }
 
 int	set_config(t_context *ctx, char *file_name)
@@ -94,6 +88,12 @@ int	set_config(t_context *ctx, char *file_name)
 	ctx->player.velocity = 0.33;
 	ctx->player.rotation_velocity = M_PI * 0.0625;
 	ctx->player.mouse_sensitivity = M_PI * 0.001953125;
+	ctx->textures.title.img = mlx_xpm_file_to_image(ctx->mlx, "./img/title.xpm", &ctx->textures.title.width, &ctx->textures.title.height);
+	get_img_data(&ctx->textures.title);
+	convert(&ctx->textures.title);
+	ctx->textures.arm.img = mlx_xpm_file_to_image(ctx->mlx, "./img/dw_arm.xpm", &ctx->textures.arm.width, &ctx->textures.arm.height);
+	get_img_data(&ctx->textures.arm);
+	convert(&ctx->textures.arm);
 	limit_fps(ctx, 42);
 	create_buttons(ctx);
 	return (0);
@@ -118,8 +118,8 @@ int	main(int argc, char **argv)
 	mlx_hook(ctx.window, KeyRelease, KeyReleaseMask, &key_release_event, &ctx);
 	mlx_loop_hook(ctx.mlx, loop_hook, &ctx);
 	initialize_screen(&ctx);
-	// render_screen(&ctx);
 	ctx.mode = MENU;
+	ctx.render = 1;
 	mlx_loop(ctx.mlx);
 	mlx_destroy_display(ctx.mlx);
 	free(ctx.mlx);

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 17:46:13 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/09 23:47:49 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/24 14:47:59 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,26 @@ static int	empty_element(t_context *ctx)
 	int	ret;
 
 	ret = 0;
-	if (!ctx->textures.north.tex[0].set)
+	if (!ctx->textures.north.size)
 		ret += ft_putnstr_fd("Error\nMissing north texture\n", 2, 50);
-	if (!ctx->textures.south.tex[0].set)
+	if (!ctx->textures.south.size)
 		ret += ft_putnstr_fd("Error\nMissing south texture\n", 2, 50);
-	if (!ctx->textures.west.tex[0].set)
+	if (!ctx->textures.west.size)
 		ret += ft_putnstr_fd("Error\nMissing west texture\n", 2, 50);
-	if (!ctx->textures.east.tex[0].set)
+	if (!ctx->textures.east.size)
 		ret += ft_putnstr_fd("Error\nMissing east texture\n", 2, 50);
-	if (!ctx->textures.ceiling.tex[0].set)
+	if (!ctx->textures.ceiling.size)
 		ret += ft_putnstr_fd("Error\nMissing ceiling color\n", 2, 50);
-	if (!ctx->textures.floor.tex[0].set)
+	if (!ctx->textures.floor.size)
 		ret += ft_putnstr_fd("Error\nMissing floor color\n", 2, 50);
 	if (!(ctx->player.pos.x))
 		ret += ft_putnstr_fd("Error\nMissing character position\n", 2, 50);
+	if (ctx->map.elements.doors && ! ctx->textures.door.size)
+		ret += ft_putnstr_fd("Error\nMissing door texture\n", 2, 50);
+	if (ctx->map.elements.enemies && ! ctx->textures.enemy.size)
+		ret += ft_putnstr_fd("Error\nMissing enemies texture\n", 2, 50);
+	if (ctx->map.elements.exit && ! ctx->textures.exit.size)
+		ret += ft_putnstr_fd("Error\nMissing exit texture\n", 2, 50);
 	return (ret);
 }
 

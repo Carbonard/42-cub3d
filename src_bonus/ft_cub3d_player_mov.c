@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:22:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/16 17:19:01 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/16 23:16:48 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	move_player(t_context *ctx, t_coordinate forward, t_coordinate side)
 
 	ret = 0;
 	p = &ctx->player;
-	new_pos.x = p->pos.x + p->dir.x * forward + p->ort.x * side;
+	new_pos.x = p->pos.x + fmax(-1, fmin(1, p->dir.x * forward + p->ort.x * side));
 	new_pos.y = ctx->player.pos.y;
 	if (!is_wall(&ctx->map, &new_pos))
 	{
@@ -37,7 +37,7 @@ int	move_player(t_context *ctx, t_coordinate forward, t_coordinate side)
 	}
 	else
 		new_pos.x = ctx->player.pos.x;
-	new_pos.y = p->pos.y + p->dir.y * forward + p->ort.y * side;
+	new_pos.y = p->pos.y + fmax(-1, fmin(1, p->dir.y * forward + p->ort.y * side));
 	if (!is_wall(&ctx->map, &new_pos))
 	{
 		p->pos.y = new_pos.y;

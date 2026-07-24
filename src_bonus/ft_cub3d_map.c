@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:45:56 by elangari          #+#    #+#             */
-/*   Updated: 2026/07/10 22:19:53 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/24 13:54:42 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,35 @@ static void	set_player(t_character *player, char **map, int x, int y)
 	set_player_vectors(player);
 }
 
+void	add_char(char *str, char c)
+{
+	size_t i;
+
+	i = 0;
+	while (str[i])
+	{
+		i++;
+	}
+	str[i] = c;
+}
+
+static int	parse_cell(t_context *ctx, t_str_array *raw_map, int x, int y)
+{
+	if (ft_strchr("NSWE", raw_map->data[y][x]))
+		set_player(&ctx->player, raw_map->data, x, y);
+	else if (raw_map->data[y][x] == ' ')
+		raw_map->data[y][x] = '0';
+	else if (raw_map->data[y][x] == CLOSED_DOOR)
+		ctx->map.elements.doors = 1;
+	else if (raw_map->data[y][x] == ENEMY)
+		ctx->map.elements.enemies = 1;
+	else if (raw_map->data[y][x] == EXIT)
+		ctx->map.elements.exit = 1;
+	else if (!ft_strchr(VALID_MAP_CHARS, raw_map->data[y][x]))
+		return (1);
+	return (0);
+}
+
 static int	parse_map(t_context *ctx, t_str_array *raw_map)
 {
 	int	i;
@@ -42,11 +71,7 @@ static int	parse_map(t_context *ctx, t_str_array *raw_map)
 		c = 0;
 		while (raw_map->data[i][c] && raw_map->data[i][c] != '\n')
 		{
-			if (ft_strchr("NSWE", raw_map->data[i][c]))
-				set_player(&ctx->player, raw_map->data, c, i);
-			else if (raw_map->data[i][c] == ' ')
-				raw_map->data[i][c] = '0';
-			else if (!ft_strchr(VALID_MAP_CHARS, raw_map->data[i][c]))
+			if (parse_cell(ctx, raw_map, c, i))
 				return (1);
 			c++;
 		}
@@ -86,27 +111,6 @@ static int	init_map(t_context *ctx, t_str_array *raw_map)
 	ctx->map.matrix[y] = NULL;
 	free_str_array(raw_map);
 	return (0);
-}
-
-static int	flood_fill(char **map, int x, int y, t_map *size)
-{
-	int	ret;
-
-	if (x < 0 || x >= size->width || y < 0 || y >= size->height)
-		return (1);
-	if (map[y][x] == '1')
-		return (0);
-	ret = 0;
-	map[y][x] = '1';
-	if (flood_fill(map, x + 1, y, size))
-		ret = 1;
-	else if (flood_fill(map, x - 1, y, size))
-		ret = 1;
-	else if (flood_fill(map, x, y + 1, size))
-		ret = 1;
-	else if (flood_fill(map, x, y - 1, size))
-		ret = 1;
-	return (ret);
 }
 
 void	set_map(t_context *ctx, t_str_array *raw_map)

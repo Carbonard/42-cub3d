@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/16 18:16:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/24 14:08:22 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,11 @@
 # define RED 0xFF0000
 # define GREEN 0xFF00
 # define BLUE 0xFF
+# define TRANSPARENT 0xFF00FF
 
 # define VALID_MAP_CHARS "01Ddef"
+# define MAX_TEXTURES 20
+# define MAX_ENEMIES 512
 
 enum e_errors
 {
@@ -78,7 +81,7 @@ enum e_axis
 	AXIS_Y,
 };
 
-enum e_map_elements
+enum e_map_chars
 {
 	FLOOR = '0',
 	WALL = '1',
@@ -126,10 +129,7 @@ typedef struct s_texture
 {
 	unsigned int	color;
 	t_mlx_image		image;
-	short int		set;
 }	t_texture;
-
-# define MAX_TEXTURES 20
 
 typedef struct s_tex_array
 {
@@ -156,6 +156,8 @@ typedef struct s_textures
 	t_tex_array	exit;
 	t_tex_array	enemy;
 	t_tex_array	explosion;
+	t_mlx_image	title;
+	t_mlx_image	arm;
 }	t_textures;
 
 typedef struct s_character
@@ -170,6 +172,13 @@ typedef struct s_character
 	t_mlx_image	minimap_img;
 }	t_character;
 
+typedef struct s_map_elements
+{
+	int	doors;
+	int	exit;
+	int	enemies;
+}	t_map_elements;
+
 typedef struct s_map
 {
 	char			**matrix;
@@ -181,6 +190,7 @@ typedef struct s_map
 	unsigned int	minimap_wall_color;
 	unsigned int	minimap_floor_color;
 	unsigned int	minimap_player_color;
+	t_map_elements	elements;
 }	t_map;
 
 typedef struct s_pressed_keys
@@ -193,6 +203,7 @@ typedef struct s_pressed_keys
 	int	right;
 	int	up;
 	int	down;
+	int	space;
 }	t_pressed_keys;
 
 typedef struct s_wall
@@ -223,8 +234,6 @@ typedef struct s_enemy
 	t_texture		*texture;
 	t_explosion		*explosion;
 }	t_enemy;
-
-# define MAX_ENEMIES 512
 
 enum e_modes
 {
@@ -266,7 +275,6 @@ struct s_context
 	t_pressed_keys	pressed;
 	unsigned int	current_tex;
 	t_wall_limits	walls[2048];
-	int				rain_mode;
 	double			time;
 	t_enemy			enemies[MAX_ENEMIES];
 	int				n_enemies;
@@ -279,6 +287,7 @@ struct s_context
 	t_menu_button	buttons[B_SIZE];
 	int				focus;
 	char			*map_file;
+	size_t			last_time_shot;
 };
 
 // String
@@ -299,6 +308,7 @@ int				free_str_array(t_str_array *str);
 void			parse_file(t_context *ctx, char *file_name);
 int				load_texture(t_context *ctx, char *line);
 void			set_map(t_context *ctx, t_str_array *map);
+int				flood_fill(char **map, int x, int y, t_map *size);
 
 // Config
 
@@ -352,6 +362,7 @@ double			screen_dist(t_character *player, t_ray_info *ray);
 void			render_background(t_context *ctx);
 void			render_walls(t_context *ctx);
 void			render_enemies(t_context *ctx);
+void			merge_images(t_mlx_image *main, t_mlx_image *other, int x, int y);
 
 // Ray Casting
 
@@ -360,11 +371,12 @@ void			init_ray_casting(t_context *ctx, t_ray_cast *rc, t_vector *dir);
 // Textures
 
 void			set_textures(t_context *ctx);
+void			convert(t_mlx_image *image);
 void			convert_transparencies(t_tex_array *texture);
 
 // Doors
 
-void			open_door(t_context *ctx);
+void			shoot(t_context *ctx);
 
 // Close
 

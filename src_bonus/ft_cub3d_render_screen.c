@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 23:46:45 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/16 23:57:49 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,4 +206,6 @@ time(3,1);
 	render_enemies(ctx);
 time(3,2);
 	render_minimap(ctx);
+	if (ctx->pressed.space)
+		merge_images(&ctx->screen, &ctx->textures.arm, ctx->width / 2, ctx->height / 2);
 }
