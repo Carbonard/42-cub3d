@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/24 14:08:22 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/29 04:49:17 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,17 @@
 # define VALID_MAP_CHARS "01Ddef"
 # define MAX_TEXTURES 20
 # define MAX_ENEMIES 512
+
+# define MAX_FPS 100
+# define DEF_FPS 42
+# define MAX_MOV_VELOC 10
+# define DEF_MOV_VELOC 8
+# define MAX_ROT_VELOC 10
+# define DEF_ROT_VELOC 7
+# define MAX_MOUSE_SENS 10
+# define DEF_MOUSE_SENS 5
+
+# define MAX_MAPS 8
 
 enum e_errors
 {
@@ -238,13 +249,13 @@ typedef struct s_enemy
 enum e_modes
 {
 	MENU,
-	// MAP_SELECTOR,
+	CONFIG,
 	GAME
 };
 
 typedef struct s_context t_context;
 
-typedef int (*t_button_action)(t_context *ctx, int n);
+typedef void (*t_button_action)(t_context *ctx);
 
 typedef struct s_menu_button
 {
@@ -256,11 +267,46 @@ typedef struct s_menu_button
 enum e_buttons
 {
 	B_PLAY,
-	// B_MAPS,
-	// B_CONFIG,
+	B_CONFIG,
 	B_EXIT,
 	B_SIZE
 };
+
+enum e_config_buttons
+{
+	C_SPEED,
+	C_ROTATION,
+	C_MOUSE,
+	C_MAP,
+	C_FPS,
+	C_RETURN,
+	C_SIZE
+};
+
+typedef void (*t_set_config)(t_context *, int);
+
+typedef struct s_config_item
+{
+	int				current;
+	int				max;
+	t_set_config	setter;
+}	t_config_item;
+
+typedef struct s_config
+{
+	t_config_item	max_fps;
+	t_config_item	veloc_lvl;
+	t_config_item	rot_veloc_lvl;
+	t_config_item	mouse_sens;
+	t_config_item	map_number;
+}	t_config;
+
+typedef struct s_config_button
+{
+	t_mlx_image		image;
+	t_mlx_image		focus_image;
+	t_config_item	*config;
+}	t_config_button;
 
 struct s_context
 {
@@ -285,9 +331,14 @@ struct s_context
 	int				render;
 	int				mode;
 	t_menu_button	buttons[B_SIZE];
+	t_config_button	config_buttons[C_SIZE];
 	int				focus;
+	int				config_focus;
 	char			*map_file;
 	size_t			last_time_shot;
+	int				total_enemies;
+	id_t			defeated_enemies;
+	t_config		config;
 };
 
 // String
@@ -313,6 +364,10 @@ int				flood_fill(char **map, int x, int y, t_map *size);
 // Config
 
 void			limit_fps(t_context *ctx, int max_fps);
+void			set_velocity(t_context *ctx, int veloc_lvl);
+void			set_rot_velocity(t_context *ctx, int rot_veloc_lvl);
+void			set_map_number(t_context *ctx, int n_map);
+void			set_mouse_sensitivity(t_context *ctx, int rot_veloc_lvl);
 
 // MLX Utils
 
@@ -321,6 +376,8 @@ unsigned int	get_pixel(const t_mlx_image *image, int x, int y);
 unsigned int	rgb(int r, int g, int b);
 unsigned int	argb(int a, int r, int g, int b);
 void			get_img_data(t_mlx_image *image);
+void	fill_screen(t_context *ctx, unsigned int color);
+int	put_centered_scaled_image(t_context *ctx, t_mlx_image *image, int height, int y0);
 
 // Map Utils
 
@@ -390,6 +447,8 @@ size_t			get_time(void);
 
 // Menu
 
+void			create_buttons(t_context *ctx);
 void			open_menu(t_context *ctx);
+void			open_config(t_context *ctx);
 
 #endif

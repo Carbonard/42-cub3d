@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_cub3d_render_vertical.c                         :+:      :+:    :+:   */
+/*   ft_cub3d_render_enemies.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:26:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/16 22:44:33 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/29 05:42:06 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,15 @@ void	check_explosions(t_context *ctx)
 		{
 			tex = (get_time() - ctx->explosions[i].time) / 150000;
 			if (tex < ctx->textures.explosion.size)
+			{
 				ctx->explosions[i].texture = &ctx->textures.explosion.tex[tex];
-			else
+				ctx->render = 1;
+			}
+			else if (ctx->map.matrix[ctx->explosions[i].map.y][ctx->explosions[i].map.x] != FLOOR)
+			{
 				ctx->map.matrix[ctx->explosions[i].map.y][ctx->explosions[i].map.x] = FLOOR;
-			ctx->render = 1;
+				ctx->render = 1;
+			}
 		}
 		i++;
 	}

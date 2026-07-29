@@ -4,7 +4,7 @@ MLX_DIR = ./minilibx-linux
 
 LIBFT_DIR = ./libft
 
-CFLAGS = -Wall -Werror -Wextra -g3 -fsanitize=address,undefined
+CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address,undefined
 
 LIBS = -lmlx -lXext -lX11 -lm
 
@@ -54,7 +54,7 @@ render_screen render_enemies render_utils\
 events_key\
 player_mov\
 close\
-shoot mouse_utils raycasting textures set_config menu
+shoot mouse_utils raycasting textures set_config menu buttons menu_config
 
 SRC_DIR_BONUS = src_bonus
 

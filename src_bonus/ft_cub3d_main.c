@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/24 14:12:51 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/07/29 05:47:56 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,56 +26,27 @@ int	check_args(int argc, char **argv)
 	return (0);
 }
 
-int	play_game(t_context *ctx, int mode)
+void	set_config(t_context *ctx)
 {
-	(void)mode;
-	close_images(ctx);
-	free_split(ctx->map.matrix);
-	bzero(&ctx->enemies, sizeof(t_enemy));
-	ctx->n_enemies = 0;
-	bzero(&ctx->explosions, sizeof(t_explosion));
-	ctx->n_explosions = 0;
-	parse_file(ctx, ctx->map_file);
-	initialize_minimap(ctx);
-	if (ctx->textures.enemy.size)
-		convert_transparencies(&ctx->textures.enemy);
-	if (ctx->textures.explosion.size)
-		convert_transparencies(&ctx->textures.explosion);
-	set_textures(ctx);
-	mlx_mouse_move(ctx->mlx, ctx->window, ctx->screen.width / 2, ctx->screen.height / 2);
-	usleep(500000);
-	ctx->mode = GAME;
-	return (0);
+	// ctx->player.mouse_sensitivity = M_PI / 512;
+	ctx->config.max_fps.max = MAX_FPS;
+	ctx->config.max_fps.current = DEF_FPS;
+	ctx->config.max_fps.setter = limit_fps;
+	ctx->config.veloc_lvl.max = MAX_MOV_VELOC;
+	ctx->config.veloc_lvl.current = DEF_MOV_VELOC;
+	ctx->config.veloc_lvl.setter = set_velocity;
+	ctx->config.rot_veloc_lvl.max = MAX_ROT_VELOC;
+	ctx->config.rot_veloc_lvl.current = DEF_ROT_VELOC;
+	ctx->config.rot_veloc_lvl.setter = set_rot_velocity;
+	ctx->config.mouse_sens.max = 10;
+	ctx->config.mouse_sens.current = 5;
+	ctx->config.mouse_sens.setter = set_mouse_sensitivity;
+	ctx->config.map_number.max = MAX_MAPS - 1;
+	ctx->config.map_number.current = 0;
+	ctx->config.map_number.setter = set_map_number;
 }
 
-void	new_button(t_context *ctx, t_menu_button *button, char *files[2], t_button_action act)
-{
-	button->image.img = mlx_xpm_file_to_image(
-		ctx->mlx, files[0],
-		&button->image.width,
-		&button->image.height);
-	get_img_data(&button->image);
-	button->focus_image.img = mlx_xpm_file_to_image(
-		ctx->mlx, files[1],
-		&button->focus_image.width,
-		&button->focus_image.height);
-	get_img_data(&button->focus_image);
-	button->action = act;
-}
-
-void	create_buttons(t_context *ctx)
-{
-	char *actions[2];
-
-	actions[0] = "./img/play.xpm";
-	actions[1] = "./img/play_focus.xpm";
-	new_button(ctx, &ctx->buttons[B_PLAY], actions, play_game);
-	actions[0] = "./img/exit.xpm";
-	actions[1] = "./img/exit_focus.xpm";
-	new_button(ctx, &ctx->buttons[B_EXIT], actions, close_game);
-}
-
-int	set_config(t_context *ctx, char *file_name)
+int	init_values(t_context *ctx, char *file_name)
 {
 	ft_bzero(ctx, sizeof(t_context));
 	ctx->mlx = mlx_init();
@@ -85,17 +56,14 @@ int	set_config(t_context *ctx, char *file_name)
 	ctx->map.minimap_wall_color = argb(230, 0, 0, 0);
 	ctx->map.minimap_floor_color = argb(50, 255, 255, 255);
 	ctx->map.minimap_player_color = argb(200, 200, 20, 20);
-	ctx->player.velocity = 0.33;
-	ctx->player.rotation_velocity = M_PI * 0.0625;
-	ctx->player.mouse_sensitivity = M_PI * 0.001953125;
 	ctx->textures.title.img = mlx_xpm_file_to_image(ctx->mlx, "./img/title.xpm", &ctx->textures.title.width, &ctx->textures.title.height);
 	get_img_data(&ctx->textures.title);
 	convert(&ctx->textures.title);
 	ctx->textures.arm.img = mlx_xpm_file_to_image(ctx->mlx, "./img/dw_arm.xpm", &ctx->textures.arm.width, &ctx->textures.arm.height);
 	get_img_data(&ctx->textures.arm);
 	convert(&ctx->textures.arm);
-	limit_fps(ctx, 42);
 	create_buttons(ctx);
+	set_config(ctx);
 	return (0);
 }
 
@@ -105,14 +73,14 @@ int	main(int argc, char **argv)
 
 	if (check_args(argc, argv))
 		return (-1);
-	set_config(&ctx, argv[1]);
+	init_values(&ctx, argv[1]);
 	mlx_get_screen_size(ctx.mlx, &ctx.width, &ctx.height);
 	ctx.width *= (float)2/3;
 	ctx.height *= (float)2/3;
 	ctx.window = mlx_new_window(ctx.mlx, ctx.width, ctx.height, "cube3D");
 	if (!ctx.window)
 		return (C3D_MLX);
-	// mlx_mouse_hide(ctx.mlx, ctx.window);
+	mlx_mouse_hide(ctx.mlx, ctx.window);
 	mlx_hook(ctx.window, 17, 0, &close_game, &ctx);
 	mlx_hook(ctx.window, KeyPress, KeyPressMask, &key_press_event, &ctx);
 	mlx_hook(ctx.window, KeyRelease, KeyReleaseMask, &key_release_event, &ctx);
