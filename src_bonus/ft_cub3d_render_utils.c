@@ -6,33 +6,33 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:28:43 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/16 22:47:11 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/08/10 11:15:34 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-static void put_floor_and_ceiling(t_context *ctx, t_int_vector *screen, t_vector *floor_point)
+static void	put_floor_and_ceiling(t_context *ctx, t_int_vector *screen,
+	t_vector *floor_point)
 {
 	const t_texture		*floor = ctx->textures.floor.current;
 	const t_texture		*ceiling = ctx->textures.ceiling.current;
 
-	// if (floor_point->x < 0 || floor_point->y < 0 || floor_point->x > ctx->width || floor_point->y > ctx->height)
-	// 	return ;
 	if (!ceiling->image.img)
 		put_pixel(&ctx->screen, screen->x, screen->y, ceiling->color);
 	else
 		put_pixel(&ctx->screen, screen->x, screen->y,
 			get_pixel(&ceiling->image,
-			floor_point->x * ceiling->image.width,
-			floor_point->y * ceiling->image.height));
+				floor_point->x * ceiling->image.width,
+				floor_point->y * ceiling->image.height));
 	if (!floor->image.img)
-		put_pixel(&ctx->screen, screen->x, ctx->height - screen->y, floor->color);
+		put_pixel(&ctx->screen, screen->x, ctx->height - screen->y,
+			floor->color);
 	else
 		put_pixel(&ctx->screen, screen->x, ctx->height - screen->y,
 			get_pixel(&floor->image,
-			floor_point->x * floor->image.width,
-			floor_point->y * floor->image.height));
+				floor_point->x * floor->image.width,
+				floor_point->y * floor->image.height));
 }
 
 void	render_background(t_context *ctx)
@@ -41,21 +41,21 @@ void	render_background(t_context *ctx)
 	t_vector			floor_point;
 	double				dist;
 	const double		x_step = (double) 2 / ctx->width;
+
 	screen.y = 0;
 	while (screen.y < ctx->height / 2)
 	{
 		dist = (double) ctx->height / (ctx->height - screen.y * 2);
 		screen.x = 0;
-		floor_point.x = ctx->player.pos.x 
+		floor_point.x = ctx->player.pos.x
 			+ (ctx->player.dir.x - ctx->player.ort.x) * dist;
-		floor_point.y = ctx->player.pos.y 
+		floor_point.y = ctx->player.pos.y
 			+ (ctx->player.dir.y - ctx->player.ort.y) * dist;
+		dist *= x_step;
 		while (screen.x < ctx->width)
 		{
-			floor_point.x += x_step * ctx->player.ort.x * dist;
-			floor_point.x -= floor(floor_point.x);
-			floor_point.y += x_step * ctx->player.ort.y * dist;
-			floor_point.y -= floor(floor_point.y);
+			floor_point.x = decimal(floor_point.x + dist * ctx->player.ort.x);
+			floor_point.y = decimal(floor_point.y + dist * ctx->player.ort.y);
 			if (ctx->walls[screen.x].bottom >= screen.y)
 				put_floor_and_ceiling(ctx, &screen, &floor_point);
 			screen.x++;

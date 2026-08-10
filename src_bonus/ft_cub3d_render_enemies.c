@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:26:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/29 05:42:06 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/08/10 12:00:03 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	fill_enemy_info(t_context *ctx, t_enemy *enemy)
 {
 	t_vector	dir;
 	double		cos;
-	double		screen_factor;
+	double		s_factor;
 
 	dir.x = enemy->map.x - ctx->player.pos.x;
 	dir.y = enemy->map.y - ctx->player.pos.y;
@@ -53,8 +53,8 @@ void	fill_enemy_info(t_context *ctx, t_enemy *enemy)
 	enemy->size = (float)ctx->height / (enemy->dist);
 	if (ctx->player.dir.x * dir.y < ctx->player.dir.y * dir.x)
 		cos *= -1;
-	screen_factor = sqrt(1 - cos * cos) / cos;
-	enemy->screen_pos.x = (screen_factor + 1) * ctx->width / 2 - enemy->size / 2;
+	s_factor = sqrt(1 - cos * cos) / cos;
+	enemy->screen_pos.x = (s_factor + 1) * ctx->width / 2 - enemy->size / 2;
 	enemy->screen_pos.y = (ctx->height - enemy->size) / 2;
 	if (enemy->type == ENEMY)
 		enemy->texture = ctx->textures.enemy.current;
@@ -88,8 +88,8 @@ void	sort_enemies(t_context *ctx)
 
 void	check_explosions(t_context *ctx)
 {
-	int	i;
-	int	tex;
+	int		i;
+	int		tex;
 
 	i = 0;
 	while (i < ctx->n_explosions)
@@ -102,9 +102,11 @@ void	check_explosions(t_context *ctx)
 				ctx->explosions[i].texture = &ctx->textures.explosion.tex[tex];
 				ctx->render = 1;
 			}
-			else if (ctx->map.matrix[ctx->explosions[i].map.y][ctx->explosions[i].map.x] != FLOOR)
+			else if (ctx->map.matrix[ctx->explosions[i].map.y]
+				[ctx->explosions[i].map.x] != FLOOR)
 			{
-				ctx->map.matrix[ctx->explosions[i].map.y][ctx->explosions[i].map.x] = FLOOR;
+				ctx->map.matrix[ctx->explosions[i].map.y]
+				[ctx->explosions[i].map.x] = FLOOR;
 				ctx->render = 1;
 			}
 		}
@@ -127,9 +129,9 @@ void	render_enemies(t_context *ctx)
 	i = 0;
 	while (i < ctx->n_enemies)
 	{
-		merge_enemy_images(ctx, &ctx->enemies[i].texture->image, &ctx->enemies[i]);
+		merge_enemy_images(ctx, &ctx->enemies[i].texture->image,
+			&ctx->enemies[i]);
 		i++;
 	}
 	ctx->n_enemies = 0;
 }
-

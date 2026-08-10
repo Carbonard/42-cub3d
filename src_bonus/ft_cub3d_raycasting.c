@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 03:25:45 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/11 17:59:51 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/08/10 11:20:52 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,17 @@ void	init_ray_casting(t_context *ctx, t_ray_cast *rc, t_vector *dir)
 	rc->delta.x = 1 / fabs(dir->x);
 	rc->delta.y = 1 / fabs(dir->y);
 	if (dir->x > 0)
-		rc->next_cell.x = (ceil(ctx->player.pos.x) - ctx->player.pos.x) * rc->delta.x;
+		rc->next_cell.x = (ceil(ctx->player.pos.x) - ctx->player.pos.x)
+			* rc->delta.x;
 	else
-		rc->next_cell.x = (ctx->player.pos.x - floor(ctx->player.pos.x)) * rc->delta.x;
+		rc->next_cell.x = (ctx->player.pos.x - floor(ctx->player.pos.x))
+			* rc->delta.x;
 	if (dir->y > 0)
-		rc->next_cell.y = (ceil(ctx->player.pos.y) - ctx->player.pos.y) * rc->delta.y;
+		rc->next_cell.y = (ceil(ctx->player.pos.y) - ctx->player.pos.y)
+			* rc->delta.y;
 	else
-		rc->next_cell.y = (ctx->player.pos.y - floor(ctx->player.pos.y)) * rc->delta.y;
+		rc->next_cell.y = (ctx->player.pos.y - floor(ctx->player.pos.y))
+			* rc->delta.y;
 }
 
 // void	ray_casting(t_context *ctx, t_vector *dir, t_ray_cast *rc)

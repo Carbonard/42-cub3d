@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:45:56 by elangari          #+#    #+#             */
-/*   Updated: 2026/07/24 13:54:42 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/08/10 14:01:28 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,6 @@ static void	set_player(t_character *player, char **map, int x, int y)
 	else if (orientation == 'E')
 		player->rot_ang = 0;
 	set_player_vectors(player);
-}
-
-void	add_char(char *str, char c)
-{
-	size_t i;
-
-	i = 0;
-	while (str[i])
-	{
-		i++;
-	}
-	str[i] = c;
 }
 
 static int	parse_cell(t_context *ctx, t_str_array *raw_map, int x, int y)

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 17:33:54 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/24 14:41:23 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/08/09 17:14:52 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	shooting_ray_must_continue(t_context *ctx, t_ray_cast *rc)
 	if (ctx->map.matrix[rc->map_cell.y][rc->map_cell.x] == EXPLOSION)
 		return (1);
 	if (rc->map_cell.x == (int)ctx->player.pos.x
-			&& rc->map_cell.y == (int)ctx->player.pos.y)
+		&& rc->map_cell.y == (int)ctx->player.pos.y)
 		return (1);
 	return (0);
 }

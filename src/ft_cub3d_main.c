@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 19:13:36 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/08/10 11:35:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	set_config(t_context *ctx, char *file_name)
 	ctx->map.minimap_floor_color = argb(50, 255, 255, 255);
 	ctx->map.minimap_player_color = argb(200, 200, 20, 20);
 	ctx->player.velocity = 0.33;
-	ctx->player.rotation_velocity = M_PI * 0.0625;
+	ctx->player.rot_velocity = M_PI * 0.0625;
 	return (0);
 }
 
@@ -49,8 +49,8 @@ int	main(int argc, char **argv)
 		return (-1);
 	set_config(&ctx, argv[1]);
 	mlx_get_screen_size(ctx.mlx, &ctx.width, &ctx.height);
-	ctx.width *= (float)2/3;
-	ctx.height *= (float)2/3;
+	ctx.width *= (float)2 / 3;
+	ctx.height *= (float)2 / 3;
 	ctx.window = mlx_new_window(ctx.mlx, ctx.width, ctx.height, "cube3D");
 	if (!ctx.window)
 		return (C3D_MLX);

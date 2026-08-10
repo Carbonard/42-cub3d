@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:29:51 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/16 15:46:07 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/08/09 17:46:12 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	is_player(t_coordinate x, t_coordinate y, int size, t_angle rot)
 	return (0);
 }
 
-void	fill_minimap_player_image(t_context *ctx,
+static void	fill_minimap_player_image(t_context *ctx,
 			t_character *player, t_coordinate size)
 {
 	int	i;
@@ -56,21 +56,10 @@ void	fill_minimap_player_image(t_context *ctx,
 	}
 }
 
-// This function just considers the c2 color transparency
-unsigned int	merge_colors(unsigned int c1, unsigned int c2)
-{
-	double	a;
-
-	a = (double)(c2 >> 24) / 0xFF;
-	return (((unsigned int)((1 - a) * (c1 & RED) + a * (c2 & RED)) & RED)
-		+ ((unsigned int)((1 - a) * (c1 & GREEN) + a * (c2 & GREEN)) & GREEN)
-		+ ((unsigned int)((1 - a) * (c1 & BLUE) + a * (c2 & BLUE)) & BLUE));
-}
-
 void	merge_images(t_mlx_image *main, t_mlx_image *other, int x, int y)
 {
-	int				i;
-	int				j;
+	int	i;
+	int	j;
 
 	j = 0;
 	while (j < other->height)
@@ -88,11 +77,17 @@ void	merge_images(t_mlx_image *main, t_mlx_image *other, int x, int y)
 	}
 }
 
-static void	put_square(t_context *ctx, int x, int y, int color, int width, int height)
+static void	put_info_square(t_context *ctx, int x, int y)
 {
-	int	i;
-	int	j;
+	int				i;
+	int				j;
+	int				width;
+	int				height;
+	unsigned int	color;
 
+	width = 65;
+	height = 40;
+	color = rgb(200, 200, 200);
 	i = 0;
 	while (i < width)
 	{
@@ -112,25 +107,25 @@ static void	put_square(t_context *ctx, int x, int y, int color, int width, int h
 
 void	render_minimap(t_context *ctx)
 {
-	int			x_margin;
-	int			y_margin;
 	char		*aux;
 
-	x_margin = 10;
-	y_margin = 10;
 	fill_minimap_player_image(ctx, &ctx->player, ctx->map.minimap_scale);
-	merge_images(&ctx->screen, &ctx->map.img, x_margin, y_margin);
+	merge_images(&ctx->screen, &ctx->map.img, MAP_LEFT_MARGIN, MAP_TOP_MARGIN);
 	merge_images(&ctx->screen, &ctx->player.minimap_img,
-		x_margin + (ctx->player.pos.x - 0.5) * ctx->map.minimap_scale,
-		y_margin + (ctx->player.pos.y - 0.5) * ctx->map.minimap_scale);
-	put_square(ctx, ctx->width - 142, ctx->height - 63, rgb(200,200,200), 60, 40);
+		MAP_LEFT_MARGIN + (ctx->player.pos.x - 0.5) * ctx->map.minimap_scale,
+		MAP_TOP_MARGIN + (ctx->player.pos.y - 0.5) * ctx->map.minimap_scale);
+	put_info_square(ctx, ctx->width - 142, ctx->height - 63);
 	mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->screen.img, 0, 0);
 	aux = ft_itoa(ctx->time / 10);
-	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 137, ctx->height - 50, rgb(10, 10, 10), "Time: ");
-	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 100, ctx->height - 50, rgb(10, 10, 10), aux);
+	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 137, ctx->height - 50,
+		rgb(10, 10, 10), "Time: ");
+	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 100, ctx->height - 50,
+		rgb(10, 10, 10), aux);
 	free(aux);
 	aux = ft_itoa(ctx->real_fps);
-	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 130, ctx->height - 30, rgb(10, 10, 100), "FPS: ");
-	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 100, ctx->height - 30, rgb(10, 10, 100), aux);
+	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 130, ctx->height - 30,
+		rgb(10, 10, 100), "FPS: ");
+	mlx_string_put(ctx->mlx, ctx->window, ctx->width - 100, ctx->height - 30,
+		rgb(10, 10, 100), aux);
 	free(aux);
 }

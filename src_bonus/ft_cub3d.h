@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/29 04:49:17 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/08/10 15:35:27 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 # include "../minilibx-linux/mlx.h"
 # include "../minilibx-linux/mlx_int.h"
 # include "../libft/libft.h"
+
+# define MAP_LEFT_MARGIN 10
+# define MAP_TOP_MARGIN 10
 
 # define RED 0xFF0000
 # define GREEN 0xFF00
@@ -39,9 +42,11 @@
 # define MAX_ROT_VELOC 10
 # define DEF_ROT_VELOC 7
 # define MAX_MOUSE_SENS 10
-# define DEF_MOUSE_SENS 5
+# define DEF_MOUSE_SENS 7
 
 # define MAX_MAPS 8
+
+typedef unsigned int		t_color;
 
 enum e_errors
 {
@@ -63,8 +68,8 @@ enum e_errors
 
 # define SQRT2_INV 0.707106781
 
-typedef double			t_coordinate;
-typedef double			t_angle;
+typedef double				t_coordinate;
+typedef double				t_angle;
 
 typedef struct s_vector
 {
@@ -79,10 +84,9 @@ typedef struct s_int_vector
 }	t_int_vector;
 
 void			rotate_vector(t_vector *v, t_angle alpha);
-void			normalize_vector(t_vector *v);
 double			dist(t_vector *u, t_vector *v);
 double			v_cos(t_vector *u, t_vector *v);
-double			v_mod(t_vector *v);
+double			decimal(double x);
 
 // General
 
@@ -177,7 +181,7 @@ typedef struct s_character
 	t_vector	pos;
 	t_vector	dir;
 	t_vector	ort;
-	float		rotation_velocity;
+	float		rot_velocity;
 	float		mouse_sensitivity;
 	t_angle		rot_ang;
 	t_mlx_image	minimap_img;
@@ -253,9 +257,11 @@ enum e_modes
 	GAME
 };
 
-typedef struct s_context t_context;
+typedef struct s_context	t_context;
 
-typedef void (*t_button_action)(t_context *ctx);
+typedef void				(*t_button_action)(t_context *ctx);
+
+typedef void				(*t_set_config)(t_context *, int);
 
 typedef struct s_menu_button
 {
@@ -283,8 +289,6 @@ enum e_config_buttons
 	C_SIZE
 };
 
-typedef void (*t_set_config)(t_context *, int);
-
 typedef struct s_config_item
 {
 	int				current;
@@ -303,8 +307,7 @@ typedef struct s_config
 
 typedef struct s_config_button
 {
-	t_mlx_image		image;
-	t_mlx_image		focus_image;
+	t_mlx_image		image[2];
 	t_config_item	*config;
 }	t_config_button;
 
@@ -371,13 +374,14 @@ void			set_mouse_sensitivity(t_context *ctx, int rot_veloc_lvl);
 
 // MLX Utils
 
-void			put_pixel(const t_mlx_image *image, int x, int y, unsigned int color);
-unsigned int	get_pixel(const t_mlx_image *image, int x, int y);
+void			put_pixel(const t_mlx_image *img, int x, int y, t_color color);
+unsigned int	get_pixel(const t_mlx_image *img, int x, int y);
 unsigned int	rgb(int r, int g, int b);
 unsigned int	argb(int a, int r, int g, int b);
 void			get_img_data(t_mlx_image *image);
-void	fill_screen(t_context *ctx, unsigned int color);
-int	put_centered_scaled_image(t_context *ctx, t_mlx_image *image, int height, int y0);
+void			fill_screen(t_context *ctx, t_color color);
+int				put_centered_scaled_image(t_context *ctx, t_mlx_image *image,
+					int height, int y0);
 
 // Map Utils
 
@@ -419,7 +423,8 @@ double			screen_dist(t_character *player, t_ray_info *ray);
 void			render_background(t_context *ctx);
 void			render_walls(t_context *ctx);
 void			render_enemies(t_context *ctx);
-void			merge_images(t_mlx_image *main, t_mlx_image *other, int x, int y);
+void			merge_images(t_mlx_image *main, t_mlx_image *other,
+					int x, int y);
 
 // Ray Casting
 
@@ -450,5 +455,9 @@ size_t			get_time(void);
 void			create_buttons(t_context *ctx);
 void			open_menu(t_context *ctx);
 void			open_config(t_context *ctx);
+
+void			reset_game(t_context *ctx);
+void			play_game(t_context *ctx);
+void			close_game_success(t_context *ctx);
 
 #endif

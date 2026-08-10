@@ -50,11 +50,12 @@ FILES_BONUS = main utils read_file load_config\
 mlx_utils map_utils\
 dyn_arrays math\
 map minimap_init minimap\
-render_screen render_enemies render_utils\
+render_screen render_screen_raycasting render_enemies render_utils\
 events_key\
 player_mov\
 close\
-shoot mouse_utils raycasting textures set_config menu buttons menu_config
+shoot mouse_utils raycasting textures set_config menu menu_config events_loop colors\
+buttons buttons_functions
 
 SRC_DIR_BONUS = src_bonus
 

@@ -6,14 +6,14 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/04 20:26:07 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/06 20:09:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/08/10 15:26:15 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
 // void	display_minimap_point(t_map *map,
-// t_coordinate x, t_coordinate y, unsigned int color, int size)
+// t_coordinate x, t_coordinate y, t_color color, int size)
 // {
 // 	int a;
 
@@ -25,7 +25,7 @@
 // }
 
 // void	display_miniray(t_context *ctx, t_ray *ray,
-// unsigned int color)
+// t_color color)
 // {
 // 	t_vector	p;
 // 	double		i;

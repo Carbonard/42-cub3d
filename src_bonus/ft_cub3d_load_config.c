@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 18:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/24 14:08:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/08/10 11:20:09 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,19 +62,19 @@ static int	set_color(char *str, t_texture *texture)
 
 static t_tex_array	*get_texture(t_context *ctx, char *line)
 {
-	int	i;
+	int					i;
 	const t_str_to_tex	textures[] = {
-		{.str = "NO ", .texture = &ctx->textures.north},
-		{.str = "SO ", .texture = &ctx->textures.south},
-		{.str = "WE ", .texture = &ctx->textures.west},
-		{.str = "EA ", .texture = &ctx->textures.east},
-		{.str = "F ", .texture = &ctx->textures.floor},
-		{.str = "C ", .texture = &ctx->textures.ceiling},
-		{.str = "D ", .texture = &ctx->textures.door},
-		{.str = "e ", .texture = &ctx->textures.exit},
-		{.str = "f ", .texture = &ctx->textures.enemy},
-		{.str = "ex ", .texture = &ctx->textures.explosion},
-		{.str = NULL, .texture = NULL}
+	{.str = "NO ", .texture = &ctx->textures.north},
+	{.str = "SO ", .texture = &ctx->textures.south},
+	{.str = "WE ", .texture = &ctx->textures.west},
+	{.str = "EA ", .texture = &ctx->textures.east},
+	{.str = "F ", .texture = &ctx->textures.floor},
+	{.str = "C ", .texture = &ctx->textures.ceiling},
+	{.str = "D ", .texture = &ctx->textures.door},
+	{.str = "e ", .texture = &ctx->textures.exit},
+	{.str = "f ", .texture = &ctx->textures.enemy},
+	{.str = "ex ", .texture = &ctx->textures.explosion},
+	{.str = NULL, .texture = NULL}
 	};
 
 	i = 0;
@@ -101,10 +101,10 @@ int	load_texture(t_context *ctx, char *line)
 	while (texture_inputs[texture->size] && texture->size < MAX_TEXTURES)
 	{
 		if (set_color(texture_inputs[texture->size],
-						&texture->tex[texture->size]) != C3D_SUCCESS)
+				&texture->tex[texture->size]) != C3D_SUCCESS)
 			if (load_image(ctx,
-							texture_inputs[texture->size],
-							&texture->tex[texture->size].image) != C3D_SUCCESS)
+					texture_inputs[texture->size],
+					&texture->tex[texture->size].image) != C3D_SUCCESS)
 			{
 				free_split(texture_inputs);
 				return (C3D_FILE_PARSER_ERROR);

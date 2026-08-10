@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:22:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/16 23:16:48 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/08/10 11:33:48 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,19 @@ void	set_player_vectors(t_character *player)
 	player->ort.y = sin(player->rot_ang + M_PI / 2);
 }
 
+int	check_exit(t_context *ctx, int ret)
+{
+	if (ctx->map.matrix[(int)ctx->player.pos.y][(int)ctx->player.pos.x] == EXIT)
+	{
+		printf("\n\n\nCONGRATULATIONS!!\n\nYou have spent %.2lf seconds!\n\n\n",
+			ctx->time / 10);
+		ctx->mode = MENU;
+		ctx->render = 1;
+		return (0);
+	}
+	return (ret);
+}
+
 int	move_player(t_context *ctx, t_coordinate forward, t_coordinate side)
 {
 	t_character	*p;
@@ -28,7 +41,8 @@ int	move_player(t_context *ctx, t_coordinate forward, t_coordinate side)
 
 	ret = 0;
 	p = &ctx->player;
-	new_pos.x = p->pos.x + fmax(-1, fmin(1, p->dir.x * forward + p->ort.x * side));
+	new_pos.x = p->pos.x
+		+ fmax(-1, fmin(1, p->dir.x * forward + p->ort.x * side));
 	new_pos.y = ctx->player.pos.y;
 	if (!is_wall(&ctx->map, &new_pos))
 	{
@@ -37,18 +51,14 @@ int	move_player(t_context *ctx, t_coordinate forward, t_coordinate side)
 	}
 	else
 		new_pos.x = ctx->player.pos.x;
-	new_pos.y = p->pos.y + fmax(-1, fmin(1, p->dir.y * forward + p->ort.y * side));
+	new_pos.y = p->pos.y
+		+ fmax(-1, fmin(1, p->dir.y * forward + p->ort.y * side));
 	if (!is_wall(&ctx->map, &new_pos))
 	{
 		p->pos.y = new_pos.y;
 		ret = 1;
 	}
-	if (ctx->map.matrix[(int)p->pos.y][(int)p->pos.x] == EXIT)
-	{
-		printf("\n\n\nCONGRATULATIONS!!\n\nYou have spent %.2lf seconds!\n\n\n", ctx->time / 10);
-		ctx->mode = MENU;
-		return (0);
-	}
+	ret = check_exit(ctx, ret);
 	return (ret);
 }
 

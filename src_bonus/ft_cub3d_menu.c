@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 15:39:09 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/28 01:59:12 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/08/10 15:26:15 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-void	fill_screen(t_context *ctx, unsigned int color)
+void	fill_screen(t_context *ctx, t_color color)
 {
 	int	i;
 	int	j;
@@ -30,7 +30,8 @@ void	fill_screen(t_context *ctx, unsigned int color)
 	}
 }
 
-int	put_centered_scaled_image(t_context *ctx, t_mlx_image *image, int height, int y0)
+int	put_centered_scaled_image(t_context *ctx, t_mlx_image *image,
+		int height, int y0)
 {
 	double	factor;
 	int		x0;
@@ -58,21 +59,23 @@ int	put_centered_scaled_image(t_context *ctx, t_mlx_image *image, int height, in
 	return (y);
 }
 
-static void	put_buttons(t_context *ctx, t_menu_button *buttons, int size, int focus, int start)
+static void	put_buttons(t_context *ctx, t_menu_button *buttons, int start)
 {
 	int	i;
 	int	height;
-	int	separation;
+	int	sep;
 
-	separation = 20;
-	height = fmin((ctx->height - start) / size - separation, ctx->height * 0.1);
+	sep = 20;
+	height = fmin((ctx->height - start) / B_SIZE - sep, ctx->height * 0.1);
 	i = 0;
-	while (i < size)
+	while (i < B_SIZE)
 	{
-		if (i == focus)
-			put_centered_scaled_image(ctx, &buttons[i].focus_image, height, start + i * (height + separation));
+		if (i == ctx->focus)
+			put_centered_scaled_image(ctx, &buttons[i].focus_image,
+				height, start + i * (height + sep));
 		else
-			put_centered_scaled_image(ctx, &buttons[i].image, height, start + i * (height + separation));
+			put_centered_scaled_image(ctx, &buttons[i].image,
+				height, start + i * (height + sep));
 		i++;
 	}
 }
@@ -84,9 +87,10 @@ void	open_menu(t_context *ctx)
 	ctx->mode = MENU;
 	if (ctx->render)
 	{
-		fill_screen(ctx, rgb(0,10,20));
-		buttons_start = put_centered_scaled_image(ctx, &ctx->textures.title, ctx->height * 0.3, ctx->height * 0.07) + ctx->height * 0.13;
+		fill_screen(ctx, rgb(0, 10, 20));
+		buttons_start = put_centered_scaled_image(ctx, &ctx->textures.title,
+				ctx->height * 0.3, ctx->height * 0.07) + ctx->height * 0.13;
 		mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->screen.img, 0, 0);
-		put_buttons(ctx, ctx->buttons, B_SIZE, ctx->focus, buttons_start);
+		put_buttons(ctx, ctx->buttons, buttons_start);
 	}
 }

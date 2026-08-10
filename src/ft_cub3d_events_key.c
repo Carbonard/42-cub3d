@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/15 19:13:36 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/08/10 11:35:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,28 +53,26 @@ int	key_release_event(int key, t_context *ctx)
 int	loop_hook(t_context *ctx)
 {
 	static size_t	last_time;
-	double			time_increment;
+	double			time_jump;
 	int				render;
 
 	render = 0;
-	if (!last_time)
-		last_time = get_time();
-	time_increment = (double)(get_time() - last_time) / 100000;
-	if (time_increment > 1)
-		time_increment = 1;
+	time_jump = !!last_time * (double)(get_time() - last_time) / 100000;
+	if (time_jump > 1)
+		time_jump = 1;
 	last_time = get_time();
 	if (ctx->pressed.a)
-		render = move_player(ctx, 0, -ctx->player.velocity * time_increment);
+		render = move_player(ctx, 0, -ctx->player.velocity * time_jump);
 	if (ctx->pressed.d)
-		render = move_player(ctx, 0, +ctx->player.velocity * time_increment);
+		render = move_player(ctx, 0, +ctx->player.velocity * time_jump);
 	if (ctx->pressed.w)
-		render = move_player(ctx, +ctx->player.velocity * time_increment, 0);
+		render = move_player(ctx, +ctx->player.velocity * time_jump, 0);
 	if (ctx->pressed.s)
-		render = move_player(ctx, -ctx->player.velocity * time_increment, 0);
+		render = move_player(ctx, -ctx->player.velocity * time_jump, 0);
 	if (ctx->pressed.left)
-		render = rotate_player(ctx, -ctx->player.rotation_velocity * time_increment);
+		render = rotate_player(ctx, -ctx->player.rot_velocity * time_jump);
 	if (ctx->pressed.right)
-		render = rotate_player(ctx, +ctx->player.rotation_velocity * time_increment);
+		render = rotate_player(ctx, +ctx->player.rot_velocity * time_jump);
 	if (render)
 		render_screen(ctx);
 	return (0);
