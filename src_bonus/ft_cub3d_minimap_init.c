@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:41:24 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/16 17:25:23 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/04 09:18:14 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ int	max(int a, int b)
 
 void	initialize_minimap(t_context *ctx)
 {
-	ctx->map.size = ctx->width * 0.3;
-	ctx->map.minimap_scale = max((double)ctx->map.size / ctx->map.width, 3);
+	// ctx->map.size = ctx->width * 0.3;
+	ctx->map.minimap_scale = max((double)ctx->width * 0.3 / ctx->map.width, 3);
 	ctx->map.img.width = ctx->map.width * ctx->map.minimap_scale;
 	ctx->map.img.height = ctx->map.height * ctx->map.minimap_scale;
 	ctx->map.img.img = mlx_new_image(

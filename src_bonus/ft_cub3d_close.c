@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:59:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/16 22:47:24 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/03 15:42:43 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ static void	print_error(int exit_code)
 {
 	if (exit_code == C3D_MALLOC)
 		ft_putendl_fd("Malloc failed", 2);
-	if (exit_code == C3D_BAD_FILE)
-		ft_putendl_fd("Wrong file", 2);
 	if (exit_code == C3D_FILE_PARSER_ERROR)
 		ft_putendl_fd("Wrong file content format", 2);
 	if (exit_code == C3D_MAP_PARSER)
@@ -70,12 +68,21 @@ int	close_game(t_context *ctx, int exit_code)
 
 	print_error(exit_code);
 	close_images(ctx);
+	safe_close_image(ctx->mlx, &ctx->textures.title);
+	safe_close_image(ctx->mlx, &ctx->textures.arm);
 	safe_close_image(ctx->mlx, &ctx->screen);
 	i = 0;
 	while (i < B_SIZE)
 	{
 		safe_close_image(ctx->mlx, &ctx->buttons[i].image);
 		safe_close_image(ctx->mlx, &ctx->buttons[i].focus_image);
+		i++;
+	}
+	i = 0;
+	while (i < C_SIZE)
+	{
+		safe_close_image(ctx->mlx, &ctx->config_buttons[i].image[0]);
+		safe_close_image(ctx->mlx, &ctx->config_buttons[i].image[1]);
 		i++;
 	}
 	free_split(ctx->map.matrix);

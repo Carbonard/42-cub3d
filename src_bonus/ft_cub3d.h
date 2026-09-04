@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/08/10 15:35:27 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/04 09:17:21 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ typedef struct s_map
 	char			**matrix;
 	int				width;
 	int				height;
-	int				size;
+	// int				size;
 	t_mlx_image		img;
 	int				minimap_scale;
 	unsigned int	minimap_wall_color;
@@ -379,6 +379,7 @@ unsigned int	get_pixel(const t_mlx_image *img, int x, int y);
 unsigned int	rgb(int r, int g, int b);
 unsigned int	argb(int a, int r, int g, int b);
 void			get_img_data(t_mlx_image *image);
+void			read_xpm(t_context *ctx, t_mlx_image *image, char *file_name);
 void			fill_screen(t_context *ctx, t_color color);
 int				put_centered_scaled_image(t_context *ctx, t_mlx_image *image,
 					int height, int y0);

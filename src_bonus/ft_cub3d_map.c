@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 22:45:56 by elangari          #+#    #+#             */
-/*   Updated: 2026/08/10 14:01:28 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/04 09:26:09 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ void	set_map(t_context *ctx, t_str_array *raw_map)
 {
 	char	**map_copy;
 
+	ctx->map.width = 0;
+	ctx->map.height = 0;
 	if (parse_map(ctx, raw_map))
 	{
 		free_str_array(raw_map);

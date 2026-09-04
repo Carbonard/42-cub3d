@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/08/05 18:43:47 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/03 15:44:58 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,9 @@ int	init_values(t_context *ctx, char *file_name)
 	ctx->map.minimap_wall_color = argb(230, 0, 0, 0);
 	ctx->map.minimap_floor_color = argb(50, 255, 255, 255);
 	ctx->map.minimap_player_color = argb(200, 200, 20, 20);
-	ctx->textures.title.img = mlx_xpm_file_to_image(ctx->mlx, "./img/title.xpm",
-			&ctx->textures.title.width, &ctx->textures.title.height);
-	get_img_data(&ctx->textures.title);
+	read_xpm(ctx, &ctx->textures.title, "./img/title.xpm");
 	convert(&ctx->textures.title);
-	ctx->textures.arm.img = mlx_xpm_file_to_image(ctx->mlx, "./img/dw_arm.xpm",
-			&ctx->textures.arm.width, &ctx->textures.arm.height);
-	get_img_data(&ctx->textures.arm);
+	read_xpm(ctx, &ctx->textures.arm, "./img/dw_arm.xpm");
 	convert(&ctx->textures.arm);
 	create_buttons(ctx);
 	set_config(ctx);
@@ -77,10 +73,12 @@ int	main(int argc, char **argv)
 	init_values(&ctx, argv[1]);
 	mlx_get_screen_size(ctx.mlx, &ctx.width, &ctx.height);
 	ctx.height *= (float)19 / 20;
+	// ctx.width = 300;
+	// ctx.height = 200;
 	ctx.window = mlx_new_window(ctx.mlx, ctx.width, ctx.height, "cube3D");
 	if (!ctx.window)
 		return (C3D_MLX);
-	mlx_mouse_hide(ctx.mlx, ctx.window);
+	// mlx_mouse_hide(ctx.mlx, ctx.window);
 	mlx_hook(ctx.window, 17, 0, &close_game, &ctx);
 	mlx_hook(ctx.window, KeyPress, KeyPressMask, &key_press_event, &ctx);
 	mlx_hook(ctx.window, KeyRelease, KeyReleaseMask, &key_release_event, &ctx);
