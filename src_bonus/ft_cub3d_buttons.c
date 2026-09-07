@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/24 17:52:23 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/04 08:44:15 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/07 15:46:28 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,6 @@ void	new_button(t_context *ctx, t_menu_button *button, char *files[2],
 {
 	read_xpm(ctx, &button->image, files[0]);
 	read_xpm(ctx, &button->focus_image, files[1]);
-	// button->image.img = mlx_xpm_file_to_image(
-	// 		ctx->mlx, files[0],
-	// 		&button->image.width,
-	// 		&button->image.height);
-	// get_img_data(&button->image);
-	// button->focus_image.img = mlx_xpm_file_to_image(
-	// 		ctx->mlx, files[1],
-	// 		&button->focus_image.width,
-	// 		&button->focus_image.height);
-	// get_img_data(&button->focus_image);
 	convert(&button->image);
 	convert(&button->focus_image);
 	button->action = act;
@@ -37,16 +27,6 @@ void	new_config(t_context *ctx, t_config_button *button, char *files[2],
 {
 	read_xpm(ctx, &button->image[0], files[0]);
 	read_xpm(ctx, &button->image[1], files[1]);
-	// button->image[0].img = mlx_xpm_file_to_image(
-	// 		ctx->mlx, files[0],
-	// 		&button->image[0].width,
-	// 		&button->image[0].height);
-	// get_img_data(&button->image[0]);
-	// button->image[1].img = mlx_xpm_file_to_image(
-	// 		ctx->mlx, files[1],
-	// 		&button->image[1].width,
-	// 		&button->image[1].height);
-	// get_img_data(&button->image[1]);
 	convert(&button->image[0]);
 	convert(&button->image[1]);
 	button->config = conf;

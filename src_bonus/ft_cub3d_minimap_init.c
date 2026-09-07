@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:41:24 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/04 17:14:09 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/07 15:46:47 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ void	fill_minimap_image(t_map *map)
 				put_square(map, i, j, map->minimap_enemy_color);
 			else if (map->matrix[j][i] == EXIT)
 				put_square(map, i, j, map->minimap_exit_color);
-			else
-				put_square(map, i, j, argb(255, 255, 0, 0));
 			i++;
 		}
 		j++;
@@ -74,7 +72,6 @@ int	max(int a, int b)
 
 void	initialize_minimap(t_context *ctx)
 {
-	// ctx->map.size = ctx->width * 0.3;
 	ctx->map.minimap_scale = max((double)ctx->width * 0.3 / ctx->map.width, 3);
 	ctx->map.img.width = ctx->map.width * ctx->map.minimap_scale;
 	ctx->map.img.height = ctx->map.height * ctx->map.minimap_scale;

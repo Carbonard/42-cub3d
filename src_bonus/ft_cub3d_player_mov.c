@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:22:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/04 19:56:49 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/07 15:34:00 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,20 @@ void	set_player_vectors(t_character *player)
 
 int	check_exit(t_context *ctx, int ret)
 {
-	if (ctx->map.matrix[(int)ctx->player.pos.y][(int)ctx->player.pos.x] == EXIT)
+	char	cell;
+
+	cell = ctx->map.matrix[(int)ctx->player.pos.y][(int)ctx->player.pos.x];
+	if (cell == EXIT)
 	{
-		printf("\n\n\nCONGRATULATIONS!!\n\nYou have won in %.2lf seconds!\n\n\n",
+		printf("\n\n\nCONGRATULATIONS!\n\nYou have won in %.2lf seconds!\n\n\n",
 			ctx->time / 10);
 		ctx->mode = MENU;
 		ctx->render = 1;
 		return (0);
 	}
-	if (ctx->map.matrix[(int)ctx->player.pos.y][(int)ctx->player.pos.x] == ENEMY)
+	if (cell == ENEMY)
 	{
-		printf("\n\n\nYOU FAILED!!\n\nYou have died in %.2lf seconds!\n\n\n",
+		printf("\n\n\nYOU FAILED!\n\nYou have died in %.2lf seconds!\n\n\n",
 			ctx->time / 10);
 		ctx->mode = MENU;
 		ctx->render = 1;

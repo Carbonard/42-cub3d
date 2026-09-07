@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/07 15:27:28 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/07 15:35:02 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ void	save_walls(t_context *ctx, t_ray_info *ray, t_texture *tex)
 	if (y_partition <= 0)
 		ctx->walls[ray->screen_x].tex_y = (double)
 			- y_partition * tex->image.height / wall_height;
-	if (ctx->walls[ray->screen_x].tex_y < 0){
-		printf("wall_height: %i, y_part: %i, image_height: %i\n", wall_height, y_partition, tex->image.height); sleep(1);}
 	ctx->walls[ray->screen_x].y_step = (double)tex->image.height / wall_height;
 	ctx->walls[ray->screen_x].bottom = 0;
 	ctx->walls[ray->screen_x].top = ctx->height;

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/04 17:08:55 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/07 15:44:27 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -385,6 +385,7 @@ void			read_xpm(t_context *ctx, t_mlx_image *image, char *file_name);
 void			fill_screen(t_context *ctx, t_color color);
 int				put_centered_scaled_image(t_context *ctx, t_mlx_image *image,
 					int height, int y0);
+void			safe_close_image(void *mlx, t_mlx_image *image);
 
 // Map Utils
 

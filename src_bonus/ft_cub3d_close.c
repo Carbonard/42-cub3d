@@ -6,20 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:59:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/03 15:42:43 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/07 15:45:56 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
-
-static void	safe_close_image(void *mlx, t_mlx_image *image)
-{
-	if (image->img)
-	{
-		mlx_destroy_image(mlx, image->img);
-		image->img = NULL;
-	}
-}
 
 static void	close_tex_array(void *mlx, t_tex_array *texure)
 {
@@ -62,12 +53,10 @@ static void	print_error(int exit_code)
 		ft_putendl_fd("The map is not closed", 2);
 }
 
-int	close_game(t_context *ctx, int exit_code)
+void	close_last_images(t_context *ctx)
 {
 	int	i;
 
-	print_error(exit_code);
-	close_images(ctx);
 	safe_close_image(ctx->mlx, &ctx->textures.title);
 	safe_close_image(ctx->mlx, &ctx->textures.arm);
 	safe_close_image(ctx->mlx, &ctx->screen);
@@ -85,6 +74,13 @@ int	close_game(t_context *ctx, int exit_code)
 		safe_close_image(ctx->mlx, &ctx->config_buttons[i].image[1]);
 		i++;
 	}
+}
+
+int	close_game(t_context *ctx, int exit_code)
+{
+	print_error(exit_code);
+	close_images(ctx);
+	close_last_images(ctx);
 	free_split(ctx->map.matrix);
 	if (ctx->mlx && ctx->window)
 		mlx_destroy_window(ctx->mlx, ctx->window);
