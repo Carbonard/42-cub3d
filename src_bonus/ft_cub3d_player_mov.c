@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:22:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/08/10 11:33:48 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/04 19:56:49 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,15 @@ int	check_exit(t_context *ctx, int ret)
 {
 	if (ctx->map.matrix[(int)ctx->player.pos.y][(int)ctx->player.pos.x] == EXIT)
 	{
-		printf("\n\n\nCONGRATULATIONS!!\n\nYou have spent %.2lf seconds!\n\n\n",
+		printf("\n\n\nCONGRATULATIONS!!\n\nYou have won in %.2lf seconds!\n\n\n",
+			ctx->time / 10);
+		ctx->mode = MENU;
+		ctx->render = 1;
+		return (0);
+	}
+	if (ctx->map.matrix[(int)ctx->player.pos.y][(int)ctx->player.pos.x] == ENEMY)
+	{
+		printf("\n\n\nYOU FAILED!!\n\nYou have died in %.2lf seconds!\n\n\n",
 			ctx->time / 10);
 		ctx->mode = MENU;
 		ctx->render = 1;

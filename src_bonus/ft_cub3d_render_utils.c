@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:28:43 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/08/10 11:15:34 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/07 15:22:21 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ void	render_walls(t_context *ctx)
 		texture = ctx->walls[screen.x].texture;
 		y_step = ctx->walls[screen.x].y_step;
 		screen.y = ctx->walls[screen.x].bottom + 1;
+		if (tex.y < 0)
+			printf("tex.x: %lf, tex.y: %lf, screen.y: %i, y_step: %lf\n", tex.x, tex.y, screen.y, y_step);
 		while (screen.y < ctx->walls[screen.x].top)
 		{
 			if (texture->image.img)

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 17:33:54 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/08/09 17:14:52 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/04 17:27:58 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,21 @@ int	shooting_ray_must_continue(t_context *ctx, t_ray_cast *rc)
 	return (0);
 }
 
+void	manage_collision(t_context *ctx, char *collision_point)
+{
+	if (*collision_point == OPEN_DOOR || *collision_point == CLOSED_DOOR)
+	{
+		*collision_point ^= CLOSED_DOOR ^ OPEN_DOOR;
+		initialize_minimap(ctx);
+	}
+	if (*collision_point == ENEMY)
+		*collision_point = EXPLOSION * (!!ctx->textures.explosion.size)
+			+ FLOOR * (!ctx->textures.explosion.size);
+}
+
 void	shoot(t_context *ctx)
 {
 	t_ray_cast	rc;
-	char		*colision_point;
 
 	init_ray_casting(ctx, &rc, &ctx->player.dir);
 	while (shooting_ray_must_continue(ctx, &rc))
@@ -43,10 +54,5 @@ void	shoot(t_context *ctx)
 			rc.map_cell.y += rc.step.y;
 		}
 	}
-	colision_point = &ctx->map.matrix[rc.map_cell.y][rc.map_cell.x];
-	if (*colision_point == OPEN_DOOR || *colision_point == CLOSED_DOOR)
-		*colision_point ^= CLOSED_DOOR ^ OPEN_DOOR;
-	if (*colision_point == ENEMY)
-		*colision_point = EXPLOSION * (!!ctx->textures.explosion.size)
-			+ FLOOR * (!ctx->textures.explosion.size);
+	manage_collision(ctx, &ctx->map.matrix[rc.map_cell.y][rc.map_cell.x]);
 }

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:26:17 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/08/10 12:00:03 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/04 17:28:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void	check_explosions(t_context *ctx)
 			{
 				ctx->map.matrix[ctx->explosions[i].map.y]
 				[ctx->explosions[i].map.x] = FLOOR;
+				initialize_minimap(ctx);
 				ctx->render = 1;
 			}
 		}

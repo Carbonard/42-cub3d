@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 18:47:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/08/10 11:20:09 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/04 17:24:05 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,14 +101,14 @@ int	load_texture(t_context *ctx, char *line)
 	while (texture_inputs[texture->size] && texture->size < MAX_TEXTURES)
 	{
 		if (set_color(texture_inputs[texture->size],
-				&texture->tex[texture->size]) != C3D_SUCCESS)
-			if (load_image(ctx,
-					texture_inputs[texture->size],
-					&texture->tex[texture->size].image) != C3D_SUCCESS)
-			{
-				free_split(texture_inputs);
-				return (C3D_FILE_PARSER_ERROR);
-			}
+				&texture->tex[texture->size]) != C3D_SUCCESS
+			&& load_image(ctx,
+				texture_inputs[texture->size],
+				&texture->tex[texture->size].image) != C3D_SUCCESS)
+		{
+			free_split(texture_inputs);
+			return (C3D_FILE_PARSER_ERROR);
+		}
 		texture->size++;
 	}
 	free_split(texture_inputs);

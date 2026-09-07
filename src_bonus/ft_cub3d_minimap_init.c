@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:41:24 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/04 09:18:14 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/04 17:14:09 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,19 @@ void	fill_minimap_image(t_map *map)
 		i = 0;
 		while (map->matrix[j][i])
 		{
-			if (map->matrix[j][i] == '1')
+			if (map->matrix[j][i] == WALL
+				|| map->matrix[j][i] == CLOSED_DOOR)
 				put_square(map, i, j, map->minimap_wall_color);
-			else if (map->matrix[j][i] == '0')
+			else if (map->matrix[j][i] == FLOOR
+				|| map->matrix[j][i] == OPEN_DOOR)
 				put_square(map, i, j, map->minimap_floor_color);
+			else if (map->matrix[j][i] == ENEMY
+				|| map->matrix[j][i] == EXPLOSION)
+				put_square(map, i, j, map->minimap_enemy_color);
+			else if (map->matrix[j][i] == EXIT)
+				put_square(map, i, j, map->minimap_exit_color);
 			else
-				put_square(map, i, j, rgb(255, 0, 0));
+				put_square(map, i, j, argb(255, 255, 0, 0));
 			i++;
 		}
 		j++;

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/03 15:44:58 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/04 17:10:10 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,11 @@ int	init_values(t_context *ctx, char *file_name)
 	if (!ctx->mlx)
 		exit (C3D_MLX);
 	ctx->map_file = file_name;
-	ctx->map.minimap_wall_color = argb(230, 0, 0, 0);
+	ctx->map.minimap_wall_color = argb(200, 0, 0, 0);
 	ctx->map.minimap_floor_color = argb(50, 255, 255, 255);
-	ctx->map.minimap_player_color = argb(200, 200, 20, 20);
+	ctx->map.minimap_player_color = argb(200, 20, 20, 200);
+	ctx->map.minimap_enemy_color = argb(200, 200, 20, 20);
+	ctx->map.minimap_exit_color = argb(200, 20, 20, 200);
 	read_xpm(ctx, &ctx->textures.title, "./img/title.xpm");
 	convert(&ctx->textures.title);
 	read_xpm(ctx, &ctx->textures.arm, "./img/dw_arm.xpm");

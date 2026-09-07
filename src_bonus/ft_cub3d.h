@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/04 09:17:21 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/04 17:08:55 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,8 @@ typedef struct s_map
 	unsigned int	minimap_wall_color;
 	unsigned int	minimap_floor_color;
 	unsigned int	minimap_player_color;
+	unsigned int	minimap_enemy_color;
+	unsigned int	minimap_exit_color;
 	t_map_elements	elements;
 }	t_map;
 
