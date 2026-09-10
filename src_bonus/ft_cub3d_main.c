@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/04 17:10:10 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/08 18:01:20 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ int	main(int argc, char **argv)
 	init_values(&ctx, argv[1]);
 	mlx_get_screen_size(ctx.mlx, &ctx.width, &ctx.height);
 	ctx.height *= (float)19 / 20;
-	// ctx.width = 300;
-	// ctx.height = 200;
+	// ctx.width = 2000;
+	// ctx.height = 1500;
 	ctx.window = mlx_new_window(ctx.mlx, ctx.width, ctx.height, "cube3D");
 	if (!ctx.window)
 		return (C3D_MLX);

@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/07 15:35:02 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/08 15:46:17 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,15 +91,21 @@ t_texture	*get_texture(t_context *ctx, t_ray_info *ray, t_vector *dir)
 
 static void	render(t_context *ctx)
 {
-	time(1, 1);
+	if (DEBUG)
+		time(1, 1);
 	render_background(ctx);
-	time(1, 2);
-	time(2, 1);
+	if (DEBUG)
+		time(1, 2);
+	if (DEBUG)
+		time(2, 1);
 	render_walls(ctx);
-	time(2, 2);
-	time(3, 1);
+	if (DEBUG)
+		time(2, 2);
+	if (DEBUG)
+		time(3, 1);
 	render_enemies(ctx);
-	time(3, 2);
+	if (DEBUG)
+		time(3, 2);
 	render_minimap(ctx);
 }
 
@@ -111,7 +117,8 @@ void	render_screen(t_context *ctx)
 	t_vector	direction;
 	double		scale_screen_factor;
 
-	time(0, 1);
+	if (DEBUG)
+		time(0, 1);
 	ctx->render = 0;
 	ray.screen_x = 0;
 	while (ray.screen_x < ctx->width)
@@ -125,7 +132,8 @@ void	render_screen(t_context *ctx)
 		save_walls(ctx, &ray, get_texture(ctx, &ray, &direction));
 		ray.screen_x++;
 	}
-	time(0, 2);
+	if (DEBUG)
+		time(0, 2);
 	render(ctx);
 	if (ctx->pressed.space)
 		merge_images(&ctx->screen, &ctx->textures.arm,

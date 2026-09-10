@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:28:43 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/07 15:38:41 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/08 11:06:32 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,16 @@ static void	put_floor_and_ceiling(t_context *ctx, t_int_vector *screen,
 	else
 		put_pixel(&ctx->screen, screen->x, screen->y,
 			get_pixel(&ceiling->image,
-				floor_point->x * ceiling->image.width,
-				floor_point->y * ceiling->image.height));
+				decimal(floor_point->x) * ceiling->image.width,
+				decimal(floor_point->y) * ceiling->image.height));
 	if (!floor->image.img)
 		put_pixel(&ctx->screen, screen->x, ctx->height - screen->y,
 			floor->color);
 	else
 		put_pixel(&ctx->screen, screen->x, ctx->height - screen->y,
 			get_pixel(&floor->image,
-				floor_point->x * floor->image.width,
-				floor_point->y * floor->image.height));
+				decimal(floor_point->x) * floor->image.width,
+				decimal(floor_point->y) * floor->image.height));
 }
 
 void	render_background(t_context *ctx)
@@ -54,8 +54,8 @@ void	render_background(t_context *ctx)
 		dist *= x_step;
 		while (screen.x < ctx->width)
 		{
-			floor_point.x = decimal(floor_point.x + dist * ctx->player.ort.x);
-			floor_point.y = decimal(floor_point.y + dist * ctx->player.ort.y);
+			floor_point.y += dist * ctx->player.ort.y;
+			floor_point.x += dist * ctx->player.ort.x;
 			if (ctx->walls[screen.x].bottom >= screen.y)
 				put_floor_and_ceiling(ctx, &screen, &floor_point);
 			screen.x++;

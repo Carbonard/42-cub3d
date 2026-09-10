@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/07 15:44:27 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/08 15:55:54 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include "../minilibx-linux/mlx.h"
 # include "../minilibx-linux/mlx_int.h"
 # include "../libft/libft.h"
+
+#define DEBUG 1
 
 # define MAP_LEFT_MARGIN 10
 # define MAP_TOP_MARGIN 10
@@ -325,7 +327,7 @@ struct s_context
 	t_character		player;
 	t_pressed_keys	pressed;
 	unsigned int	current_tex;
-	t_wall_limits	walls[2048];
+	t_wall_limits	walls[4056];
 	double			time;
 	t_enemy			enemies[MAX_ENEMIES];
 	int				n_enemies;

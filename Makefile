@@ -4,7 +4,7 @@ MLX_DIR = ./minilibx-linux
 
 LIBFT_DIR = ./libft
 
-CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address,undefined
+CFLAGS = -Wall -Werror -Wextra -O3	#-fsanitize=address,undefined
 
 LIBS = -lmlx -lXext -lX11 -lm
 

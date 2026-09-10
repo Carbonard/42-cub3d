@@ -1,35 +1,18 @@
 
-Use speed variable? (read it from file in bonus (and maybe more things))
-
-Raycasting:
-	- display vision on minimap?
 
 Accept png and xpm? check extension on texture files?
 
-If player looking diagonal to a wall and try to walk, walks better?
-
 Errors:
 	- Print "Error\n" followed by an explicit message
-
-Animated:
-	- Walls
-	- Doctor arm and sonic
-
-Textures on floor and ceil (?)
-
-Exit cell
-
-Menu:
-	- Start
-	- Maps
-	- Config
-		- Mode
-		- Speed
-		- Rain mode (?)
-	- Exit
 
 check textures for every char in map
 
 BAD_TEX_FILE shows no message in mandatory
 
 repeated textures(?)
+
+time info position
+
+big screens
+
+slow on clusters
