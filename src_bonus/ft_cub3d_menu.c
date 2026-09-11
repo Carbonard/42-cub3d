@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/16 15:39:09 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/08/10 15:26:15 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/10 19:23:20 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ void	open_menu(t_context *ctx)
 		fill_screen(ctx, rgb(0, 10, 20));
 		buttons_start = put_centered_scaled_image(ctx, &ctx->textures.title,
 				ctx->height * 0.3, ctx->height * 0.07) + ctx->height * 0.13;
-		mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->screen.img, 0, 0);
 		put_buttons(ctx, ctx->buttons, buttons_start);
+		resize_screen(ctx);
+		mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->real_screen.img, 0, 0);
 	}
 }

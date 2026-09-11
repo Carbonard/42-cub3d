@@ -55,7 +55,7 @@ events_key\
 player_mov\
 close\
 shoot mouse_utils raycasting textures set_config menu menu_config events_loop colors\
-buttons buttons_functions
+buttons buttons_functions put_screen
 
 SRC_DIR_BONUS = src_bonus
 

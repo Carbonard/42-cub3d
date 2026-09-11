@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/08 15:46:17 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/10 20:14:12 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ static void	render(t_context *ctx)
 	if (DEBUG)
 		time(3, 2);
 	render_minimap(ctx);
+	put_screen(ctx);
 }
 
 void	trace_ray(t_context *ctx, t_ray_info *ray, t_vector *direction);

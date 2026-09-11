@@ -6,11 +6,54 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:28:43 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/08 11:06:32 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/10 19:21:02 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
+
+void	put_big_pixel(t_context *ctx, int x, int y, unsigned int c)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	while (j < ctx->pix_size)
+	{
+		i = 0;
+		while (i < ctx->pix_size)
+		{
+			put_pixel(&ctx->real_screen,
+				x * ctx->pix_size, y * ctx->pix_size, c);
+			put_pixel(&ctx->real_screen,
+				x * ctx->pix_size, y * ctx->pix_size + j, c);
+			put_pixel(&ctx->real_screen,
+				x * ctx->pix_size + i, y * ctx->pix_size, c);
+			put_pixel(&ctx->real_screen,
+				x * ctx->pix_size + i, y * ctx->pix_size + j, c);
+			i++;
+		}
+		j++;
+	}
+}
+
+void	resize_screen(t_context *ctx)
+{
+	int				x;
+	int				y;
+
+	y = 0;
+	while (y < ctx->height)
+	{
+		x = 0;
+		while (x < ctx->width)
+		{
+			put_big_pixel(ctx, x, y, get_pixel(&ctx->screen, x, y));
+			x++;
+		}
+		y++;
+	}
+}
 
 static void	put_floor_and_ceiling(t_context *ctx, t_int_vector *screen,
 	t_vector *floor_point)

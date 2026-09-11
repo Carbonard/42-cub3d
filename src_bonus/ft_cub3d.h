@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/08 15:55:54 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/10 20:08:13 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,6 +321,7 @@ struct s_context
 	void			*mlx;
 	void			*window;
 	t_mlx_image		screen;
+	t_mlx_image		real_screen;
 	int				width;
 	int				height;
 	t_map			map;
@@ -346,6 +347,7 @@ struct s_context
 	int				total_enemies;
 	id_t			defeated_enemies;
 	t_config		config;
+	int				pix_size;
 };
 
 // String
@@ -431,6 +433,8 @@ void			render_walls(t_context *ctx);
 void			render_enemies(t_context *ctx);
 void			merge_images(t_mlx_image *main, t_mlx_image *other,
 					int x, int y);
+void			resize_screen(t_context *ctx);
+void			put_screen(t_context *ctx);
 
 // Ray Casting
 
