@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/11 20:28:45 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/11 23:03:39 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	menu_key_events(t_context *ctx, int key)
 		ctx->buttons[ctx->focus].action(ctx);
 	else
 	{
-		printf("Invalid key: %d\n", key);
+		if (DEBUG)
+			printf("Invalid key: %d\n", key);
 		return ;
 	}
 	ctx->render = 1;
@@ -44,7 +45,8 @@ void	config_key_events(t_context *ctx, int key)
 			ctx->config_buttons[ctx->config_focus].config->current + 1);
 	else
 	{
-		printf("Invalid key: %d\n", key);
+		if (DEBUG)
+			printf("Invalid key: %d\n", key);
 		return ;
 	}
 	ctx->render = 1;
@@ -88,6 +90,8 @@ int	key_press_event(int key, t_context *ctx)
 		ctx->pressed.right = 1;
 	else if (key == XK_space)
 		ctx->pressed.space = 1;
+	else if (DEBUG)
+		printf("Invalid key: %d\n", key);
 	return (0);
 }
 
