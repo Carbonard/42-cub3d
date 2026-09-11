@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/10 20:07:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/10 20:18:32 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/11 21:12:36 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,15 @@ void	put_screen(t_context *ctx)
 	put_info_square(ctx, screen_size.x - 142, screen_size.y - 63);
 	mlx_put_image_to_window(ctx->mlx, ctx->window, ctx->real_screen.img, 0, 0);
 	aux = ft_itoa(ctx->time / 10);
-	mlx_string_put(ctx->mlx, ctx->window, screen_size.x - 137, screen_size.y - 50,
-		rgb(10, 10, 10), "Time: ");
-	mlx_string_put(ctx->mlx, ctx->window, screen_size.x - 100, screen_size.y - 50,
-		rgb(10, 10, 10), aux);
+	mlx_string_put(ctx->mlx, ctx->window,
+		screen_size.x - 137, screen_size.y - 50, rgb(10, 10, 10), "Time: ");
+	mlx_string_put(ctx->mlx, ctx->window,
+		screen_size.x - 100, screen_size.y - 50, rgb(10, 10, 10), aux);
 	free(aux);
 	aux = ft_itoa(ctx->real_fps);
-	mlx_string_put(ctx->mlx, ctx->window, screen_size.x - 130, screen_size.y - 30,
-		rgb(10, 10, 100), "FPS: ");
-	mlx_string_put(ctx->mlx, ctx->window, screen_size.x - 100, screen_size.y - 30,
-		rgb(10, 10, 100), aux);
+	mlx_string_put(ctx->mlx, ctx->window,
+		screen_size.x - 130, screen_size.y - 30, rgb(10, 10, 100), "FPS: ");
+	mlx_string_put(ctx->mlx, ctx->window,
+		screen_size.x - 100, screen_size.y - 30, rgb(10, 10, 100), aux);
 	free(aux);
 }

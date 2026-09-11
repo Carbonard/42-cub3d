@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/11 19:40:12 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/11 22:55:06 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,21 @@ int	init_values(t_context *ctx, char *file_name)
 	convert(&ctx->textures.arm);
 	create_buttons(ctx);
 	set_config(ctx);
-	ctx->pix_size = 2;
+	return (0);
+}
+
+int	init_window_config(t_context *ctx)
+{
+	mlx_get_screen_size(ctx->mlx, &ctx->width, &ctx->height);
+	printf("%i x %i\n", ctx->width, ctx->height);
+	ctx->height *= (float)19 / 20;
+	ctx->window = mlx_new_window(ctx->mlx, ctx->width, ctx->height, "cube3D");
+	if (!ctx->window)
+		return (C3D_MLX);
+	ctx->pix_size = ctx->height / 1850 + 1;
+	ctx->width /= ctx->pix_size;
+	ctx->height /= ctx->pix_size;
+	activate_mouse(ctx, 1);
 	return (0);
 }
 
@@ -74,17 +88,8 @@ int	main(int argc, char **argv)
 	if (check_args(argc, argv))
 		return (-1);
 	init_values(&ctx, argv[1]);
-	mlx_get_screen_size(ctx.mlx, &ctx.width, &ctx.height);
-	printf("%i x %i\n", ctx.width, ctx.height);
-	ctx.height *= (float)19 / 20;
-	ctx.width = 2500;
-	ctx.height = 1400;
-	ctx.window = mlx_new_window(ctx.mlx, ctx.width, ctx.height, "cube3D");
-	if (!ctx.window)
+	if (init_window_config(&ctx))
 		return (C3D_MLX);
-	ctx.width /= ctx.pix_size;
-	ctx.height /= ctx.pix_size;
-	activate_mouse(&ctx, 1);
 	mlx_hook(ctx.window, 17, 0, &close_game, &ctx);
 	mlx_hook(ctx.window, KeyPress, KeyPressMask, &key_press_event, &ctx);
 	mlx_hook(ctx.window, KeyRelease, KeyReleaseMask, &key_release_event, &ctx);

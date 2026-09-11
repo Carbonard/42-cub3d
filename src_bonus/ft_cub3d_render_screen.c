@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/10 20:14:12 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/11 20:35:05 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,9 @@ static void	render(t_context *ctx)
 	if (DEBUG)
 		time(3, 2);
 	render_minimap(ctx);
+	if (ctx->pressed.space)
+		merge_images(&ctx->screen, &ctx->textures.arm,
+			ctx->width / 2, ctx->height / 2);
 	put_screen(ctx);
 }
 
@@ -136,7 +139,4 @@ void	render_screen(t_context *ctx)
 	if (DEBUG)
 		time(0, 2);
 	render(ctx);
-	if (ctx->pressed.space)
-		merge_images(&ctx->screen, &ctx->textures.arm,
-			ctx->width / 2, ctx->height / 2);
 }

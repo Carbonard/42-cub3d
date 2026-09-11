@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:17:38 by elangari          #+#    #+#             */
-/*   Updated: 2026/09/11 20:27:57 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/11 22:36:05 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 void	activate_mouse(t_context *ctx, int activate)
 {
+	int	x;
+	int	y;
+
 	ctx->mouse_active = !!activate;
 	if (ENABLE_MOUSE_HIDE)
 	{
@@ -22,6 +25,9 @@ void	activate_mouse(t_context *ctx, int activate)
 		else
 			mlx_mouse_show(ctx->mlx, ctx->window);
 	}
+	mlx_mouse_move(ctx->mlx, ctx->window,
+		ctx->screen.width / 2, ctx->screen.height / 2);
+	mlx_mouse_get_pos(ctx->mlx, ctx->window, &x, &y);
 }
 
 int	check_mouse(t_context *ctx)

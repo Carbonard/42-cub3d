@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:41:24 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/10 16:59:41 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/11 22:52:40 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	initialize_screen(t_context *ctx)
 	get_img_data(&ctx->screen);
 	ctx->real_screen.width = ctx->width * ctx->pix_size;
 	ctx->real_screen.height = ctx->height * ctx->pix_size;
-	ctx->real_screen.img = mlx_new_image(ctx->mlx, ctx->width * ctx->pix_size, ctx->height * ctx->pix_size);
+	ctx->real_screen.img = mlx_new_image(ctx->mlx,
+			ctx->width * ctx->pix_size,
+			ctx->height * ctx->pix_size);
 	get_img_data(&ctx->real_screen);
 }

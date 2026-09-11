@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/11 19:49:44 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/11 22:43:11 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # include "../minilibx-linux/mlx_int.h"
 # include "../libft/libft.h"
 
-#define DEBUG 1
-#define ENABLE_MOUSE_HIDE 1
+# define DEBUG 0
+# define ENABLE_MOUSE_HIDE 0
 
 # define MAP_LEFT_MARGIN 10
 # define MAP_TOP_MARGIN 10
@@ -35,7 +35,7 @@
 # define TRANSPARENT 0xFF00FF
 
 # define VALID_MAP_CHARS "01Ddef"
-# define MAX_TEXTURES 20
+# define MAX_TEXTURES 32
 # define MAX_ENEMIES 512
 
 # define MAX_FPS 100
@@ -285,10 +285,10 @@ enum e_buttons
 
 enum e_config_buttons
 {
+	C_MAP,
 	C_SPEED,
 	C_ROTATION,
 	C_MOUSE,
-	C_MAP,
 	C_FPS,
 	C_RETURN,
 	C_SIZE

@@ -6,63 +6,11 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/07/09 00:18:27 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/11 21:10:09 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
-
-// t_mlx_image	*last_step(t_context *ctx,
-// 				double last_step, t_ray *ray, t_vector *last_jump)
-// {
-// 	if (last_step < ray->h_dist(ray->pos.x) / fabs(ray->dir.x))
-// 		last_step = ray->v_dist(ray->pos.y) / fabs(ray->dir.y);
-// 	else
-// 		last_step = ray->h_dist(ray->pos.x) / fabs(ray->dir.x);
-// 	last_jump->x = ray->pos.x;
-// 	ray->pos.y += last_step * ray->dir.y;
-// 	ray->pos.x += last_step * ray->dir.x;
-// 	if (!is_wall(&ctx->map, last_jump))
-// 	{
-// 		if (ray->dir.x > 0)
-// 			return (&ctx->textures.east);
-// 		else
-// 			return (&ctx->textures.west);
-// 	}
-// 	else
-// 	{
-// 		if (ray->dir.y > 0)
-// 			return (&ctx->textures.south);
-// 		else
-// 			return (&ctx->textures.north);
-// 	}
-// }
-
-// static void	trace_ray_2(t_context *ctx, t_ray *ray, t_int_vector *screen)
-// {
-// 	double			step;
-// 	t_mlx_image		*texture;
-// 	t_vector		tmp;
-
-// 	texture = NULL;
-// 	while (!is_wall(&ctx->map, &ray->pos))
-// 	{
-// 		step = get_step_size(ray);
-// 		// printf("step: %lf\n", step);
-// 		tmp.x = ray->pos.x + ray->dir.x * step;
-// 		tmp.y = ray->pos.y + ray->dir.y * step;
-// 		if (is_wall(&ctx->map, &tmp))
-// 		{
-// 			texture = last_step(ctx, step, ray, &tmp);
-// 			break ;
-// 		}
-// 		ray->pos.x = tmp.x;
-// 		ray->pos.y = tmp.y;
-// 	}
-// 	if (!on_map(&ctx->map, &ray->pos))
-// 		texture = NULL;
-// 	display_vertical_slice(ctx, screen, ray, texture);
-// }
 
 t_mlx_image	*last_step(t_context *ctx,
 				t_ray *ray, t_vector *dist_to, char last_cross)
@@ -85,11 +33,27 @@ t_mlx_image	*last_step(t_context *ctx,
 		else
 			texture = &ctx->textures.north;
 	}
-	if (ray->dist < 0.0001)
-		ray->dist = 0.0001;
+	// if (ray->dist < 0.0001)
+	// 	ray->dist = 0.0001;
 	ray->pos.x = ctx->player.pos.x + ray->dir.x * ray->dist;
 	ray->pos.y = ctx->player.pos.y + ray->dir.y * ray->dist;
 	return (texture);
+}
+
+static void	trace_ray_3(t_vector *dist_to, t_ray *ray, t_vector *map_cell, char *last_cross)
+{
+	if (dist_to->x < dist_to->y)
+	{
+		map_cell->x += ray->dir_sgn.x;
+		dist_to->x += ray->dir_inv.x;
+		*last_cross = 'x';
+	}
+	else
+	{
+		map_cell->y += ray->dir_sgn.y;
+		dist_to->y += ray->dir_inv.y;
+		*last_cross = 'y';
+	}
 }
 
 static void	trace_ray_2(t_context *ctx, t_ray *ray, t_int_vector *screen)
@@ -102,21 +66,9 @@ static void	trace_ray_2(t_context *ctx, t_ray *ray, t_int_vector *screen)
 	dist_to.y = ray->v_dist(ctx->player.pos.y) * ray->dir_inv.y;
 	map_cell.x = ctx->player.pos.x;
 	map_cell.y = ctx->player.pos.y;
+	last_cross = 0;
 	while (!is_wall(&ctx->map, &map_cell))
-	{
-		if (dist_to.x < dist_to.y)
-		{
-			map_cell.x += ray->dir_sgn.x;
-			dist_to.x += ray->dir_inv.x;
-			last_cross = 'x';
-		}
-		else
-		{
-			map_cell.y += ray->dir_sgn.y;
-			dist_to.y += ray->dir_inv.y;
-			last_cross = 'y';
-		}
-	}
+		trace_ray_3(&dist_to, ray, &map_cell, &last_cross);
 	display_vertical_slice(ctx, screen, ray,
 		last_step(ctx, ray, &dist_to, last_cross));
 }
@@ -129,7 +81,6 @@ static void	trace_ray(t_context *ctx, t_int_vector *screen)
 	scale_screen_factor = (double)(screen->x * 2) / ctx->width - 1;
 	ray.dir.x = ctx->player.dir.x + scale_screen_factor * ctx->player.ort.x;
 	ray.dir.y = ctx->player.dir.y + scale_screen_factor * ctx->player.ort.y;
-	// normalize_vector(&ray.dir);
 	ray.pos.x = ctx->player.pos.x;
 	ray.pos.y = ctx->player.pos.y;
 	if (ray.dir.x > 0)
@@ -161,14 +112,3 @@ void	render_screen(t_context *ctx)
 	}
 	render_minimap(ctx);
 }
-
-// size_t t = get_time();
-// static size_t total_time;
-// static size_t cnt;
-
-// cnt++;
-// total_time += get_time() - t;
-// if (cnt == 1000){
-//printf("mean time int %lu iterations: %lf\n", cnt, (double)total_time / cnt);
-// cnt = 0;
-// total_time = 0;}
