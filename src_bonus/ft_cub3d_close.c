@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 13:59:21 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/07 15:45:56 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/11 19:49:21 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	close_last_images(t_context *ctx)
 int	close_game(t_context *ctx, int exit_code)
 {
 	print_error(exit_code);
+	activate_mouse(ctx, 0);
 	close_images(ctx);
 	close_last_images(ctx);
 	free_split(ctx->map.matrix);

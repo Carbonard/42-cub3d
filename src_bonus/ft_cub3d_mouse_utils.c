@@ -6,11 +6,23 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/11 16:17:38 by elangari          #+#    #+#             */
-/*   Updated: 2026/08/09 16:49:24 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/11 20:27:57 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
+
+void	activate_mouse(t_context *ctx, int activate)
+{
+	ctx->mouse_active = !!activate;
+	if (ENABLE_MOUSE_HIDE)
+	{
+		if (activate)
+			mlx_mouse_hide(ctx->mlx, ctx->window);
+		else
+			mlx_mouse_show(ctx->mlx, ctx->window);
+	}
+}
 
 int	check_mouse(t_context *ctx)
 {
@@ -18,6 +30,8 @@ int	check_mouse(t_context *ctx)
 	int	y;
 	int	game_x;
 
+	if (!ctx->mouse_active)
+		return (0);
 	mlx_mouse_get_pos(ctx->mlx, ctx->window, &x, &y);
 	if (y < 20)
 		return (0);

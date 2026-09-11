@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 14:06:12 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/08/09 17:12:46 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/11 20:28:45 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,30 @@ void	config_key_events(t_context *ctx, int key)
 	ctx->render = 1;
 }
 
-int	key_press_event(int key, t_context *ctx)
+static int	key_press_menu(int key, t_context *ctx)
 {
-	if (key == XK_Escape)
-		return (close_game(ctx, 0));
-	if (key == XK_m)
+	if (key == XK_p)
+	{
 		ctx->mode = MENU;
-	if (key == XK_m)
 		ctx->render = 1;
+	}
 	else if (ctx->mode == MENU)
 		menu_key_events(ctx, key);
 	else if (ctx->mode == CONFIG)
 		config_key_events(ctx, key);
+	else
+		return (0);
+	return (1);
+}
+
+int	key_press_event(int key, t_context *ctx)
+{
+	if (key == XK_Escape)
+		return (close_game(ctx, 0));
+	if (key_press_menu(key, ctx))
+		return (0);
+	else if (key == XK_m)
+		activate_mouse(ctx, !ctx->mouse_active);
 	else if (key == XK_a)
 		ctx->pressed.a = 1;
 	else if (key == XK_d)

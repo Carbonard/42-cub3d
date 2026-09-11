@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/10 20:08:13 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/11 19:49:44 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include "../libft/libft.h"
 
 #define DEBUG 1
+#define ENABLE_MOUSE_HIDE 1
 
 # define MAP_LEFT_MARGIN 10
 # define MAP_TOP_MARGIN 10
@@ -348,6 +349,7 @@ struct s_context
 	id_t			defeated_enemies;
 	t_config		config;
 	int				pix_size;
+	int				mouse_active;
 };
 
 // String
@@ -390,6 +392,7 @@ void			fill_screen(t_context *ctx, t_color color);
 int				put_centered_scaled_image(t_context *ctx, t_mlx_image *image,
 					int height, int y0);
 void			safe_close_image(void *mlx, t_mlx_image *image);
+void			activate_mouse(t_context *ctx, int activate);
 
 // Map Utils
 

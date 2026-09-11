@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/10 20:20:04 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/11 19:40:12 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,15 +75,16 @@ int	main(int argc, char **argv)
 		return (-1);
 	init_values(&ctx, argv[1]);
 	mlx_get_screen_size(ctx.mlx, &ctx.width, &ctx.height);
+	printf("%i x %i\n", ctx.width, ctx.height);
 	ctx.height *= (float)19 / 20;
-	ctx.width = 2000;
-	ctx.height = 1500;
+	ctx.width = 2500;
+	ctx.height = 1400;
 	ctx.window = mlx_new_window(ctx.mlx, ctx.width, ctx.height, "cube3D");
 	if (!ctx.window)
 		return (C3D_MLX);
 	ctx.width /= ctx.pix_size;
 	ctx.height /= ctx.pix_size;
-	// mlx_mouse_hide(ctx.mlx, ctx.window);
+	activate_mouse(&ctx, 1);
 	mlx_hook(ctx.window, 17, 0, &close_game, &ctx);
 	mlx_hook(ctx.window, KeyPress, KeyPressMask, &key_press_event, &ctx);
 	mlx_hook(ctx.window, KeyRelease, KeyReleaseMask, &key_release_event, &ctx);
