@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:07:56 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/11 23:05:22 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/12 00:46:10 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include "../libft/libft.h"
 
 # define DEBUG 0
-# define ENABLE_MOUSE_HIDE 0
+# define ENABLE_MOUSE_HIDE 1
 
 # define MAP_LEFT_MARGIN 10
 # define MAP_TOP_MARGIN 10

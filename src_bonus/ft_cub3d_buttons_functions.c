@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 11:23:00 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/08/10 11:30:00 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/11 23:43:25 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	play_game(t_context *ctx)
 {
 	mlx_mouse_move(ctx->mlx, ctx->window,
 		ctx->screen.width / 2, ctx->screen.height / 2);
+	check_mouse(ctx);
 	reset_game(ctx);
 	parse_file(ctx, ctx->map_file);
 	initialize_minimap(ctx);
@@ -43,6 +44,8 @@ void	play_game(t_context *ctx)
 	limit_fps(ctx, ctx->config.max_fps.current);
 	ctx->time = 0;
 	ctx->mode = GAME;
+	if (DEBUG)
+		printf("Max FPS: %i\n", ctx->config.max_fps.current);
 }
 
 void	close_game_success(t_context *ctx)

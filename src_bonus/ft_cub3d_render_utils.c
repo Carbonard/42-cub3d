@@ -6,52 +6,37 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/06 20:28:43 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/10 19:21:02 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/12 00:43:25 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-void	put_big_pixel(t_context *ctx, int x, int y, unsigned int c)
-{
-	int	i;
-	int	j;
-
-	j = 0;
-	while (j < ctx->pix_size)
-	{
-		i = 0;
-		while (i < ctx->pix_size)
-		{
-			put_pixel(&ctx->real_screen,
-				x * ctx->pix_size, y * ctx->pix_size, c);
-			put_pixel(&ctx->real_screen,
-				x * ctx->pix_size, y * ctx->pix_size + j, c);
-			put_pixel(&ctx->real_screen,
-				x * ctx->pix_size + i, y * ctx->pix_size, c);
-			put_pixel(&ctx->real_screen,
-				x * ctx->pix_size + i, y * ctx->pix_size + j, c);
-			i++;
-		}
-		j++;
-	}
-}
-
 void	resize_screen(t_context *ctx)
 {
-	int				x;
-	int				y;
+	t_int_vector	r;
+	t_vector		s;
+	int				width;
+	int				height;
+	float			step;
 
-	y = 0;
-	while (y < ctx->height)
+	width = ctx->width * ctx->pix_size;
+	height = ctx->height * ctx->pix_size;
+	step = (float)1 / ctx->pix_size;
+	r.y = 0;
+	s.y = 0;
+	while (r.y < height)
 	{
-		x = 0;
-		while (x < ctx->width)
+		r.x = 0;
+		s.x = 0;
+		while (r.x < width)
 		{
-			put_big_pixel(ctx, x, y, get_pixel(&ctx->screen, x, y));
-			x++;
+			put_pixel(&ctx->real_screen, r.x, r.y, get_pixel(&ctx->screen, s.x, s.y));
+			r.x++;
+			s.x += step;
 		}
-		y++;
+		r.y++;
+		s.y += step;
 	}
 }
 

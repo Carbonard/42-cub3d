@@ -37,7 +37,7 @@ cd cub3D && make && cub3D [map_file.cub]
 - To move the camera use the directional keys or the mouse. Press `M` to disable the mouse.
 
 #### Using the sonic
-To open/close doors and kill enemies, aim the _Sonic Screwdriver_ and press `SPACE`.
+To open/close doors and kill enemies, aim for the center of the screen and press `SPACE`.
 
 #### Add your own maps and textures!
 To execute the game, a map file must be added as an argument. The file must follow this requirements:

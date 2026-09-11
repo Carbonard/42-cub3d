@@ -6,7 +6,7 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/27 15:13:22 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/11 22:59:30 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/12 00:28:15 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int	init_values(t_context *ctx, char *file_name)
 int	init_window_config(t_context *ctx)
 {
 	mlx_get_screen_size(ctx->mlx, &ctx->width, &ctx->height);
-	ctx->height *= (float)19 / 20;
 	ctx->window = mlx_new_window(ctx->mlx, ctx->width, ctx->height, "cube3D");
 	if (!ctx->window)
 		return (C3D_MLX);
@@ -94,6 +93,8 @@ int	main(int argc, char **argv)
 	mlx_hook(ctx.window, KeyRelease, KeyReleaseMask, &key_release_event, &ctx);
 	mlx_loop_hook(ctx.mlx, loop_hook, &ctx);
 	initialize_screen(&ctx);
+	if (DEBUG)
+		printf("pixel size: %i\n", ctx.pix_size);
 	ctx.mode = MENU;
 	ctx.render = 1;
 	mlx_loop(ctx.mlx);

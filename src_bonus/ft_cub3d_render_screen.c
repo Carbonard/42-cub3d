@@ -6,13 +6,13 @@
 /*   By: rselva-2 <rselva-2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/30 17:07:26 by rselva-2          #+#    #+#             */
-/*   Updated: 2026/09/11 20:35:05 by rselva-2         ###   ########.fr       */
+/*   Updated: 2026/09/12 00:04:24 by rselva-2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_cub3d.h"
 
-void	time(int slot, int step)
+static void	time(int slot, int step)
 {
 	static size_t	t[10] = {0};
 	static size_t	total_time[10] = {0};
@@ -110,7 +110,11 @@ static void	render(t_context *ctx)
 	if (ctx->pressed.space)
 		merge_images(&ctx->screen, &ctx->textures.arm,
 			ctx->width / 2, ctx->height / 2);
+	if (DEBUG)
+		time(4, 1);
 	put_screen(ctx);
+	if (DEBUG)
+		time(4, 2);
 }
 
 void	trace_ray(t_context *ctx, t_ray_info *ray, t_vector *direction);
